@@ -1,9 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { compile, type CompileResult } from "@arviahq/compiler";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { compile, LineIndex, type CompileResult } from "@arviahq/compiler";
 import { CodeBlock } from "./code-block.arv";
 import { Playground as PlaygroundStyles } from "./playground.arv";
 import { highlightCode } from "./highlight";
 import { useSiteTheme } from "../site-theme";
+import type { ArviaMarker } from "./MonacoArvia";
+
+// Monaco is heavy — load it only when the playground renders.
+const MonacoArvia = lazy(() => import("./MonacoArvia"));
 
 const DEFAULT_SOURCE = `theme {
   color {
@@ -46,7 +50,8 @@ component Button {
 }
 `;
 
-type OutputTab = "preview" | "tsx" | "css" | "types";
+type OutputTab = "preview" | "css" | "types";
+type EditorFile = "arv" | "tsx";
 
 interface LastGood {
   css: string;
@@ -61,10 +66,10 @@ export function Playground() {
   const siteTheme = useSiteTheme();
 
   const [source, setSource] = useState(DEFAULT_SOURCE);
+  const [file, setFile] = useState<EditorFile>("arv");
+  const [editedTsx, setEditedTsx] = useState<string | null>(null);
   const [tab, setTab] = useState<OutputTab>("preview");
-  const [editorHtml, setEditorHtml] = useState<string | null>(null);
   const [outputHtml, setOutputHtml] = useState<string | null>(null);
-  const highlightRef = useRef<HTMLDivElement>(null);
 
   // Compile in the browser on every edit — the same compiler that runs in Vite.
   const result = useMemo(() => compile(source, { filename: "playground.arv" }), [source]);
@@ -75,23 +80,12 @@ export function Playground() {
   const { css, dts, meta } = lastGood.current;
   const errors = result.diagnostics.filter((d) => d.severity === "error");
 
-  useEffect(() => {
-    let cancelled = false;
-    highlightCode(source, "css", siteTheme)
-      .then((html) => {
-        if (!cancelled) setEditorHtml(html);
-      })
-      .catch(() => undefined);
-    return () => {
-      cancelled = true;
-    };
-  }, [source, siteTheme]);
-
-  const tsx = useMemo(() => usageSnippet(meta), [meta]);
+  // App.tsx follows the compiled component until the user edits it by hand.
+  const tsx = editedTsx ?? usageSnippet(meta);
 
   useEffect(() => {
     if (tab === "preview") return;
-    const code = tab === "css" ? css : tab === "types" ? dts : tsx;
+    const code = tab === "css" ? css : dts;
     let cancelled = false;
     highlightCode(code || "/* empty */", tab === "css" ? "css" : "tsx", siteTheme)
       .then((html) => {
@@ -101,28 +95,32 @@ export function Playground() {
     return () => {
       cancelled = true;
     };
-  }, [tab, css, dts, tsx, siteTheme]);
+  }, [tab, css, dts, siteTheme]);
 
-  const syncScroll = (event: React.UIEvent<HTMLTextAreaElement>) => {
-    const target = event.currentTarget;
-    const highlight = highlightRef.current?.querySelector("pre");
-    if (highlight) {
-      highlight.scrollTop = target.scrollTop;
-      highlight.scrollLeft = target.scrollLeft;
-    }
-  };
-
-  const onKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key !== "Tab") return;
-    event.preventDefault();
-    const target = event.currentTarget;
-    const { selectionStart, selectionEnd, value } = target;
-    const next = `${value.slice(0, selectionStart)}  ${value.slice(selectionEnd)}`;
-    setSource(next);
-    requestAnimationFrame(() => {
-      target.selectionStart = target.selectionEnd = selectionStart + 2;
+  // Compiler diagnostics become real editor squiggles.
+  const markers = useMemo<ArviaMarker[]>(() => {
+    const index = new LineIndex(source);
+    return errors.map((d) => {
+      const range = index.spanToRange(d.span);
+      return {
+        startLineNumber: range.start.line,
+        startColumn: range.start.col,
+        endLineNumber: range.end.line,
+        endColumn: range.end.col,
+        message: d.hint ? `${d.message} (${d.hint})` : d.message,
+      };
     });
-  };
+  }, [source, errors]);
+
+  useEffect(() => {
+    let cancelled = false;
+    import("./MonacoArvia").then((mod) => {
+      if (!cancelled) mod.setMarkersOnCurrentModels(markers);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [markers]);
 
   const dotsOf = (block: ReturnType<typeof CodeBlock>) => (
     <span className={block.dots} aria-hidden>
@@ -137,29 +135,45 @@ export function Playground() {
       <div className={editorBlock.root} style={{ margin: 0 }}>
         <div className={editorBlock.header}>
           {dotsOf(editorBlock)}
-          playground.arv
+          <span className={pg.tabs} style={{ marginLeft: 0 }}>
+            {(
+              [
+                ["arv", "playground.arv"],
+                ["tsx", "App.tsx"],
+              ] as const
+            ).map(([id, label]) => (
+              <button
+                key={id}
+                type="button"
+                className={pg.tab}
+                data-active={file === id}
+                onClick={() => setFile(id)}
+              >
+                {label}
+              </button>
+            ))}
+          </span>
           <span style={{ marginLeft: "auto", fontWeight: 500 }}>editable</span>
         </div>
         <div className={editorBlock.body} style={{ overflow: "hidden" }}>
           <div className={pg.editor}>
-            <div ref={highlightRef} aria-hidden>
-              {editorHtml ? (
-                <div dangerouslySetInnerHTML={{ __html: editorHtml }} />
-              ) : (
-                <pre>{source}</pre>
-              )}
-            </div>
-            <textarea
-              className={pg.input}
-              value={source}
-              onChange={(event) => setSource(event.target.value)}
-              onScroll={syncScroll}
-              onKeyDown={onKeyDown}
-              spellCheck={false}
-              autoCapitalize="off"
-              autoComplete="off"
-              aria-label="Arvia playground editor"
-            />
+            <Suspense
+              fallback={
+                <pre style={{ margin: 0, padding: 14, fontSize: 13, lineHeight: 1.6 }}>
+                  {file === "arv" ? source : tsx}
+                </pre>
+              }
+            >
+              <MonacoArvia
+                path={file === "arv" ? "playground.arv" : "App.tsx"}
+                language={file === "arv" ? "arvia" : "typescript"}
+                value={file === "arv" ? source : tsx}
+                onChange={file === "arv" ? setSource : setEditedTsx}
+                theme={siteTheme}
+                markers={markers}
+                height={300}
+              />
+            </Suspense>
           </div>
         </div>
         {errors.length > 0 ? (
@@ -179,7 +193,7 @@ export function Playground() {
           {dotsOf(outputBlock)}
           output
           <span className={pg.tabs}>
-            {(["preview", "tsx", "css", "types"] as const).map((name) => (
+            {(["preview", "css", "types"] as const).map((name) => (
               <button
                 key={name}
                 type="button"
@@ -195,7 +209,7 @@ export function Playground() {
         {tab === "preview" ? (
           <div className={pg.preview}>
             <style>{css}</style>
-            <LivePreview meta={meta} />
+            <LivePreview meta={meta} tsx={tsx} />
           </div>
         ) : (
           <div className={outputBlock.body} style={{ margin: 0 }}>
@@ -203,9 +217,7 @@ export function Playground() {
               {outputHtml ? (
                 <div dangerouslySetInnerHTML={{ __html: outputHtml }} />
               ) : (
-                <pre style={{ margin: 0, padding: 16 }}>
-                  {tab === "css" ? css : tab === "types" ? dts : tsx}
-                </pre>
+                <pre style={{ margin: 0, padding: 16 }}>{tab === "css" ? css : dts}</pre>
               )}
             </div>
           </div>
@@ -251,8 +263,38 @@ const emptyMeta: CompileResult["meta"] = {
   styles: [],
 };
 
-/** Renders the first compiled component once per value of its first variant. */
-function LivePreview({ meta }: { meta: CompileResult["meta"] }) {
+interface TsxUsage {
+  props: Record<string, string>;
+  label: string;
+  showIcon: boolean;
+}
+
+/** Best-effort read of the App.tsx usage: variant props, button label, icon slot. */
+function parseUsage(tsx: string, componentName: string): TsxUsage | null {
+  const call = tsx.match(new RegExp(`\\b${componentName}\\s*\\(([^)]*)\\)`));
+  if (!call) return null;
+
+  const props: Record<string, string> = {};
+  for (const m of (call[1] ?? "").matchAll(/([A-Za-z_$][\w$]*)\s*:\s*["']([^"']*)["']/g)) {
+    props[m[1] ?? ""] = m[2] ?? "";
+  }
+
+  let label = componentName;
+  const jsx = tsx.match(/<([a-zA-Z][\w]*)\b[^>]*>([\s\S]*?)<\/\1>/);
+  if (jsx?.[2] != null) {
+    const text = jsx[2]
+      .replace(/<[^>]+>[\s\S]*?<\/[^>]+>/g, " ")
+      .replace(/<[^>]*\/>/g, " ")
+      .replace(/\{[^}]*\}/g, " ")
+      .trim();
+    if (text) label = text;
+  }
+
+  return { props, label, showIcon: /styles\.icon/.test(tsx) };
+}
+
+/** Renders what App.tsx describes; falls back to one button per first-variant value. */
+function LivePreview({ meta, tsx }: { meta: CompileResult["meta"]; tsx: string }) {
   const component = meta.components[0];
   if (!component) {
     return <span style={{ opacity: 0.6, fontSize: 13 }}>define a component to preview it</span>;
@@ -261,7 +303,11 @@ function LivePreview({ meta }: { meta: CompileResult["meta"] }) {
   const classFor = (overrides: Record<string, string>): string => {
     const classes = [`${component.name}_root_${component.hash}`];
     for (const variant of component.variants) {
-      const value = overrides[variant.name] ?? component.defaults[variant.name];
+      const override = overrides[variant.name];
+      const value =
+        override && variant.values.includes(override)
+          ? override
+          : component.defaults[variant.name];
       if (value) {
         classes.push(`${component.name}_${variant.name}_${value}_root_${component.hash}`);
       }
@@ -270,16 +316,21 @@ function LivePreview({ meta }: { meta: CompileResult["meta"] }) {
   };
 
   const hasIcon = component.slots.includes("icon");
-  const renderOne = (label: string, overrides: Record<string, string>) => (
+  const renderOne = (label: string, overrides: Record<string, string>, withIcon = hasIcon) => (
     <button key={label} type="button" className={classFor(overrides)}>
       {label}
-      {hasIcon ? (
+      {withIcon ? (
         <span className={`${component.name}_icon_${component.hash}`} aria-hidden>
           →
         </span>
       ) : null}
     </button>
   );
+
+  const usage = parseUsage(tsx, component.name);
+  if (usage) {
+    return renderOne(usage.label, usage.props, hasIcon && usage.showIcon);
+  }
 
   const firstVariant = component.variants[0];
   if (!firstVariant || firstVariant.values.length === 0) {

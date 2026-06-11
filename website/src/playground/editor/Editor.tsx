@@ -1,26 +1,19 @@
-import { useEffect, useState } from "react";
-import CodeMirror from "@uiw/react-codemirror";
-import { vscodeDark, vscodeLight } from "@uiw/codemirror-theme-vscode";
-import { EditorView } from "@codemirror/view";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import { LineIndex } from "@arviahq/compiler";
 import { Code } from "../../components/Code";
+import type { ArviaMarker } from "../../components/MonacoArvia";
 import { Text } from "../../components/text.arv";
 import { useSiteTheme } from "../../site-theme";
 import { EditorShell, OutputTabs } from "../playground-layout.arv";
-import { arvHighlight } from "./arv-highlight";
 import { DiagnosticList } from "./DiagnosticList";
 import { EditorPreview } from "./EditorPreview";
 import { DEFAULT_TEMPLATE, EDITOR_TEMPLATES } from "./templates";
 import { useArviaCompiler } from "./useArviaCompiler";
 
-type OutputTab = "preview" | "css" | "js" | "types" | "errors";
+// Monaco is heavy — load it only when the editor tab renders.
+const MonacoArvia = lazy(() => import("../../components/MonacoArvia"));
 
-const editorTheme = EditorView.theme({
-  "&": { fontSize: "13px" },
-  ".cm-scroller": { overflow: "auto" },
-  ".cm-content": { padding: "12px 0" },
-  ".cm-line": { padding: "0 16px" },
-  ".cm-gutters": { paddingRight: "8px" },
-});
+type OutputTab = "preview" | "css" | "js" | "types" | "errors";
 
 export function Editor() {
   const [source, setSource] = useState(DEFAULT_TEMPLATE.source);
@@ -33,6 +26,39 @@ export function Editor() {
     const template = EDITOR_TEMPLATES.find((t) => t.id === templateId);
     if (template) setSource(template.source);
   }, [templateId]);
+
+  // Compiler diagnostics become editor squiggles. The compile is debounced, so the
+  // spans can briefly lag the text — bail out rather than show misplaced markers.
+  const markers = useMemo<ArviaMarker[]>(() => {
+    if (!result) return [];
+    try {
+      const index = new LineIndex(source);
+      return result.diagnostics
+        .filter((d) => d.severity === "error")
+        .map((d) => {
+          const range = index.spanToRange(d.span);
+          return {
+            startLineNumber: range.start.line,
+            startColumn: range.start.col,
+            endLineNumber: range.end.line,
+            endColumn: range.end.col,
+            message: d.hint ? `${d.message} (${d.hint})` : d.message,
+          };
+        });
+    } catch {
+      return [];
+    }
+  }, [result, source]);
+
+  useEffect(() => {
+    let cancelled = false;
+    import("../../components/MonacoArvia").then((mod) => {
+      if (!cancelled) mod.setMarkersOnCurrentModels(markers);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [markers]);
 
   const tabs = OutputTabs();
   const shell = EditorShell();
@@ -77,18 +103,31 @@ export function Editor() {
             maxWidth: "100%",
           }}
         >
-          <CodeMirror
-            value={source}
-            height="420px"
-            theme={siteTheme === "dark" ? vscodeDark : vscodeLight}
-            onChange={setSource}
-            extensions={[editorTheme, ...arvHighlight]}
-            basicSetup={{
-              lineNumbers: true,
-              foldGutter: true,
-              highlightActiveLine: true,
-            }}
-          />
+          <Suspense
+            fallback={
+              <pre
+                style={{
+                  margin: 0,
+                  padding: 14,
+                  fontSize: 13,
+                  lineHeight: 1.6,
+                  height: 300,
+                  overflow: "hidden",
+                }}
+              >
+                {source}
+              </pre>
+            }
+          >
+            <MonacoArvia
+              path="editor.arv"
+              value={source}
+              onChange={setSource}
+              theme={siteTheme}
+              markers={markers}
+              height={300}
+            />
+          </Suspense>
         </div>
       </div>
 
