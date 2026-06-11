@@ -12,47 +12,6 @@ export type DocBlock =
   | { type: "ul"; items: string[] }
   | { type: "code"; label?: string; code: string; lang?: string };
 
-export const DOC_NAV: { section: string; items: { title: string; slug: string }[] }[] = [
-  {
-    section: "Getting started",
-    items: [
-      { title: "Introduction", slug: "introduction" },
-      { title: "Installation", slug: "installation" },
-      { title: "Quick start", slug: "quick-start" },
-    ],
-  },
-  {
-    section: "Language",
-    items: [
-      { title: "Theme & tokens", slug: "theme" },
-      { title: "Theme modes", slug: "theme-modes" },
-      { title: "Global styles", slug: "global" },
-      { title: "Recipes", slug: "recipes" },
-      { title: "Styles", slug: "styles" },
-      { title: "Components", slug: "components" },
-      { title: "Slots", slug: "slots" },
-      { title: "Local tokens", slug: "local-tokens" },
-      { title: "Variants & defaults", slug: "variants" },
-      { title: "Compound variants", slug: "compound" },
-      { title: "States", slug: "states" },
-      { title: "Responsive", slug: "responsive" },
-      { title: "Container queries", slug: "container-queries" },
-      { title: "Keyframes", slug: "keyframes" },
-      { title: "Token docs", slug: "token-docs" },
-    ],
-  },
-  {
-    section: "Tooling",
-    items: [
-      { title: "Packages", slug: "packages" },
-      { title: "Vite plugin", slug: "vite-plugin" },
-      { title: "CLI", slug: "cli" },
-      { title: "Language server", slug: "language-server" },
-      { title: "Storybook", slug: "storybook" },
-    ],
-  },
-];
-
 export const DOCS: Record<string, DocSection> = {
   introduction: {
     title: "Introduction",

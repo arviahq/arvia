@@ -1,0 +1,893 @@
+{
+  "fb-locale": "de_DE",
+  "translations": {
+    "8kGMU/gE66uX64x2vEH5ag==": {
+      "description": "Homepage playground section heading",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Sieh, was du auslieferst",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "AzdqHwO0BIlf3u+OhLpYPg==": {
+      "description": "Homepage playground section description part 1",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Bearbeite die",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "KcaFZQV7ZjNacjooTkmrFA==": {
+      "description": "Homepage playground section description part 2",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "oder wechsle zu",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "k2zyyTyqxGJO1nQKBYLNjg==": {
+      "description": "Homepage playground section description part 3",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "— Vorschau, CSS und TypeScript-Typen werden live im Browser kompiliert.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "p+OtsI6By9T8DGAuDK6+Aw==": {
+      "description": "Playground page title",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Playground",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "7T8l09r4+9vcMCmZxqcg3g==": {
+      "description": "Playground page description part 1",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Bearbeite die",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "L0Ujzx5/XO6CJzQTf8ER9Q==": {
+      "description": "Playground page description part 2",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "oder",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Iq9x1rHZx/dJ/lhROYnTiA==": {
+      "description": "Playground page description part 3",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "— Vorschau, CSS und Typen werden live im Browser kompiliert. Lade eine Demo aus der Auswahl.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "VDpPOlRA4/a1CIp4a64z8g==": {
+      "description": "Docs sidebar section title",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Erste Schritte",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "ltEazAvd+khRzZOxvT9mkQ==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Einführung",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "1u/7FUuTIA2UKCCO4fSJtA==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Installation",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "0Uqu0a4WEK3OcEbYtU4mpA==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Schnellstart",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "3gWxZ32f2StuSPlKIhU9MQ==": {
+      "description": "Docs sidebar section title",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Sprache",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "nhNEGqAueLmPDfvDMeWW3A==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Theme & Tokens",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "np8NiJCbahHwe+8rTgCMPg==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Theme-Modi",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "X2fHuP0QdGyiz2pkNeMR+A==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Globale Styles",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "eBXYBLropSs+S7ZCULloMg==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Rezepte",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "FQtXSA5WuE30nuscyZb0zA==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Styles",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "5yWSmyrd3zSfVJIN6mOhIw==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Komponenten",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "HpnOgF12t9/jfdYFsD75OQ==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Slots",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "W/Xwplpvn/p2gdv1GZrbpQ==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Lokale Tokens",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "q151J9msbRdq6bf4ez3usQ==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Varianten & Defaults",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "XkYnN3mM+4Ven3vfEVT3CA==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Zusammengesetzte Varianten",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "sMYxZlvKtktYeX965Um0Pg==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Zustände",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "SHnZc3cDVvwCCHuKVrpLdQ==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Responsive",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "WZDHjDg6Lovx8J4vPt/l/w==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Container Queries",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "BZHG0X+7CtjGdNWoJ5ribQ==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Keyframes",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "B+MDa5l6VpoTxbFbaNx1lw==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Token-Dokumentation",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "syFZyID841btA2pHHfrXBw==": {
+      "description": "Docs sidebar section title",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Tooling",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "o0vSMauqajzxvJfZ+JKl9w==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Pakete",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "/V0gx8sF9vIwgY4xVePm6Q==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Vite-Plugin",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "6IZN6op2AqeYQQFn6Cc2Ow==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "CLI",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "lLxtkOkjj/9Mg9bKSTR/dg==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Language Server",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "TiL/wuxCK5OvXjg83r9uaw==": {
+      "description": "Docs nav item",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Storybook",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "PBqguULy2B8oXfBAMeAKcw==": {
+      "description": "Copy button success state",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Kopiert",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "izSLtbRsice0dDOj8tT5Ug==": {
+      "description": "Copy button label",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Code kopieren",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "TyY+ys0qLd3GuXePc/2EBQ==": {
+      "description": "Copy button success label",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Kopiert",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "rF6mPBvuqpYpsTdgJIzV6w==": {
+      "description": "Copy button label",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Kopieren",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "sI/suPDQ8lPhQYEFXTOuNw==": {
+      "description": "Main navigation link to documentation",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Docs",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "jUXL7FNTCw6gbBpgiYWGnw==": {
+      "description": "Main navigation link to playground",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Playground",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "e+8t+Y8N3CsgWREV9c7l1A==": {
+      "description": "Hero badge highlighting product traits",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Zero Runtime · voll typisiert",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "bo1JVdoNBYako58euZZMcg==": {
+      "description": "Hero headline first line",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Design Systems verdienen",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "aGao45S+hLzH8hFX/CDLkA==": {
+      "description": "Hero headline second line",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "eine eigene Sprache.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "cnDwVqJHfZipMjAH7fxzyg==": {
+      "description": "Hero subtitle first line",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Erweitere vertrautes CSS mit erstklassigen Tokens, Themes, Varianten, Slots und Komponenten.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "KcL7SNL+OabWoP4iIuJfog==": {
+      "description": "Hero subtitle second line",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Kompiliere zu optimiertem CSS, generierten Typen und typisierten Komponenten-APIs — ohne Runtime-Overhead.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "6iOnoVpRjzNK1IFjmV9Zew==": {
+      "description": "Primary hero call to action",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Loslegen",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "BbulGb6lKl2r4N5HNuU+7w==": {
+      "description": "Secondary hero call to action",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Playground testen",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "5PG0uoneuMn8BCr5mIvpOQ==": {
+      "description": "Label before supported framework links",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Unterstützte Frameworks:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "5cuco9631eft8J5Lg1WP2Q==": {
+      "description": "Feature card title — zero runtime CSS",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Zero-Runtime-CSS",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "q2mnNnGerV86X72QVWORQg==": {
+      "description": "Feature card body — compile-time styles",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Styles werden zur Build-Zeit kompiliert. Keine Neuberechnung im Browser.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "IytGUrSrtI1/vyoLed3Wkg==": {
+      "description": "Feature card title — typed variants",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Typisierte Varianten",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "fYuK4wC/kYCC0T5WvxbPzA==": {
+      "description": "Feature card body — variant autocomplete",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Autovervollständigung für jede Varianten-Prop. Ungültige Kombinationen früh erkennen.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "vDC6btPmSNWefA8If0+z3Q==": {
+      "description": "Feature card title — design tokens",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Design Tokens",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "5lnPg7bZICKOt+uWUj/Sgg==": {
+      "description": "Feature card body — token system",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Themes, Modi, Breakpoints und Container-Tokens — alles erstklassig.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "LEBOfM/VHjX/KRLebh3v1g==": {
+      "description": "Feature card title — slots and recipes",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Slots & Rezepte",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "4sRBrBrV7BRkfPtsY9uWIw==": {
+      "description": "Feature card body — composition",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Mehrteilige Komponenten und wiederverwendbare Style-Fragmente mit use.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Zj1YBWS/WWzq4F9ZzrlPxw==": {
+      "description": "Feature card title — responsive layout",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Responsive & Container",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "JmqDHnvLC6IQgusk0x2rWA==": {
+      "description": "Feature card body — responsive variants",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Breakpoint- und Container-Query-Varianten mit Objekt-Props.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "exdvDyqEJ9mNH522WgZvdg==": {
+      "description": "Feature card title — toolchain",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Vollständige Toolchain",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "WrSWrVO8y70HXDeRfQ1ZSw==": {
+      "description": "Feature card body — developer tools",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Vite-Plugin, LSP, Storybook-Generator und Token-Dokumentation.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "IYUmtYxQtGdt1MucjXrsVA==": {
+      "description": "Label with meaning 'at least number'",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "{number}+",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "ZIF1WhVQwt7WZJvFTEbMWw==": {
+      "description": "Label with meaning 'less than number'",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "<{number}",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Oc/9PrbjfyLHS60BXceD1A==": {
+      "description": "A list of items of various types, for example: \"San Francisco; London; Tokyo\". {previous items} and {following items} are themselves lists that contain one or more items.",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "{previous items}; {following items}",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "AXXbKEUZuc0ji1IClRrOOw==": {
+      "description": "A list of items of various types separated by bullets, for example: \"San Francisco \\u2022 London \\u2022 Tokyo\". {previous items} and {following items} are themselves lists that contain one or more items.",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "{previous items} • {following items}",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "89ACgPMtnwlLDSeqhLBx2Q==": {
+      "description": "A list of items of various types separated by commas, for example: \"San Francisco, London, Tokyo\". {previous items} and {following items} are themselves lists that contain one or more items.",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "{previous items}, {following items}",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "5hL7VXOBVnetm46YAjpX0g==": {
+      "description": "A list of items of various types with a serial comma, for example: \"item1, item2, and item3\"",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "{list of items}, and {last item}",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "icNetEL/crQv/PS6yhySVQ==": {
+      "description": "A list of items of various types, for example: \"item1, item2, item3 and item4\"",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "{list of items} and {last item}",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "8kLAQ3ffiiFnQ/bWPqXfuQ==": {
+      "description": "A list of items of various types with a serial comma, for example: \"item1, item2, or item3\"",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "{list of items}, or {last item}",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "8eSaAzrWtAqn9ktNKfkaEg==": {
+      "description": "A list of items of various types, for example: \"item1, item2, item3 or item4\"",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "{list of items} or {last item}",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "+IBI7kr/mMKdzp+3stDvkw==": {
+      "description": "A list of items of various types, for example: \"San Francisco; London; Tokyo\". {previous items} itself contains one or more items.",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "{previous items}; {last item}",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "55IeE8c0qqtjTU0lo7q9AA==": {
+      "description": "A list of items of various types separated by bullets, for example: \"San Francisco \\u2022 London \\u2022 Tokyo\". {previous items} contains one or more items.",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "{list of items} • {last item}",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "6PRJS0QalZfvaN8CkKCUCw==": {
+      "description": "A list of items of various types, for example: \"item1, item2, item3, item4\"",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "{list of items}, {last item}",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "opMOtZHX5x6Q8S2Xt1yhJg==": {
+      "description": "Theme toggle — switch to light mode",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Zum hellen Modus wechseln",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "x+LLZmLphLDp3JA8cs5zLA==": {
+      "description": "Theme toggle — switch to dark mode",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Zum dunklen Modus wechseln",
+          "variations": {}
+        }
+      ],
+      "types": []
+    }
+  }
+}

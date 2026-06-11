@@ -39,5 +39,21 @@ component Nav {
       align-items: center;
       gap: space.2;
     }
+    control {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      height: 30px;
+      min-height: 30px;
+      padding: 0 space.3;
+      line-height: 1;
+      font-size: font.xs;
+    }
+    controlIcon {
+      width: 30px;
+      min-width: 30px;
+      padding: 0;
+    }
   }
 }

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
+import { fbt } from "fbtee";
 import { Link as RouterLinkBase, useMatch } from "react-router-dom";
-import { DOC_NAV } from "../docs/content";
+import { getDocNav } from "../docs/nav";
 import { Badge } from "./badge.arv";
 import { Button } from "./button.arv";
 import { Code } from "./Code";
@@ -12,7 +13,6 @@ import {
   Grid,
   Hero,
   HeroShell,
-  InlineCode,
   Page,
   Prose,
   SidebarSection,
@@ -21,6 +21,7 @@ import {
 import { Link } from "./link.arv";
 import { Nav } from "./nav.arv";
 import { Text } from "./text.arv";
+import type { SiteLocale, SiteTheme } from "../preferences";
 
 function RouterLink(props: {
   to: string;
@@ -39,8 +40,61 @@ function RouterLink(props: {
   );
 }
 
-export function SiteNav(props: { onThemeToggle: () => void; themeLabel: string }) {
+const LOCALE_OPTIONS: { value: SiteLocale; label: string }[] = [
+  { value: "en_US", label: "English" },
+  { value: "fr_FR", label: "Français" },
+  { value: "es_ES", label: "Español" },
+  { value: "de_DE", label: "Deutsch" },
+  { value: "pt_PT", label: "Português" },
+];
+
+function SunIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      aria-hidden
+    >
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+    </svg>
+  );
+}
+
+function MoonIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+    </svg>
+  );
+}
+
+export function SiteNav(props: {
+  locale: SiteLocale;
+  onLocaleChange: (locale: SiteLocale) => void;
+  onThemeToggle: () => void;
+  theme: SiteTheme;
+}) {
   const nav = Nav();
+  const navBtn = Button({ tone: "ghost", size: "sm" });
+  const controlClass = `${navBtn.root} ${nav.control}`;
+  const iconControlClass = `${controlClass} ${nav.controlIcon}`;
+
   return (
     <header className={nav.root}>
       <div className={nav.inner}>
@@ -55,10 +109,10 @@ export function SiteNav(props: { onThemeToggle: () => void; themeLabel: string }
         </RouterLink>
         <nav className={nav.links}>
           <RouterLink to="/docs/introduction" tone="muted">
-            Docs
+            <fbt desc="Main navigation link to documentation">Docs</fbt>
           </RouterLink>
           <RouterLink to="/playground" tone="muted">
-            Playground
+            <fbt desc="Main navigation link to playground">Playground</fbt>
           </RouterLink>
           <a
             href="https://github.com/Fausto95/arvia"
@@ -70,12 +124,30 @@ export function SiteNav(props: { onThemeToggle: () => void; themeLabel: string }
           </a>
         </nav>
         <div className={nav.actions}>
+          <select
+            aria-label="Language"
+            value={props.locale}
+            onChange={(e) => props.onLocaleChange(e.target.value as SiteLocale)}
+            className={controlClass}
+            style={{ fontFamily: "inherit", cursor: "pointer" }}
+          >
+            {LOCALE_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
           <button
             type="button"
-            className={Button({ tone: "ghost", size: "sm" }).root}
+            className={iconControlClass}
             onClick={props.onThemeToggle}
+            aria-label={
+              props.theme === "dark"
+                ? fbt("Switch to light mode", "Theme toggle — switch to light mode")
+                : fbt("Switch to dark mode", "Theme toggle — switch to dark mode")
+            }
           >
-            {props.themeLabel}
+            {props.theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
         </div>
       </div>
@@ -93,29 +165,35 @@ export function SiteHero() {
       </div>
       <section className={shell.content + " " + hero.root}>
         <div className={hero.badge}>
-          <span className={Badge({ tone: "accent" }).root}>zero runtime · fully typed</span>
+          <span className={Badge({ tone: "accent" }).root}>
+            <fbt desc="Hero badge highlighting product traits">zero runtime · fully typed</fbt>
+          </span>
         </div>
         <h1 className={Heading({ level: "display" }).root + " " + hero.title}>
-          Design systems deserve
+          <fbt desc="Hero headline first line">Design systems deserve</fbt>
           <br />
-          their own language.
+          <fbt desc="Hero headline second line">their own language.</fbt>
         </h1>
         <p className={hero.subtitle}>
-          Extend familiar CSS with first-class tokens, themes, variants, slots, and components.
+          <fbt desc="Hero subtitle first line">
+            Extend familiar CSS with first-class tokens, themes, variants, slots, and components.
+          </fbt>
           <br />
-          Compile to optimized CSS, generated types, and typed component APIs — zero runtime
-          overhead.
+          <fbt desc="Hero subtitle second line">
+            Compile to optimized CSS, generated types, and typed component APIs — zero runtime
+            overhead.
+          </fbt>
         </p>
         <div className={hero.actions}>
           <RouterLinkBase to="/docs/quick-start" className={Button({ tone: "primary" }).root}>
-            Get started
+            <fbt desc="Primary hero call to action">Get started</fbt>
           </RouterLinkBase>
           <RouterLinkBase to="/playground" className={Button({ tone: "surface" }).root}>
-            Try playground
+            <fbt desc="Secondary hero call to action">Try playground</fbt>
           </RouterLinkBase>
         </div>
         <p className={hero.frameworks}>
-          Supported frameworks:{" "}
+          <fbt desc="Label before supported framework links">Supported frameworks:</fbt>{" "}
           <RouterLinkBase to="/docs/installation" className={Link({ tone: "accent" }).root}>
             React
           </RouterLinkBase>
@@ -134,42 +212,66 @@ export function FeatureGrid() {
   const items = [
     {
       icon: "⚡",
-      title: "Zero runtime CSS",
-      body: "Styles compile at build time. No style recalculation in the browser.",
+      title: <fbt desc="Feature card title — zero runtime CSS">Zero runtime CSS</fbt>,
+      body: (
+        <fbt desc="Feature card body — compile-time styles">
+          Styles compile at build time. No style recalculation in the browser.
+        </fbt>
+      ),
     },
     {
       icon: "🎯",
-      title: "Typed variants",
-      body: "Autocomplete for every variant prop. Catch invalid combinations early.",
+      title: <fbt desc="Feature card title — typed variants">Typed variants</fbt>,
+      body: (
+        <fbt desc="Feature card body — variant autocomplete">
+          Autocomplete for every variant prop. Catch invalid combinations early.
+        </fbt>
+      ),
     },
     {
       icon: "🧩",
-      title: "Design tokens",
-      body: "Themes, modes, breakpoints, and container tokens — all first-class.",
+      title: <fbt desc="Feature card title — design tokens">Design tokens</fbt>,
+      body: (
+        <fbt desc="Feature card body — token system">
+          Themes, modes, breakpoints, and container tokens — all first-class.
+        </fbt>
+      ),
     },
     {
       icon: "📦",
-      title: "Slots & recipes",
-      body: "Multi-part components and reusable style fragments with use.",
+      title: <fbt desc="Feature card title — slots and recipes">Slots & recipes</fbt>,
+      body: (
+        <fbt desc="Feature card body — composition">
+          Multi-part components and reusable style fragments with use.
+        </fbt>
+      ),
     },
     {
       icon: "📱",
-      title: "Responsive & containers",
-      body: "Breakpoint and container-query variants with object props.",
+      title: <fbt desc="Feature card title — responsive layout">Responsive & containers</fbt>,
+      body: (
+        <fbt desc="Feature card body — responsive variants">
+          Breakpoint and container-query variants with object props.
+        </fbt>
+      ),
     },
     {
       icon: "🛠",
-      title: "Full toolchain",
-      body: "Vite plugin, LSP, Storybook generator, and token documentation.",
+      title: <fbt desc="Feature card title — toolchain">Full toolchain</fbt>,
+      body: (
+        <fbt desc="Feature card body — developer tools">
+          Vite plugin, LSP, Storybook generator, and token documentation.
+        </fbt>
+      ),
     },
   ];
 
   return (
     <div className={grid.root}>
-      {items.map((item) => {
+      {items.map((item, i) => {
         const card = FeatureCard();
         return (
-          <div key={item.title} className={card.root}>
+          <div key={i} className={card.root}>
             <span className={card.icon}>{item.icon}</span>
             <p className={card.title}>{item.title}</p>
             <p className={card.body}>{item.body}</p>
@@ -236,9 +338,10 @@ export function DocContent(props: {
 }
 
 export function DocsSidebar() {
+  const docNav = getDocNav();
   return (
     <aside>
-      {DOC_NAV.map((group) => {
+      {docNav.map((group) => {
         const s = SidebarSection();
         return (
           <div key={group.section} className={s.root}>
@@ -289,4 +392,4 @@ export function ExampleCard(props: {
 }
 
 export { Code } from "./Code";
-export { Page, Stack, InlineCode, Text, Heading, Button, Badge };
+export { Page, Stack, Text, Heading, Button, Badge };

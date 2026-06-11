@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { fbt } from "fbtee";
 import { Button } from "./button.arv";
 import { CodeBlock } from "./code-block.arv";
 import { highlightCode, langFromLabel } from "./highlight";
@@ -63,11 +64,19 @@ export function Code(props: {
             <button
               type="button"
               className={Button({ tone: "ghost", size: "sm" }).root}
-              aria-label={copied ? "Copied" : "Copy code"}
+              aria-label={
+                copied
+                  ? fbt("Copied", "Copy button success state")
+                  : fbt("Copy code", "Copy button label")
+              }
               aria-live="polite"
               onClick={copyCode}
             >
-              {copied ? "Copied" : "Copy"}
+              {copied ? (
+                <fbt desc="Copy button success label">Copied</fbt>
+              ) : (
+                <fbt desc="Copy button label">Copy</fbt>
+              )}
             </button>
           </div>
         </div>

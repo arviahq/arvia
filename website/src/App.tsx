@@ -1,22 +1,20 @@
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import { getTheme, setTheme } from "./arvia-theme";
+import { setTheme } from "./arvia-theme";
 import { SiteNav } from "./components/ui";
 import { SiteThemeProvider } from "./site-theme";
 import { HomePage } from "./pages/HomePage";
 import { DocPage } from "./pages/DocPage";
 import { PlaygroundPage } from "./pages/PlaygroundPage";
+import { getStoredTheme, setStoredTheme, type SiteLocale, type SiteTheme } from "./preferences";
 
-export function App() {
-  const [theme, setThemeState] = useState<"light" | "dark">("dark");
+export function App(props: { locale: SiteLocale; onLocaleChange: (locale: SiteLocale) => void }) {
+  const [theme, setThemeState] = useState<SiteTheme>(() => getStoredTheme() ?? "dark");
 
   useEffect(() => {
     setTheme(theme);
+    setStoredTheme(theme);
   }, [theme]);
-
-  useEffect(() => {
-    if (!getTheme()) setTheme("dark");
-  }, []);
 
   function toggleTheme() {
     setThemeState((t) => (t === "dark" ? "light" : "dark"));
@@ -24,7 +22,12 @@ export function App() {
 
   return (
     <SiteThemeProvider theme={theme}>
-      <SiteNav onThemeToggle={toggleTheme} themeLabel={theme === "dark" ? "Light" : "Dark"} />
+      <SiteNav
+        locale={props.locale}
+        onLocaleChange={props.onLocaleChange}
+        onThemeToggle={toggleTheme}
+        theme={theme}
+      />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/docs/:slug" element={<DocPage />} />
