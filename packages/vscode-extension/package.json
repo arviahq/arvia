@@ -19,7 +19,7 @@
   "publisher": "arviahq",
   "main": "./dist/extension.cjs",
   "scripts": {
-    "build": "tsdown",
+    "build": "tsdown --config-loader unrun",
     "typecheck": "tsc --noEmit",
     "package": "vsce package --no-dependencies",
     "package:release": "vsce package",
