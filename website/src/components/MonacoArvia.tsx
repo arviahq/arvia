@@ -63,10 +63,7 @@ monaco.languages.setMonarchTokensProvider("arvia", {
         /[A-Za-z_-][\w-]*(?=\s*:)/,
         { cases: { "@keywords": "keyword", "@default": "attribute.name" } },
       ],
-      [
-        /[A-Za-z_-][\w-]*/,
-        { cases: { "@keywords": "keyword", "@default": "identifier" } },
-      ],
+      [/[A-Za-z_-][\w-]*/, { cases: { "@keywords": "keyword", "@default": "identifier" } }],
       [/[{}();:=|]/, "delimiter"],
     ],
     comment: [
@@ -179,10 +176,7 @@ export default function MonacoArvia(props: {
   );
 }
 
-export function applyMarkers(
-  model: monaco.editor.ITextModel,
-  markers: ArviaMarker[],
-): void {
+export function applyMarkers(model: monaco.editor.ITextModel, markers: ArviaMarker[]): void {
   monaco.editor.setModelMarkers(
     model,
     "arvia",

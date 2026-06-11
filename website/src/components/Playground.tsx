@@ -70,16 +70,18 @@ interface LastGood {
   meta: CompileResult["meta"];
 }
 
-export function Playground(props: {
-  /** Pane height in px — editor, output, and preview all match. */
-  height?: number;
-  /** Theme environment so sources can reference site tokens (color.*, space.*…). */
-  env?: ThemeEnv;
-  /** CSS compiled alongside `env` — injected into the preview so hashed names (keyframes) resolve. */
-  baseCss?: string;
-  /** When set, a template select replaces the "editable" header label. */
-  templates?: PlaygroundTemplateGroup[];
-} = {}) {
+export function Playground(
+  props: {
+    /** Pane height in px — editor, output, and preview all match. */
+    height?: number;
+    /** Theme environment so sources can reference site tokens (color.*, space.*…). */
+    env?: ThemeEnv;
+    /** CSS compiled alongside `env` — injected into the preview so hashed names (keyframes) resolve. */
+    baseCss?: string;
+    /** When set, a template select replaces the "editable" header label. */
+    templates?: PlaygroundTemplateGroup[];
+  } = {},
+) {
   const pg = PlaygroundStyles();
   const editorBlock = CodeBlock();
   const outputBlock = CodeBlock();
@@ -419,9 +421,7 @@ function LivePreview({
     for (const variant of component.variants) {
       const override = overrides[variant.name];
       const value =
-        override && variant.values.includes(override)
-          ? override
-          : component.defaults[variant.name];
+        override && variant.values.includes(override) ? override : component.defaults[variant.name];
       if (value) {
         activePairs.push(`${variant.name}_${value}`);
         classes.push(`${component.name}_${variant.name}_${value}_${slot}_${component.hash}`);
