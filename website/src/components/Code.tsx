@@ -31,8 +31,15 @@ export function Code(props: {
 
   return (
     <div className={block.root}>
-      {props.label && props.variant !== "flat" ? (
-        <div className={block.header}>{props.label}</div>
+      {props.variant !== "flat" ? (
+        <div className={block.header}>
+          <span className={block.dots} aria-hidden>
+            <span className={block.dotRed} />
+            <span className={block.dotAmber} />
+            <span className={block.dotGreen} />
+          </span>
+          {props.label}
+        </div>
       ) : null}
       <div className={block.body}>
         {html ? (

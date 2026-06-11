@@ -1,4 +1,12 @@
 component CodeBlock {
+  tokens {
+    light {
+      red = #ff5f57;
+      amber = #febc2e;
+      green = #28c840;
+    }
+  }
+
   base {
     width: 100%;
     max-width: 100%;
@@ -11,6 +19,9 @@ component CodeBlock {
   slots {
     root {}
     header {
+      display: flex;
+      align-items: center;
+      gap: space.3;
       padding: space.2 space.4;
       border-bottom: 1px solid color.border;
       background: color.surfaceRaised;
@@ -19,6 +30,29 @@ component CodeBlock {
       font-weight: 600;
       letter-spacing: -0.01em;
       color: color.muted;
+    }
+    dots {
+      display: inline-flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    dotRed {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: light.red;
+    }
+    dotAmber {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: light.amber;
+    }
+    dotGreen {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: light.green;
     }
     body {
       width: 100%;
