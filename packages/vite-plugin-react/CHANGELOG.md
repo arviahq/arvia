@@ -1,5 +1,12 @@
 # @arviahq/vite-plugin-react
 
+## 0.3.0
+
+### Patch Changes
+
+- @arviahq/vite-plugin@0.3.0
+- @arviahq/typescript-plugin@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes

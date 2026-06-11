@@ -1,5 +1,16 @@
 # @arviahq/vite-plugin-preact
 
+## 0.3.0
+
+### Minor Changes
+
+- Add `@arviahq/vite-plugin-preact`, the Preact + Vite entrypoint for Arvia (mirrors `@arviahq/vite-plugin-react`).
+
+### Patch Changes
+
+- @arviahq/vite-plugin@0.3.0
+- @arviahq/typescript-plugin@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes
