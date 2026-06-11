@@ -5,6 +5,6 @@ component DemoPulseBox {
     background: color.primary;
     color: white;
     font-size: font.sm;
-    animation: keyframes.pulse duration.fast;
+    animation: keyframes.pulse duration.normal easing.default infinite alternate;
   }
 }
