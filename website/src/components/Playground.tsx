@@ -75,6 +75,8 @@ export function Playground(props: {
   height?: number;
   /** Theme environment so sources can reference site tokens (color.*, space.*…). */
   env?: ThemeEnv;
+  /** CSS compiled alongside `env` — injected into the preview so hashed names (keyframes) resolve. */
+  baseCss?: string;
   /** When set, a template select replaces the "editable" header label. */
   templates?: PlaygroundTemplateGroup[];
 } = {}) {
@@ -268,7 +270,7 @@ export function Playground(props: {
         </div>
         {tab === "preview" ? (
           <div className={pg.preview} style={{ height }}>
-            <style>{css}</style>
+            <style>{props.baseCss ? `${props.baseCss}\n${css}` : css}</style>
             <LivePreview meta={meta} tsx={tsx} css={css} />
           </div>
         ) : (
@@ -413,6 +415,7 @@ function LivePreview({
 
   const classFor = (slot: string, overrides: Record<string, string>): string => {
     const classes = [`${component.name}_${slot}_${component.hash}`];
+    const activePairs: string[] = [];
     for (const variant of component.variants) {
       const override = overrides[variant.name];
       const value =
@@ -420,10 +423,31 @@ function LivePreview({
           ? override
           : component.defaults[variant.name];
       if (value) {
+        activePairs.push(`${variant.name}_${value}`);
         classes.push(`${component.name}_${variant.name}_${value}_${slot}_${component.hash}`);
       }
     }
-    return classes.join(" ");
+
+    // Compound variants emit one class per combination (Name_size_sm_tone_danger_root_hash).
+    // Scan the CSS for combo classes whose segments are all currently-active pairs.
+    const comboRe = new RegExp(`\\.${component.name}_(.+?)_${slot}_${component.hash}\\b`, "g");
+    for (const m of css.matchAll(comboRe)) {
+      const middle = m[1] ?? "";
+      let rest = middle;
+      let pairs = 0;
+      while (rest) {
+        const pair = activePairs.find((p) => rest === p || rest.startsWith(`${p}_`));
+        if (!pair) {
+          pairs = 0;
+          break;
+        }
+        rest = rest === pair ? "" : rest.slice(pair.length + 1);
+        pairs += 1;
+      }
+      if (pairs >= 2) classes.push(`${component.name}_${middle}_${slot}_${component.hash}`);
+    }
+
+    return [...new Set(classes)].join(" ");
   };
 
   // contain: inline-size (container queries) zeroes the root's intrinsic width,

@@ -1,6 +1,6 @@
 import { Playground } from "../components/Playground";
 import { Heading, Page, Text } from "../components/ui";
-import { getThemeEnv } from "../playground/theme-env";
+import { getThemeCss, getThemeEnv } from "../playground/theme-env";
 import { TEMPLATE_GROUPS } from "../playground/templates";
 
 export function PlaygroundPage() {
@@ -14,7 +14,12 @@ export function PlaygroundPage() {
           live in your browser. Load any demo from the select.
         </p>
       </header>
-      <Playground height={520} env={getThemeEnv()} templates={TEMPLATE_GROUPS} />
+      <Playground
+        height={520}
+        env={getThemeEnv()}
+        baseCss={getThemeCss()}
+        templates={TEMPLATE_GROUPS}
+      />
     </div>
   );
 }
