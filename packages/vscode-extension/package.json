@@ -22,7 +22,7 @@
   "scripts": {
     "build": "tsdown --config-loader unrun",
     "typecheck": "tsc --noEmit",
-    "package": "vsce package --no-dependencies",
+    "package": "vsce package --no-dependencies -o arvia.vsix",
     "package:release": "vsce package",
     "publish:marketplace": "vsce publish",
     "publish:openvsx": "ovsx publish"

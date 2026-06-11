@@ -1,15 +1,14 @@
-import { createRequire } from "node:module";
+import { join } from "node:path";
 import { workspace } from "vscode";
 import type { ExtensionContext } from "vscode";
 import { LanguageClient, TransportKind } from "vscode-languageclient/node.js";
 import type { LanguageClientOptions, ServerOptions } from "vscode-languageclient/node.js";
 
-const require = createRequire(__filename);
-
 let client: LanguageClient | undefined;
 
 export async function activate(context: ExtensionContext): Promise<void> {
-  const serverModule = require.resolve("@arviahq/language-server/dist/server.cjs");
+  // Bundled next to this file — the vsix ships no node_modules.
+  const serverModule = context.asAbsolutePath(join("dist", "server.cjs"));
 
   const serverOptions: ServerOptions = {
     run: { module: serverModule, transport: TransportKind.stdio },

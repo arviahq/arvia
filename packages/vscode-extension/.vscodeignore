@@ -1,4 +1,5 @@
 src/**
 tsconfig.json
 tsdown.config.ts
-**/*.map
+dist/**/*.map
+*.vsix
