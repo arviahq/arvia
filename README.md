@@ -55,15 +55,26 @@ export default defineConfig({
 
 See **Docs → Quick start** in the site for the full setup.
 
+## VS Code extension
+
+Syntax highlighting, diagnostics, completion, and hover for `.arv` files. The packaged extension ships in this repo at [`packages/vscode-extension/arvia.vsix`](./packages/vscode-extension/arvia.vsix):
+
+```bash
+code --install-extension packages/vscode-extension/arvia.vsix
+```
+
+Or in VS Code: **Extensions → ⋯ → Install from VSIX…** Works in Cursor and other VS Code forks too.
+
 ## Packages
 
-| Package                      | Install? | Purpose                                  |
-| ---------------------------- | -------- | ---------------------------------------- |
-| `@arviahq/vite-plugin-react` | **yes**  | Vite plugin, CLI, TypeScript integration |
-| `@arviahq/compiler`          |          | Core compiler                            |
-| `@arviahq/language-server`   |          | LSP for `.arv` files                     |
-| `@arviahq/storybook`         |          | Storybook story generator                |
-| `@arviahq/docs`              |          | Token catalog generator                  |
+| Package                                                  | Install? | Purpose                                             |
+| -------------------------------------------------------- | -------- | --------------------------------------------------- |
+| `@arviahq/vite-plugin-react`                             | **yes**  | Vite plugin, CLI, TypeScript integration            |
+| `@arviahq/compiler`                                      |          | Core compiler                                       |
+| `@arviahq/language-server`                               |          | LSP for `.arv` files                                |
+| `@arviahq/storybook`                                     |          | Storybook story generator                           |
+| `@arviahq/docs`                                          |          | Token catalog generator                             |
+| [`arvia` VS Code extension](./packages/vscode-extension) | vsix     | Syntax highlighting, diagnostics, completion, hover |
 
 ## Development
 
