@@ -11,6 +11,10 @@ function blockText(block: DocBlock): string {
       return block.items.join(" ");
     case "code":
       return [block.label, block.code].filter(Boolean).join(" ");
+    case "note":
+      return block.text;
+    case "table":
+      return [...block.headers, ...block.rows.flat()].join(" ");
   }
 }
 

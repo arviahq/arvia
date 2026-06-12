@@ -78,11 +78,11 @@ function highlightArv(code: string, theme: "light" | "dark"): string {
   const patterns: { re: RegExp; color: string }[] = [
     { re: /\/\/.*$/gm, color: c.comment },
     {
-      re: /\b(component|recipe|theme|global|keyframes|style|base|slots|variants|defaults|compound|responsive|container|tokens|modes|use|doc)\b|@dark\b|&:(?:hover|focus-visible|active|disabled|focus)\b/g,
+      re: /\b(component|recipe|theme|global|keyframes|style|base|slots|variants|defaults|compound|responsive|container|tokens|modes|use|doc)\b|@[a-zA-Z][\w-]*|&::?[a-z-]+(?:\([^)]*\))?/g,
       color: c.keyword,
     },
     {
-      re: /\b(?:color|space|radius|font|duration|easing|breakpoint|keyframes)\.[a-zA-Z0-9]+\b/g,
+      re: /\b[a-z][a-zA-Z0-9]*\.[a-zA-Z0-9]+\b/g,
       color: c.token,
     },
     { re: /#[0-9a-fA-F]{3,8}\b/g, color: c.hex },

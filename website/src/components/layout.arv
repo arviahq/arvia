@@ -192,6 +192,105 @@ component InlineCode {
   color: color.accent;
 }
 
+component Callout {
+  base {
+    display: flex;
+    flex-direction: column;
+    gap: space.1;
+    max-width: 42rem;
+    margin: 0 0 space.4;
+    padding: space.3 space.4;
+    border: 1px solid color.border;
+    border-left-width: 3px;
+    border-radius: radius.md;
+    background: color.surfaceRaised;
+    font-size: font.sm;
+    line-height: 1.6;
+
+    label {
+      font-weight: 600;
+      font-size: font.xs;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    body {
+      color: color.muted;
+    }
+  }
+
+  slots {
+    root {}
+    label {}
+    body {}
+  }
+
+  variants {
+    tone {
+      info {
+        border-left-color: color.accent;
+        label { color: color.accent; }
+      }
+      warning {
+        border-left-color: color.warning;
+        label { color: color.warning; }
+      }
+      tip {
+        border-left-color: color.success;
+        label { color: color.success; }
+      }
+    }
+  }
+
+  defaults {
+    tone: info;
+  }
+}
+
+component DocTable {
+  base {
+    max-width: 42rem;
+    margin: 0 0 space.4;
+    overflow-x: auto;
+    border: 1px solid color.border;
+    border-radius: radius.md;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: font.sm;
+    }
+
+    th {
+      text-align: left;
+      padding: space.2 space.3;
+      background: color.surfaceRaised;
+      border-bottom: 1px solid color.border;
+      font-weight: 600;
+      color: color.text;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: space.2 space.3;
+      border-bottom: 1px solid color.border;
+      color: color.muted;
+      vertical-align: top;
+    }
+
+    & tr:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  slots {
+    root {}
+    table {}
+    th {}
+    td {}
+  }
+}
+
 component Prose {
   base {
     max-width: 42rem;

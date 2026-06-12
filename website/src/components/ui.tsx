@@ -15,7 +15,9 @@ import { FeatureCard } from "./feature-card.arv";
 import { Heading } from "./heading.arv";
 import { HeroBackground } from "./HeroBackground";
 import {
+  Callout,
   DocsLayout,
+  DocTable,
   Grid,
   Hero,
   HeroShell,
@@ -312,6 +314,49 @@ export function DocContent(props: {
             <Code key={i} label={block.label}>
               {block.code}
             </Code>
+          );
+        }
+        if (block.type === "note") {
+          const callout = Callout({ tone: block.tone });
+          const labels = {
+            info: fbt("Note", "Callout label — informational note"),
+            warning: fbt("Warning", "Callout label — warning about a pitfall"),
+            tip: fbt("Tip", "Callout label — pro tip"),
+          };
+          return (
+            <aside key={i} className={callout.root}>
+              <span className={callout.label}>{labels[block.tone]}</span>
+              <span className={callout.body}>{block.text}</span>
+            </aside>
+          );
+        }
+        if (block.type === "table") {
+          const t = DocTable();
+          return (
+            <div key={i} className={t.root}>
+              <table className={t.table}>
+                <thead>
+                  <tr>
+                    {block.headers.map((header, hi) => (
+                      <th key={hi} className={t.th}>
+                        {header}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {block.rows.map((row, ri) => (
+                    <tr key={ri}>
+                      {row.map((cell, ci) => (
+                        <td key={ci} className={t.td}>
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           );
         }
         const p = Prose();

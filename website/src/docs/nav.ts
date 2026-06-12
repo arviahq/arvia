@@ -18,6 +18,10 @@ export function getDocNav() {
           title: fbt("Quick start", "Docs nav item"),
           slug: "quick-start",
         },
+        {
+          title: fbt("Thinking in Arvia", "Docs nav item"),
+          slug: "thinking-in-arvia",
+        },
       ],
     },
     {
@@ -26,7 +30,7 @@ export function getDocNav() {
         { title: fbt("Theme & tokens", "Docs nav item"), slug: "theme" },
         { title: fbt("Theme modes", "Docs nav item"), slug: "theme-modes" },
         { title: fbt("Global styles", "Docs nav item"), slug: "global" },
-        { title: fbt("Recipes", "Docs nav item"), slug: "recipes" },
+        { title: fbt("Recipes & use", "Docs nav item"), slug: "recipes" },
         { title: fbt("Styles", "Docs nav item"), slug: "styles" },
         { title: fbt("Components", "Docs nav item"), slug: "components" },
         { title: fbt("Slots", "Docs nav item"), slug: "slots" },
@@ -38,6 +42,13 @@ export function getDocNav() {
         { title: fbt("Container queries", "Docs nav item"), slug: "container-queries" },
         { title: fbt("Keyframes", "Docs nav item"), slug: "keyframes" },
         { title: fbt("Token docs", "Docs nav item"), slug: "token-docs" },
+      ],
+    },
+    {
+      section: fbt("Deep dives", "Docs sidebar section title"),
+      items: [
+        { title: fbt("How compilation works", "Docs nav item"), slug: "compilation" },
+        { title: fbt("Advanced patterns", "Docs nav item"), slug: "patterns" },
       ],
     },
     {
