@@ -16,7 +16,7 @@ function decode(source: string, data: number[]): Decoded[] {
   let char = 0;
   for (let i = 0; i < data.length; i += 5) {
     line += data[i]!;
-    char = data[i]! === 0 ? char + data[i + 1]! : data[i + 1]!;
+    char = data[i] === 0 ? char + data[i + 1]! : data[i + 1]!;
     const length = data[i + 2]!;
     const mods: string[] = [];
     for (let bit = 0; bit < semanticTokensLegend.tokenModifiers.length; bit++) {

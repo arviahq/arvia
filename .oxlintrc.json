@@ -15,7 +15,20 @@
       "rules": {
         "unicorn/consistent-function-scoping": "off"
       }
+    },
+    {
+      "files": ["packages/tree-sitter-arvia/grammar.js"],
+      "rules": {
+        "no-underscore-dangle": "off"
+      }
     }
   ],
-  "ignorePatterns": ["**/dist/**", "**/node_modules/**", "**/__snapshots__/**", "**/*.arv.d.ts"]
+  "ignorePatterns": [
+    "**/dist/**",
+    "**/node_modules/**",
+    "**/__snapshots__/**",
+    "**/*.arv.d.ts",
+    "packages/tree-sitter-arvia/bindings/**",
+    "packages/tree-sitter-arvia/src/**"
+  ]
 }

@@ -34,11 +34,9 @@ module.exports = grammar({
 
     // --- theme ------------------------------------------------------------
 
-    theme_block: ($) =>
-      seq("theme", "{", optional($.modes_decl), repeat($.token_group), "}"),
+    theme_block: ($) => seq("theme", "{", optional($.modes_decl), repeat($.token_group), "}"),
 
-    modes_decl: ($) =>
-      seq("modes", ":", $.identifier, repeat(seq("|", $.identifier)), ";"),
+    modes_decl: ($) => seq("modes", ":", $.identifier, repeat(seq("|", $.identifier)), ";"),
 
     token_group: ($) =>
       seq(field("name", $.identifier), "{", repeat(choice($.token_entry, $.mode_block)), "}"),
@@ -48,8 +46,7 @@ module.exports = grammar({
 
     doc_suffix: ($) => seq("doc", $.string),
 
-    mode_block: ($) =>
-      seq("@", field("mode", $.identifier), "{", repeat($.token_entry), "}"),
+    mode_block: ($) => seq("@", field("mode", $.identifier), "{", repeat($.token_entry), "}"),
 
     // --- global / keyframes -------------------------------------------------
 
@@ -62,10 +59,8 @@ module.exports = grammar({
 
     // --- recipes / styles ----------------------------------------------------
 
-    recipe_decl: ($) =>
-      seq("recipe", field("name", $.identifier), "{", repeat($._style_item), "}"),
-    style_decl: ($) =>
-      seq("style", field("name", $.identifier), "{", repeat($._style_item), "}"),
+    recipe_decl: ($) => seq("recipe", field("name", $.identifier), "{", repeat($._style_item), "}"),
+    style_decl: ($) => seq("style", field("name", $.identifier), "{", repeat($._style_item), "}"),
 
     // --- components -----------------------------------------------------------
 
@@ -89,26 +84,20 @@ module.exports = grammar({
     base_block: ($) => seq("base", "{", repeat($._body_item), "}"),
 
     slots_block: ($) => seq("slots", "{", repeat($.slot_decl), "}"),
-    slot_decl: ($) =>
-      seq(field("name", $.identifier), "{", repeat($._style_item), "}"),
+    slot_decl: ($) => seq(field("name", $.identifier), "{", repeat($._style_item), "}"),
 
     variants_block: ($) => seq("variants", "{", repeat($.variant_decl), "}"),
-    variant_decl: ($) =>
-      seq(field("name", $.identifier), "{", repeat($.variant_value), "}"),
-    variant_value: ($) =>
-      seq(field("name", $.token_name), "{", repeat($._body_item), "}"),
+    variant_decl: ($) => seq(field("name", $.identifier), "{", repeat($.variant_value), "}"),
+    variant_value: ($) => seq(field("name", $.token_name), "{", repeat($._body_item), "}"),
 
     defaults_block: ($) => seq("defaults", "{", repeat($.setting), "}"),
-    setting: ($) =>
-      seq(field("variant", $.identifier), ":", field("value", $.token_name), ";"),
+    setting: ($) => seq(field("variant", $.identifier), ":", field("value", $.token_name), ";"),
 
     responsive_block: ($) => seq("responsive", "{", repeat($.conditional_entry), "}"),
     container_block: ($) => seq("container", "{", repeat($.conditional_entry), "}"),
-    conditional_entry: ($) =>
-      seq(field("key", $.token_name), "{", repeat($.setting), "}"),
+    conditional_entry: ($) => seq(field("key", $.token_name), "{", repeat($.setting), "}"),
 
-    compound_block: ($) =>
-      seq("compound", "{", repeat(choice($.setting, $.slot_block)), "}"),
+    compound_block: ($) => seq("compound", "{", repeat(choice($.setting, $.slot_block)), "}"),
 
     tokens_block: ($) => seq("tokens", "{", repeat($.token_group), "}"),
 
@@ -121,8 +110,7 @@ module.exports = grammar({
     // recipe/style/slot bodies: no nested slot blocks.
     _style_item: ($) => choice($.declaration, $.use_statement, $.state_block),
 
-    slot_block: ($) =>
-      seq(field("name", $.identifier), "{", repeat($._style_item), "}"),
+    slot_block: ($) => seq(field("name", $.identifier), "{", repeat($._style_item), "}"),
 
     state_block: ($) =>
       seq("&", $.raw_selector, "{", repeat(choice($.declaration, $.slot_block)), "}"),

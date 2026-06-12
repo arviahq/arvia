@@ -1,3 +1,10 @@
 {
-  "ignorePatterns": ["**/dist/**", "**/__snapshots__/**", "**/*.arv.d.ts"]
+  "ignorePatterns": [
+    "**/dist/**",
+    "**/__snapshots__/**",
+    "**/*.arv.d.ts",
+    "packages/tree-sitter-arvia/bindings/**",
+    "packages/tree-sitter-arvia/src/**",
+    "packages/tree-sitter-arvia/pyproject.toml"
+  ]
 }
