@@ -14,7 +14,10 @@ import { getDefinition } from "./definition.js";
 import { toLspDiagnostics } from "./diagnostics.js";
 import { lintDiagnostics } from "./lints.js";
 import { DocumentStore, fileForUri } from "./documents.js";
+import { getFoldingRanges } from "./folding.js";
 import { getHover } from "./hover.js";
+import { getSelectionRanges } from "./selection-ranges.js";
+import { getWorkspaceSymbols } from "./workspace-symbols.js";
 import { getInlayHints } from "./inlay-hints.js";
 import { getReferences } from "./references.js";
 import { getRenameEdits, prepareRename, readFileOr } from "./rename.js";
@@ -88,6 +91,9 @@ connection.onInitialize((_params: InitializeParams): InitializeResult => {
       inlayHintProvider: true,
       renameProvider: { prepareProvider: true },
       codeActionProvider: { codeActionKinds: ["quickfix"] },
+      foldingRangeProvider: true,
+      selectionRangeProvider: true,
+      workspaceSymbolProvider: true,
     },
   };
 });
@@ -180,6 +186,22 @@ connection.languages.inlayHint.on((params) => {
   const doc = documents.get(params.textDocument.uri);
   if (!doc) return [];
   return getInlayHints(store.analysisFor(doc), params.range);
+});
+
+connection.onFoldingRanges((params) => {
+  const doc = documents.get(params.textDocument.uri);
+  if (!doc) return [];
+  return getFoldingRanges(store.analysisFor(doc));
+});
+
+connection.onSelectionRanges((params) => {
+  const doc = documents.get(params.textDocument.uri);
+  if (!doc) return [];
+  return getSelectionRanges(store.analysisFor(doc), params.positions);
+});
+
+connection.onWorkspaceSymbol((params) => {
+  return getWorkspaceSymbols(params.query, workspaces.values(), contentFor);
 });
 
 connection.onCodeAction((params) => {

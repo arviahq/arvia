@@ -1,0 +1,135 @@
+{
+  "Component": {
+    "prefix": "component",
+    "body": [
+      "component ${1:Name} {",
+      "  base {",
+      "    $0",
+      "  }",
+      "",
+      "  variants {",
+      "    ${2:tone} {",
+      "      ${3:primary} { }",
+      "    }",
+      "  }",
+      "",
+      "  defaults { $2: $3; }",
+      "}"
+    ],
+    "description": "Component with base, variants and defaults"
+  },
+  "Theme": {
+    "prefix": "theme",
+    "body": [
+      "theme {",
+      "  ${1:color} {",
+      "    ${2:primary} = ${3:#635bff};$0",
+      "  }",
+      "}"
+    ],
+    "description": "Theme block with a token group"
+  },
+  "Theme with modes": {
+    "prefix": "theme-modes",
+    "body": [
+      "theme {",
+      "  modes: ${1:light} | ${2:dark};",
+      "",
+      "  ${3:color} {",
+      "    ${4:background} = ${5:#ffffff};",
+      "    @$2 {",
+      "      $4 = ${6:#111111};",
+      "    }$0",
+      "  }",
+      "}"
+    ],
+    "description": "Moded theme with a dark override"
+  },
+  "Token with doc": {
+    "prefix": "token",
+    "body": ["${1:name} = ${2:value} doc \"${3:description}\";$0"],
+    "description": "Theme token with documentation"
+  },
+  "Mode override block": {
+    "prefix": "@mode",
+    "body": ["@${1:dark} {", "  ${2:token} = ${3:value};$0", "}"],
+    "description": "Per-mode token overrides"
+  },
+  "Slots": {
+    "prefix": "slots",
+    "body": ["slots {", "  ${1:icon} { $0 }", "}"],
+    "description": "Slot declarations"
+  },
+  "Variants": {
+    "prefix": "variants",
+    "body": ["variants {", "  ${1:size} {", "    ${2:sm} { $0 }", "  }", "}"],
+    "description": "Variants block"
+  },
+  "Defaults": {
+    "prefix": "defaults",
+    "body": ["defaults { ${1:variant}: ${2:value}; }$0"],
+    "description": "Default variant values"
+  },
+  "Compound variants": {
+    "prefix": "compound",
+    "body": [
+      "compound {",
+      "  ${1:variant}: ${2:value};",
+      "  ${3:root} {",
+      "    $0",
+      "  }",
+      "}"
+    ],
+    "description": "Styles applied when several variants match"
+  },
+  "Responsive overrides": {
+    "prefix": "responsive",
+    "body": ["responsive {", "  ${1:md} { ${2:variant}: ${3:value}; }$0", "}"],
+    "description": "Variant overrides per breakpoint"
+  },
+  "Container overrides": {
+    "prefix": "container",
+    "body": ["container {", "  ${1:sm} { ${2:variant}: ${3:value}; }$0", "}"],
+    "description": "Variant overrides per container size"
+  },
+  "Recipe": {
+    "prefix": "recipe",
+    "body": ["recipe ${1:Name} {", "  $0", "}"],
+    "description": "Reusable style recipe (inline with `use`)"
+  },
+  "Keyframes": {
+    "prefix": "keyframes",
+    "body": [
+      "keyframes ${1:name} {",
+      "  from { ${2:opacity}: ${3:0}; }",
+      "  to { $2: ${4:1}; }$0",
+      "}"
+    ],
+    "description": "Animation keyframes"
+  },
+  "Style": {
+    "prefix": "style",
+    "body": ["style ${1:Name} {", "  $0", "}"],
+    "description": "Standalone exported class"
+  },
+  "Global styles": {
+    "prefix": "global",
+    "body": ["global {", "  ${1:body} {", "    $0", "  }", "}"],
+    "description": "Global CSS rules"
+  },
+  "State selector": {
+    "prefix": "&:",
+    "body": ["&:${1:hover} {", "  $0", "}"],
+    "description": "Pseudo-class state styles"
+  },
+  "Component tokens": {
+    "prefix": "tokens",
+    "body": ["tokens {", "  ${1:m} { ${2:pad} = ${3:8px}; }$0", "}"],
+    "description": "Component-scoped compile-time tokens"
+  },
+  "Use recipe": {
+    "prefix": "use",
+    "body": ["use ${1:Recipe};$0"],
+    "description": "Inline a recipe's styles"
+  }
+}

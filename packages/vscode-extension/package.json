@@ -67,6 +67,12 @@
         "scopeName": "source.arv",
         "path": "./syntaxes/arvia.tmLanguage.json"
       }
+    ],
+    "snippets": [
+      {
+        "language": "arvia",
+        "path": "./snippets/arvia.code-snippets"
+      }
     ]
   },
   "activationEvents": [
