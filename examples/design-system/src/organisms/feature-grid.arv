@@ -1,0 +1,56 @@
+// FeatureGrid: responsive column layout for feature items.
+
+component FeatureGrid {
+  base {
+    display: grid;
+    gap: space.4;
+
+    item {
+      padding: space.4;
+      border-radius: radius.lg;
+      border: 1px solid color.border;
+      background: color.surface;
+    }
+
+    icon {
+      font-size: font.xl;
+      margin-bottom: space.2;
+    }
+
+    title {
+      font-weight: 600;
+      font-size: font.md;
+      margin-bottom: space.1;
+    }
+
+    description {
+      font-size: font.sm;
+      color: color.muted;
+    }
+  }
+
+  slots {
+    root {}
+    item {}
+    icon {}
+    title {}
+    description {}
+  }
+
+  variants {
+    columns {
+      one { root { grid-template-columns: 1fr; } }
+      two { root { grid-template-columns: repeat(2, 1fr); } }
+      three { root { grid-template-columns: repeat(3, 1fr); } }
+    }
+  }
+
+  defaults {
+    columns: one;
+  }
+
+  responsive {
+    md { columns: two; }
+    lg { columns: three; }
+  }
+}

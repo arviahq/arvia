@@ -1,0 +1,41 @@
+// PageShell: full-page chrome with header, main, footer.
+
+component PageShell {
+  base {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: color.background;
+
+    header {
+      flex-shrink: 0;
+      border-bottom: 1px solid color.border;
+      background: color.surface;
+    }
+
+    main {
+      flex: 1;
+      padding: space.6 space.5;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    footer {
+      flex-shrink: 0;
+      padding: space.4 space.5;
+      border-top: 1px solid color.border;
+      background: color.surface;
+      font-size: font.sm;
+      color: color.muted;
+      text-align: center;
+    }
+  }
+
+  slots {
+    root {}
+    header {}
+    main {}
+    footer {}
+  }
+}

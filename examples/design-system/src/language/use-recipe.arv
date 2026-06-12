@@ -1,0 +1,6 @@
+component UseRecipeDemo {
+  use Surface;
+  padding: space.4;
+  font-size: font.sm;
+  color: color.text;
+}

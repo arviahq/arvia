@@ -1,0 +1,49 @@
+// Link: tone variants and pseudo-class states.
+
+component Link {
+  base {
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color duration.fast;
+    use FocusRing;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  variants {
+    tone {
+      primary {
+        color: color.primary;
+        &:hover {
+          color: color.primaryHover;
+        }
+      }
+      muted {
+        color: color.muted;
+        &:hover {
+          color: color.text;
+        }
+      }
+      danger {
+        color: color.danger;
+        &:hover {
+          color: color.dangerHover;
+        }
+      }
+    }
+
+    size {
+      sm { font-size: font.sm; }
+      md { font-size: font.md; }
+      lg { font-size: font.lg; }
+    }
+  }
+
+  defaults {
+    tone: primary;
+    size: md;
+  }
+}

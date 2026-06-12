@@ -1,0 +1,11 @@
+// Divider: horizontal rule atom.
+
+component Divider {
+  base {
+    display: block;
+    height: 1px;
+    border: none;
+    background: color.border;
+    margin: space.4 0;
+  }
+}

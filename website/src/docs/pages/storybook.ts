@@ -62,7 +62,7 @@ arvia gen --storybook --theme src/theme.arv --out stories src/`,
       {
         type: "p",
         text: fbt(
-          "To see a complete setup, run pnpm demo:storybook in the Arvia monorepo — it generates stories for the demo components and boots Storybook on them.",
+          "To see a complete setup, run pnpm demo:storybook in the Arvia monorepo — it generates stories for the demo components and boots Storybook on them. For a full atomic design system showcase with Language/* feature demos, run pnpm design-system:storybook (examples/design-system).",
           "Docs content — storybook: demo pointer",
         ),
       },

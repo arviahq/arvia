@@ -1,0 +1,56 @@
+// Stat: value + label metric display.
+
+component Stat {
+  base {
+    display: flex;
+    flex-direction: column;
+    gap: space.1;
+
+    value {
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    label {
+      color: color.muted;
+      font-size: font.sm;
+    }
+  }
+
+  slots {
+    root {}
+    value {}
+    label {}
+  }
+
+  variants {
+    size {
+      sm {
+        value { font-size: font.lg; }
+      }
+      md {
+        value { font-size: font.xl; }
+      }
+      lg {
+        value { font-size: font.2xl; }
+      }
+    }
+
+    tone {
+      default {
+        value { color: color.text; }
+      }
+      primary {
+        value { color: color.primary; }
+      }
+      success {
+        value { color: color.success; }
+      }
+    }
+  }
+
+  defaults {
+    size: md;
+    tone: default;
+  }
+}

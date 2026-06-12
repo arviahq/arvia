@@ -1,0 +1,56 @@
+// Input: size variants and interaction states.
+
+component Input {
+  base {
+    display: block;
+    width: 100%;
+    border: 1px solid color.border;
+    border-radius: radius.md;
+    background: color.surface;
+    color: color.text;
+    font-family: inherit;
+    transition: border-color duration.fast, box-shadow duration.fast;
+    use FocusRing;
+
+    &::placeholder {
+      color: color.muted;
+    }
+
+    &:focus-visible {
+      border-color: color.primary;
+      box-shadow: 0 0 0 3px color.infoBg;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: color.background;
+    }
+
+    &[aria-invalid="true"] {
+      border-color: color.danger;
+      box-shadow: 0 0 0 3px #fee2e2;
+    }
+  }
+
+  variants {
+    size {
+      sm {
+        font-size: font.sm;
+        padding: space.1 space.3;
+      }
+      md {
+        font-size: font.md;
+        padding: space.2 space.3;
+      }
+      lg {
+        font-size: font.lg;
+        padding: space.3 space.4;
+      }
+    }
+  }
+
+  defaults {
+    size: md;
+  }
+}

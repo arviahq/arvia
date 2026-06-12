@@ -1,0 +1,47 @@
+// DashboardLayout: sidebar + content with responsive visibility.
+
+component DashboardLayout {
+  base {
+    display: grid;
+    min-height: 100vh;
+    background: color.background;
+
+    sidebar {
+      border-right: 1px solid color.border;
+      background: color.surface;
+      padding: space.4;
+    }
+
+    content {
+      padding: space.5 space.6;
+      min-width: 0;
+    }
+  }
+
+  slots {
+    root {}
+    sidebar {}
+    content {}
+  }
+
+  variants {
+    sidebar {
+      show {
+        root { grid-template-columns: 240px 1fr; }
+        sidebar { display: block; }
+      }
+      hide {
+        root { grid-template-columns: 1fr; }
+        sidebar { display: none; }
+      }
+    }
+  }
+
+  defaults {
+    sidebar: hide;
+  }
+
+  responsive {
+    lg { sidebar: show; }
+  }
+}

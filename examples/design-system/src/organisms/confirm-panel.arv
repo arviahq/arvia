@@ -1,0 +1,39 @@
+// ConfirmPanel: destructive confirmation pattern.
+
+component ConfirmPanel {
+  use Surface;
+
+  base {
+    max-width: 420px;
+    overflow: hidden;
+
+    header {
+      padding: space.4 space.5;
+      border-bottom: 1px solid color.border;
+      font-weight: 600;
+      font-size: font.lg;
+    }
+
+    body {
+      padding: space.5;
+      font-size: font.md;
+      color: color.muted;
+    }
+
+    footer {
+      display: flex;
+      gap: space.2;
+      justify-content: flex-end;
+      padding: space.3 space.5;
+      border-top: 1px solid color.border;
+      background: color.background;
+    }
+  }
+
+  slots {
+    root {}
+    header {}
+    body {}
+    footer {}
+  }
+}

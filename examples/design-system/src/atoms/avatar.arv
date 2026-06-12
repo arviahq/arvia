@@ -1,0 +1,59 @@
+// Avatar: image + fallback slots.
+
+component Avatar {
+  base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: radius.full;
+    background: color.border;
+    color: color.text;
+    font-weight: 600;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    fallback {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  slots {
+    root {}
+    image {}
+    fallback {}
+  }
+
+  variants {
+    size {
+      sm {
+        width: 32px;
+        height: 32px;
+        font-size: font.sm;
+      }
+      md {
+        width: 40px;
+        height: 40px;
+        font-size: font.md;
+      }
+      lg {
+        width: 56px;
+        height: 56px;
+        font-size: font.lg;
+      }
+    }
+  }
+
+  defaults {
+    size: md;
+  }
+}

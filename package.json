@@ -7,6 +7,7 @@
     "dev": "pnpm --filter './packages/**' --parallel -r dev",
     "demo": "pnpm --filter demo dev",
     "demo:storybook": "pnpm --filter demo storybook",
+    "design-system:storybook": "pnpm --filter design-system storybook",
     "demo:docs": "pnpm --filter demo predocs",
     "website": "pnpm --filter website dev",
     "website:build": "pnpm --filter \"website...\" -r run build",

@@ -1,0 +1,93 @@
+// ProductCard: container-query layout with keyframe entrance.
+
+component ProductCard {
+  use Surface;
+
+  base {
+    overflow: hidden;
+    animation: keyframes.fadeIn duration.normal easing.out;
+
+    media {
+      aspect-ratio: 16 / 10;
+      background: color.background;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: font.2xl;
+    }
+
+    content {
+      padding: space.4;
+      display: flex;
+      flex-direction: column;
+      gap: space.2;
+    }
+
+    title {
+      font-weight: 600;
+      font-size: font.lg;
+    }
+
+    price {
+      font-size: font.xl;
+      font-weight: 700;
+      color: color.primary;
+    }
+
+    meta {
+      display: flex;
+      gap: space.2;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    actions {
+      display: flex;
+      gap: space.2;
+      margin-top: space.2;
+    }
+  }
+
+  slots {
+    root {}
+    media {}
+    content {}
+    title {}
+    price {}
+    meta {}
+    actions {}
+  }
+
+  variants {
+    layout {
+      stacked {
+        content {
+          flex-direction: column;
+        }
+        actions {
+          flex-direction: column;
+        }
+      }
+      horizontal {
+        content {
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+        }
+        actions {
+          flex-direction: row;
+        }
+      }
+    }
+  }
+
+  defaults {
+    layout: stacked;
+  }
+
+  container {
+    wide {
+      layout: horizontal;
+    }
+  }
+}

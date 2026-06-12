@@ -5,13 +5,13 @@ import { glob } from "tinyglobby";
 import { compile, renderDiagnostic, type ThemeEnv } from "@arviahq/compiler";
 import { writeDtsNow } from "./dts-writer.js";
 
-const USAGE = `Usage: arvia gen [dir] [--theme <path>] [--storybook|--docs] [--out <dir>] [--format md|json]
+const USAGE = `Usage: arvia gen [dir] [--theme <path>] [--storybook|--docs] [--out <dir>] [--include <dirs>] [--format md|json]
 
 Compiles every .arv file under [dir] (default: .) and writes the sibling
 .d.ts declaration files, so TypeScript can typecheck without running Vite.
 The theme defaults to the first file named theme.arv found under [dir].
 
-With --storybook, generates Storybook CSF stories into --out (default: stories/).
+With --storybook, generates Storybook CSF stories into --out (default: stories/generated/).
 With --docs, generates design token documentation (default: docs/tokens/).`;
 
 async function main(): Promise<number> {
@@ -27,6 +27,7 @@ async function main(): Promise<number> {
   let storybook = false;
   let docs = false;
   let outDir = "stories";
+  let includeDirs: string[] | undefined;
   let docsFormat: "md" | "json" = "md";
   for (let i = 0; i < args.length; i++) {
     if (args[i] === "--theme") {
@@ -37,8 +38,16 @@ async function main(): Promise<number> {
       }
     } else if (args[i] === "--storybook") {
       storybook = true;
+      outDir = "stories/generated";
     } else if (args[i] === "--docs") {
       docs = true;
+    } else if (args[i] === "--include") {
+      const raw = args[++i];
+      if (!raw) {
+        console.error("error: --include requires a comma-separated list");
+        return 1;
+      }
+      includeDirs = raw.split(",").map((s) => s.trim()).filter(Boolean);
     } else if (args[i] === "--format") {
       const fmt = args[++i];
       if (fmt !== "md" && fmt !== "json") {
@@ -78,6 +87,7 @@ async function main(): Promise<number> {
       cwd: path.resolve(dir),
       outDir,
       theme: themeArg,
+      includeDirs,
     });
     for (const error of result.errors) console.error(error);
     for (const file of result.files) {

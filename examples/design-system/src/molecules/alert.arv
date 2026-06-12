@@ -1,0 +1,61 @@
+// Alert: icon, title, message slots with tone variants.
+
+component Alert {
+  use Surface;
+
+  base {
+    display: flex;
+    gap: space.3;
+    padding: space.4;
+    align-items: flex-start;
+
+    icon {
+      flex-shrink: 0;
+      font-size: font.lg;
+      line-height: 1;
+    }
+
+    title {
+      font-weight: 600;
+      font-size: font.md;
+      margin-bottom: space.1;
+    }
+
+    message {
+      font-size: font.sm;
+      color: color.muted;
+    }
+  }
+
+  slots {
+    root {}
+    icon {}
+    title {}
+    message {}
+  }
+
+  variants {
+    tone {
+      info {
+        border-color: color.info;
+        icon { color: color.info; }
+      }
+      success {
+        border-color: color.success;
+        icon { color: color.success; }
+      }
+      warning {
+        border-color: color.warning;
+        icon { color: color.warning; }
+      }
+      danger {
+        border-color: color.danger;
+        icon { color: color.danger; }
+      }
+    }
+  }
+
+  defaults {
+    tone: info;
+  }
+}

@@ -1,0 +1,59 @@
+// FormField: label, input, hint slots with invalid state.
+
+component FormField {
+  base {
+    display: flex;
+    flex-direction: column;
+    gap: space.1;
+
+    label {
+      font-size: font.sm;
+      font-weight: 500;
+      color: color.text;
+    }
+
+    input {
+      display: block;
+      width: 100%;
+      border: 1px solid color.border;
+      border-radius: radius.md;
+      background: color.surface;
+      color: color.text;
+      font-family: inherit;
+      font-size: font.md;
+      padding: space.2 space.3;
+      transition: border-color duration.fast;
+
+      &:focus-visible {
+        outline: 2px solid color.primary;
+        outline-offset: 2px;
+        border-color: color.primary;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    hint {
+      font-size: font.sm;
+      color: color.muted;
+    }
+
+    &[data-invalid="true"] {
+      label { color: color.danger; }
+      input {
+        border-color: color.danger;
+      }
+      hint { color: color.danger; }
+    }
+  }
+
+  slots {
+    root {}
+    label {}
+    input {}
+    hint {}
+  }
+}
