@@ -7,13 +7,16 @@ import {
 } from "vscode-languageserver/node.js";
 import type { InitializeParams, InitializeResult } from "vscode-languageserver";
 import { TextDocument } from "vscode-languageserver-textdocument";
+import { getCodeActions } from "./code-actions.js";
 import { getColorPresentations, getDocumentColors } from "./colors.js";
 import { getCompletions } from "./completion.js";
 import { getDefinition } from "./definition.js";
 import { toLspDiagnostics } from "./diagnostics.js";
+import { lintDiagnostics } from "./lints.js";
 import { DocumentStore, fileForUri } from "./documents.js";
 import { getHover } from "./hover.js";
 import { getInlayHints } from "./inlay-hints.js";
+import { getReferences } from "./references.js";
 import { getRenameEdits, prepareRename, readFileOr } from "./rename.js";
 import { getDocumentSymbols } from "./symbols.js";
 import { WorkspaceState, workspaceRootFor } from "./workspace.js";
@@ -41,9 +44,18 @@ function workspaceFor(uri: string): WorkspaceState {
 const store = new DocumentStore(workspaceFor);
 const diagnosticTimers = new Map<string, ReturnType<typeof setTimeout>>();
 
+/** Open-document content when available, disk content otherwise. */
+function contentFor(file: string): string | null {
+  const open = documents.get(pathToFileUri(file));
+  return open ? open.getText() : readFileOr(file);
+}
+
 function publishDiagnostics(doc: TextDocument): void {
   const analysis = store.analysisFor(doc);
-  connection.sendDiagnostics({ uri: doc.uri, diagnostics: toLspDiagnostics(analysis) });
+  connection.sendDiagnostics({
+    uri: doc.uri,
+    diagnostics: [...toLspDiagnostics(analysis), ...lintDiagnostics(analysis)],
+  });
 }
 
 function scheduleDiagnostics(doc: TextDocument, immediate = false): void {
@@ -70,10 +82,12 @@ connection.onInitialize((_params: InitializeParams): InitializeResult => {
       completionProvider: { triggerCharacters: [":", ".", "@", " "] },
       hoverProvider: true,
       definitionProvider: true,
+      referencesProvider: true,
       documentSymbolProvider: true,
       colorProvider: true,
       inlayHintProvider: true,
       renameProvider: { prepareProvider: true },
+      codeActionProvider: { codeActionKinds: ["quickfix"] },
     },
   };
 });
@@ -129,6 +143,18 @@ connection.onDefinition((params) => {
   return getDefinition(store.analysisFor(doc), doc.offsetAt(params.position), ws);
 });
 
+connection.onReferences((params) => {
+  const doc = documents.get(params.textDocument.uri);
+  if (!doc) return null;
+  return getReferences(
+    store.analysisFor(doc),
+    doc.offsetAt(params.position),
+    params.context.includeDeclaration,
+    workspaceFor(params.textDocument.uri),
+    contentFor,
+  );
+});
+
 connection.onDocumentSymbol((params) => {
   const doc = documents.get(params.textDocument.uri);
   if (!doc) return [];
@@ -156,6 +182,12 @@ connection.languages.inlayHint.on((params) => {
   return getInlayHints(store.analysisFor(doc), params.range);
 });
 
+connection.onCodeAction((params) => {
+  const doc = documents.get(params.textDocument.uri);
+  if (!doc) return [];
+  return getCodeActions(store.analysisFor(doc), params.context, params.textDocument.uri);
+});
+
 connection.onPrepareRename((params) => {
   const doc = documents.get(params.textDocument.uri);
   if (!doc) return null;
@@ -171,10 +203,7 @@ connection.onRenameRequest((params) => {
     doc.offsetAt(params.position),
     params.newName,
     ws,
-    (file) => {
-      const open = documents.get(pathToFileUri(file));
-      return open ? open.getText() : readFileOr(file);
-    },
+    contentFor,
   );
 });
 

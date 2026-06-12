@@ -14,6 +14,8 @@ export function toLspDiagnostics(analysis: DocumentAnalysis): LspDiagnostic[] {
       message: d.hint ? `${d.message} (${d.hint})` : d.message,
       source: "arvia",
       code: d.code,
+      // Structured fix data round-tripped to textDocument/codeAction.
+      data: d.fix ? { fix: d.fix } : undefined,
     };
   });
 }
