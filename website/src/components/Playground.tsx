@@ -1,14 +1,5 @@
-import {
-  lazy,
-  Suspense,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ElementType,
-  type ReactNode,
-} from "react";
-import { compile, LineIndex, type CompileResult, type ThemeEnv } from "@arviahq/compiler";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { LineIndex, type CompileResult, type ThemeEnv } from "@arviahq/compiler";
 import { headingText } from "../lib/render-prose";
 import { CodeBlock } from "./code-block.arv";
 import { Playground as PlaygroundStyles } from "./playground.arv";
@@ -16,11 +7,13 @@ import { tokens } from "../theme.arv";
 import { highlightCode } from "./highlight";
 import { useSiteTheme } from "../site-theme";
 import type { ArviaMarker } from "./MonacoArvia";
+import { SyntheticPreview } from "../playground/runtime/SyntheticPreview";
+import { BuildClient, type BuildResponse } from "../playground/runtime/worker-client";
 
 // Monaco is heavy — load it only when the playground renders.
 const MonacoArvia = lazy(() => import("./MonacoArvia"));
 
-const DEFAULT_SOURCE = `theme {
+export const DEFAULT_SOURCE = `theme {
   color {
     primary = #6358ff;
     primaryHover = #5249e6;
@@ -81,6 +74,8 @@ interface LastGood {
   meta: CompileResult["meta"];
 }
 
+/** Compact two-pane playground with a synthetic (in-host) preview — used on
+ *  the homepage. The full IDE with real code execution is `PlaygroundIDE`. */
 export function Playground(
   props: {
     /** Pane height in px — editor, output, and preview all match. */
@@ -126,6 +121,7 @@ export function Playground(
   const [editedTsx, setEditedTsx] = useState<string | null>(null);
   const [tab, setTab] = useState<OutputTab>("preview");
   const [outputHtml, setOutputHtml] = useState<string | null>(null);
+  const [build, setBuild] = useState<BuildResponse | null>(null);
 
   function selectTemplate(id: string) {
     const template = (props.templates ?? []).flatMap((g) => g.items).find((t) => t.id === id);
@@ -136,20 +132,36 @@ export function Playground(
     setFile("arv");
   }
 
-  // Compile in the browser on every edit — the same compiler that runs in Vite.
-  const result = useMemo(
-    () => compile(source, { filename: "playground.arv", env: props.env }),
-    [source, props.env],
-  );
+  // Compilation runs in a worker — the same compiler that runs in Vite.
+  const clientRef = useRef<BuildClient | null>(null);
+  useEffect(() => {
+    const client = new BuildClient(setBuild);
+    clientRef.current = client;
+    return () => {
+      client.dispose();
+      clientRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    clientRef.current?.request({
+      framework: "react",
+      arvSource: source,
+      appSource: editedTsx,
+      labels: { clickMe, sampleText },
+      env: props.env,
+    });
+  }, [source, editedTsx, props.env, clickMe, sampleText]);
+
   const lastGood = useRef<LastGood>({ css: "", dts: "", meta: { ...emptyMeta } });
-  if (result.css !== null) {
-    lastGood.current = { css: result.css, dts: result.dts ?? "", meta: result.meta };
+  if (build && build.css !== null) {
+    lastGood.current = { css: build.css, dts: build.dts ?? "", meta: build.meta };
   }
   const { css, dts, meta } = lastGood.current;
-  const errors = result.diagnostics.filter((d) => d.severity === "error");
+  const errors = (build?.diagnostics ?? []).filter((d) => d.severity === "error");
 
   // App.tsx follows the compiled component until the user edits it by hand.
-  const tsx = editedTsx ?? usageSnippet(meta, css, clickMe, sampleText);
+  const tsx = editedTsx ?? build?.appSource ?? "";
 
   useEffect(() => {
     if (tab === "preview") return;
@@ -206,7 +218,7 @@ export function Playground(
           <span className={pg.tabs} style={{ marginLeft: 0 }}>
             {(
               [
-                ["arv", "playground.arv"],
+                ["arv", "App.arv"],
                 ["tsx", "App.tsx"],
               ] as const
             ).map(([id, label]) => (
@@ -269,7 +281,7 @@ export function Playground(
               }
             >
               <MonacoArvia
-                path={file === "arv" ? "playground.arv" : "App.tsx"}
+                path={file === "arv" ? "App.arv" : "App.tsx"}
                 language={file === "arv" ? "arvia" : "typescript"}
                 value={file === "arv" ? source : tsx}
                 onChange={file === "arv" ? setSource : setEditedTsx}
@@ -313,9 +325,9 @@ export function Playground(
         {tab === "preview" ? (
           <div className={pg.preview} style={{ height }}>
             <style>{props.baseCss ? `${props.baseCss}\n${css}` : css}</style>
-            <LivePreview
+            <SyntheticPreview
               meta={meta}
-              tsx={tsx}
+              app={tsx}
               css={css}
               sampleText={sampleText}
               emptyHint={emptyPreviewHint}
@@ -338,247 +350,9 @@ export function Playground(
   );
 }
 
-/** Interactive-looking components preview as a button, everything else as a div. */
-function previewTagFor(css: string): "button" | "div" {
-  return /cursor:\s*pointer/.test(css) ? "button" : "div";
-}
-
-function slotSampleText(slot: string, label: string): string {
-  if (slot === "icon") return "→";
-  if (slot === "label") return label;
-  return slot.charAt(0).toUpperCase() + slot.slice(1);
-}
-
-function childTagFor(slot: string): string {
-  return slot === "icon" || slot === "label" ? "span" : "div";
-}
-
-/** How you'd consume the compiled component from React. */
-function usageSnippet(
-  meta: CompileResult["meta"],
-  css: string,
-  clickMe: string,
-  sampleText: string,
-): string {
-  const component = meta.components[0];
-  if (!component) {
-    const style = meta.styles[0];
-    if (!style) {
-      return "// define a component or style to see its usage";
-    }
-    return `import { ${style.name} } from "./playground.arv";
-
-<p className={${style.name}}>${sampleText}</p>;
-`;
-  }
-
-  const variant = component.variants[0];
-  const props =
-    variant && variant.values.length > 0
-      ? `{ ${variant.name}: "${variant.values[variant.values.length - 1]}" }`
-      : "";
-
-  const tag = previewTagFor(css);
-  const childSlots = component.slots.filter((s) => s !== "root");
-  const rootText = childSlots.some((s) => s !== "icon") ? "" : `\n  ${clickMe}`;
-  const children = childSlots
-    .map((slot) => {
-      const t = childTagFor(slot);
-      return `\n  <${t} className={styles.${slot}}>${slotSampleText(slot, clickMe)}</${t}>`;
-    })
-    .join("");
-
-  return `import { ${component.name} } from "./playground.arv";
-
-const styles = ${component.name}(${props});
-
-<${tag} className={styles.root}>${rootText}${children}
-</${tag}>;
-`;
-}
-
 const emptyMeta: CompileResult["meta"] = {
   components: [],
   tokens: [],
   keyframes: [],
   styles: [],
 };
-
-interface TsxUsage {
-  props: Record<string, string>;
-  tag: string;
-  rootText: string;
-  children: { slot: string; tag: string; text: string }[];
-}
-
-/** Best-effort read of the App.tsx usage: variant props, element tag, slot children. */
-function parseUsage(tsx: string, componentName: string): TsxUsage | null {
-  const call = tsx.match(new RegExp(`\\b${componentName}\\s*\\(([^)]*)\\)`));
-  if (!call) return null;
-
-  const props: Record<string, string> = {};
-  for (const m of (call[1] ?? "").matchAll(/([A-Za-z_$][\w$]*)\s*:\s*["']([^"']*)["']/g)) {
-    props[m[1] ?? ""] = m[2] ?? "";
-  }
-
-  // Greedy body match: the root may contain children of the same tag (div in div),
-  // so capture through to the LAST matching close tag.
-  const root =
-    tsx.match(/<([a-zA-Z][\w]*)\s[^>]*className=\{styles\.root\}[^>]*>([\s\S]*)<\/\1>/) ??
-    tsx.match(/<([a-zA-Z][\w]*)\b[^>]*>([\s\S]*)<\/\1>/);
-  const tag = root?.[1] ?? "div";
-  const inner = root?.[2] ?? "";
-
-  const children: TsxUsage["children"] = [];
-  for (const m of inner.matchAll(/<(\w+)\s[^>]*className=\{styles\.(\w+)\}[^>]*>([^<]*)<\/\1>/g)) {
-    children.push({ tag: m[1] ?? "span", slot: m[2] ?? "", text: (m[3] ?? "").trim() });
-  }
-
-  const rootText = inner
-    .replace(/<(\w+)[^>]*>[\s\S]*?<\/\1>/g, " ")
-    .replace(/<[^>]*\/>/g, " ")
-    .replace(/\{[^}]*\}/g, " ")
-    .trim();
-
-  return { props, tag, rootText, children };
-}
-
-/** Renders what App.tsx describes; falls back to one instance per first-variant value. */
-function LivePreview({
-  meta,
-  tsx,
-  css,
-  sampleText,
-  emptyHint,
-  clickMe,
-}: {
-  meta: CompileResult["meta"];
-  tsx: string;
-  css: string;
-  sampleText: string;
-  emptyHint: string;
-  clickMe: string;
-}) {
-  const component = meta.components[0];
-  if (!component) {
-    const style = meta.styles[0];
-    if (style) {
-      const text = tsx.match(/>([^<{]+)</)?.[1]?.trim();
-      return (
-        <p className={style.className} style={{ margin: 0 }}>
-          {text || sampleText}
-        </p>
-      );
-    }
-    return <span style={{ opacity: 0.6, fontSize: 13 }}>{emptyHint}</span>;
-  }
-
-  const classFor = (slot: string, overrides: Record<string, string>): string => {
-    const classes = [`${component.name}_${slot}_${component.hash}`];
-    const activePairs: string[] = [];
-    for (const variant of component.variants) {
-      const override = overrides[variant.name];
-      const value =
-        override && variant.values.includes(override) ? override : component.defaults[variant.name];
-      if (value) {
-        activePairs.push(`${variant.name}_${value}`);
-        classes.push(`${component.name}_${variant.name}_${value}_${slot}_${component.hash}`);
-      }
-    }
-
-    // Compound variants emit one class per combination (Name_size_sm_tone_danger_root_hash).
-    // Scan the CSS for combo classes whose segments are all currently-active pairs.
-    const comboRe = new RegExp(`\\.${component.name}_(.+?)_${slot}_${component.hash}\\b`, "g");
-    for (const m of css.matchAll(comboRe)) {
-      const middle = m[1] ?? "";
-      let rest = middle;
-      let pairs = 0;
-      while (rest) {
-        const pair = activePairs.find((p) => rest === p || rest.startsWith(`${p}_`));
-        if (!pair) {
-          pairs = 0;
-          break;
-        }
-        rest = rest === pair ? "" : rest.slice(pair.length + 1);
-        pairs += 1;
-      }
-      if (pairs >= 2) classes.push(`${component.name}_${middle}_${slot}_${component.hash}`);
-    }
-
-    return [...new Set(classes)].join(" ");
-  };
-
-  // contain: inline-size (container queries) zeroes the root's intrinsic width,
-  // so those components need an explicit stage to render at a visible size.
-  const needsWidthStage = /container-type/.test(css);
-
-  const renderInstance = (
-    key: string,
-    overrides: Record<string, string>,
-    tag: string,
-    rootText: string,
-    children: TsxUsage["children"],
-  ) => {
-    const Root = (/^[a-z][a-z0-9]*$/.test(tag) ? tag : "div") as ElementType;
-    return (
-      <Root
-        key={key}
-        type={tag === "button" ? "button" : undefined}
-        className={classFor("root", overrides)}
-        style={needsWidthStage ? { width: "min(420px, 100%)" } : undefined}
-      >
-        {rootText || null}
-        {children.map((child, i) => {
-          const Child = (/^[a-z][a-z0-9]*$/.test(child.tag) ? child.tag : "span") as ElementType;
-          return (
-            <Child
-              key={`${child.slot}-${i}`}
-              className={
-                component.slots.includes(child.slot) ? classFor(child.slot, overrides) : undefined
-              }
-            >
-              {child.text}
-            </Child>
-          );
-        })}
-      </Root>
-    );
-  };
-
-  const defaultTag = previewTagFor(css);
-  const defaultChildren = (label: string): TsxUsage["children"] =>
-    component.slots
-      .filter((s) => s !== "root")
-      .map((slot) => ({ slot, tag: childTagFor(slot), text: slotSampleText(slot, label) }));
-  const defaultRootText = (label: string) =>
-    component.slots.some((s) => s !== "root" && s !== "icon") ? "" : label;
-
-  const usage = parseUsage(tsx, component.name);
-  if (usage) {
-    return renderInstance("usage", usage.props, usage.tag, usage.rootText, usage.children);
-  }
-
-  const firstVariant = component.variants[0];
-  if (!firstVariant || firstVariant.values.length === 0) {
-    return renderInstance(
-      component.name,
-      {},
-      defaultTag,
-      defaultRootText(clickMe),
-      defaultChildren(clickMe),
-    );
-  }
-  return (
-    <>
-      {firstVariant.values.map((value) =>
-        renderInstance(
-          value,
-          { [firstVariant.name]: value },
-          defaultTag,
-          defaultRootText(clickMe),
-          defaultChildren(clickMe),
-        ),
-      )}
-    </>
-  );
-}

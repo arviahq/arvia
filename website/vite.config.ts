@@ -5,6 +5,9 @@ import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import { arvia } from "@arviahq/vite-plugin-react";
 
 export default defineConfig({
+  // ES-format workers so the build worker's dynamic import of
+  // @vue/compiler-sfc code-splits into a lazy, worker-only chunk.
+  worker: { format: "es" },
   plugins: [
     arvia({ theme: "src/theme.arv" }),
     tanstackRouter({

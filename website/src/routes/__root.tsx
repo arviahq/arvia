@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { createRootRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import { useLocaleContext } from "fbtee";
 import { SiteFooter } from "../components/site/SiteFooter";
 import { SiteNav } from "../components/site/SiteNav";
@@ -15,6 +15,9 @@ export const Route = createRootRoute({
 function RootLayout() {
   const { locale, setLocale } = useLocaleContext();
   const [theme, setThemeState] = useState<SiteTheme>(() => getStoredTheme() ?? "dark");
+  // The playground is an edge-to-edge IDE — no footer below it.
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const isPlayground = pathname === "/playground";
 
   useEffect(() => {
     setTheme(theme);
@@ -28,14 +31,22 @@ function RootLayout() {
   return (
     <SiteThemeProvider theme={theme}>
       <DocsSearchProvider>
-        <SiteNav
-          locale={locale as SiteLocale}
-          onLocaleChange={setLocale}
-          onThemeToggle={toggleTheme}
-          theme={theme}
-        />
-        <Outlet />
-        <SiteFooter />
+        <div
+          style={
+            isPlayground
+              ? { display: "flex", flexDirection: "column", height: "100dvh", overflow: "hidden" }
+              : undefined
+          }
+        >
+          <SiteNav
+            locale={locale as SiteLocale}
+            onLocaleChange={setLocale}
+            onThemeToggle={toggleTheme}
+            theme={theme}
+          />
+          <Outlet />
+          {isPlayground ? null : <SiteFooter />}
+        </div>
       </DocsSearchProvider>
     </SiteThemeProvider>
   );

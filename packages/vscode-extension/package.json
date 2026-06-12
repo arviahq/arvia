@@ -1,7 +1,6 @@
 {
   "name": "arvia",
   "displayName": "Arvia",
-  "icon": "icons/arvia.png",
   "version": "0.2.2",
   "private": true,
   "description": "Syntax highlighting, diagnostics, completion and hover for .arv design system files.",
@@ -79,6 +78,7 @@
   "activationEvents": [
     "onLanguage:arvia"
   ],
+  "icon": "icons/arvia.png",
   "engines": {
     "vscode": "^1.74.0"
   }

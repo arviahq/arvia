@@ -20,7 +20,7 @@ const themeHost = themeHostFor(themeSource, "site-theme.arv");
 
 function analysisOf(model: monaco.editor.ITextModel): DocumentAnalysis {
   return createDocumentAnalysis(model.getValue(), {
-    filename: "playground.arv",
+    filename: "App.arv",
     env: getThemeEnv(),
   });
 }

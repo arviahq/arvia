@@ -104,3 +104,169 @@ component Playground {
     }
   }
 }
+
+// Full-page playground IDE: files sidebar, editor, browser-style preview.
+component Ide {
+  slots {
+    root {
+      display: grid;
+      grid-template-columns: 192px minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-rows: auto minmax(0, 1fr);
+      width: 100%;
+      height: 100%;
+      border-top: 1px solid color.border;
+      background: color.codeBg;
+    }
+
+    toolbar {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: space.3;
+      padding: space.2 space.4;
+      border-bottom: 1px solid color.border;
+      background: color.surfaceRaised;
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: font.xs;
+      color: color.muted;
+    }
+
+    sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: space.2;
+      border-right: 1px solid color.border;
+      background: color.surface;
+      overflow-y: auto;
+    }
+
+    sidebarLabel {
+      padding: space.2 space.2 2px;
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: color.muted;
+      opacity: 0.7;
+    }
+
+    resizer {
+      cursor: col-resize;
+      background: transparent;
+      touch-action: none;
+      user-select: none;
+
+      &:hover { background: color.border; }
+      &[data-dragging="true"] { background: color.accent; }
+    }
+
+    fileItem {
+      display: flex;
+      align-items: center;
+      gap: space.2;
+      padding: 5px space.2;
+      border: none;
+      background: transparent;
+      border-radius: radius.sm;
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: font.xs;
+      font-weight: 600;
+      color: color.muted;
+      cursor: pointer;
+      text-align: left;
+
+      &:hover { background: color.surfaceRaised; }
+      &[data-active="true"] {
+        background: color.surfaceRaised;
+        color: color.accent;
+      }
+    }
+
+    editorPane {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      border-right: 1px solid color.border;
+    }
+
+    editorHost {
+      flex: 1;
+      min-height: 0;
+    }
+
+    generatedView {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      padding: space.3 space.4;
+      background: color.codeBg;
+      color: color.codeText;
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-weight: 500;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    previewPane {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      min-height: 0;
+      background: color.surface;
+    }
+
+    browserBar {
+      display: flex;
+      align-items: center;
+      gap: space.3;
+      padding: space.2 space.3;
+      border-bottom: 1px solid color.border;
+      background: color.surfaceRaised;
+    }
+
+    urlBar {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: space.2;
+      padding: 3px space.3;
+      border-radius: 999px;
+      border: 1px solid color.border;
+      background: color.surface;
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: font.xs;
+      color: color.muted;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    refreshBtn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border: none;
+      border-radius: radius.sm;
+      background: transparent;
+      color: color.muted;
+      cursor: pointer;
+
+      &:hover {
+        background: color.surface;
+        color: color.text;
+      }
+    }
+
+    browserBody {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+    }
+  }
+}

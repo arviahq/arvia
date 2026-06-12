@@ -2,6 +2,8 @@ import Editor, { loader } from "@monaco-editor/react";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api.js";
 // Monarch-only TypeScript/TSX highlighting — no language-service worker needed.
 import "monaco-editor/esm/vs/basic-languages/typescript/typescript.contribution.js";
+// HTML monarch handles Vue SFC blocks (<template>/<script>/<style>) acceptably.
+import "monaco-editor/esm/vs/basic-languages/html/html.contribution.js";
 import editorWorker from "monaco-editor/esm/vs/editor/editor.worker.js?worker";
 import { registerArviaProviders } from "./monaco-arvia-providers";
 
@@ -135,8 +137,8 @@ export default function MonacoArvia(props: {
   onChange: (value: string) => void;
   theme: "light" | "dark";
   markers: ArviaMarker[];
-  height: number;
-  language?: "arvia" | "typescript";
+  height: number | string;
+  language?: "arvia" | "typescript" | "html";
   path?: string;
 }) {
   return (
