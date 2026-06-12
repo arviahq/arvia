@@ -13,7 +13,7 @@ export function keyframes(): DocSection {
       {
         type: "p",
         text: fbt(
-          "A keyframes block declares a CSS animation. Steps are from, to, or percentages, and values resolve tokens like everywhere else. Components reference an animation as keyframes.name:",
+          "A `keyframes` block declares a CSS animation. Steps are from, to, or percentages, and values resolve tokens like everywhere else. Components reference an animation as `keyframes.name`:",
           "Docs content — keyframes: opening",
         ),
       },
@@ -39,7 +39,7 @@ component Toast {
       {
         type: "p",
         text: fbt(
-          "Animation names share one global namespace in CSS, so the compiler hashes them the same way it hashes class names — fadeIn becomes something like fadeIn_1kqpaa, and the keyframes.fadeIn reference resolves to the hashed name:",
+          "Animation names share one global namespace in CSS, so the compiler hashes them the same way it hashes class names — fadeIn becomes something like fadeIn_1kqpaa, and the `keyframes.fadeIn` reference resolves to the hashed name:",
           "Docs content — keyframes: hashing lead-in",
         ),
       },
@@ -66,7 +66,7 @@ to {
       {
         type: "p",
         text: fbt(
-          "Two files can each declare a fadeIn without colliding, and your animation never fights one from a third-party stylesheet. The flip side: always reference through keyframes.name — a hand-written animation: fadeIn would point at a name that does not exist in the output.",
+          "Two files can each declare a fadeIn without colliding, and your animation never fights one from a third-party stylesheet. The flip side: always reference through `keyframes.name` — a hand-written animation: fadeIn would point at a name that does not exist in the output.",
           "Docs content — keyframes: hashing consequences",
         ),
       },
@@ -140,7 +140,7 @@ component Skeleton {
       {
         type: "p",
         text: fbt(
-          "Honor prefers-reduced-motion at the document level. Arvia's global block intentionally has no at-rule support, so this one rule belongs in a small plain CSS file next to your entry point — !important lets it cut through every hashed class:",
+          "Honor `prefers-reduced-motion` at the document level. Arvia's `global` block intentionally has no at-rule support, so this one rule belongs in a small plain CSS file next to your entry point — `!important` lets it cut through every hashed class:",
           "Docs content — keyframes: reduced motion lead-in",
         ),
       },

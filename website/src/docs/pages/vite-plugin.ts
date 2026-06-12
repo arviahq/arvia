@@ -13,7 +13,7 @@ export function vitePlugin(): DocSection {
       {
         type: "p",
         text: fbt(
-          "The Vite plugin makes .arv files importable modules: each import compiles to the generated JavaScript, with the CSS routed through Vite's own pipeline. The integration is identical across frameworks — only the JSX plugin next to it differs:",
+          "The Vite plugin makes `.arv` files importable modules: each import compiles to the generated JavaScript, with the CSS routed through Vite's own pipeline. The integration is identical across frameworks — only the JSX plugin next to it differs:",
           "Docs content — vite: opening",
         ),
       },
@@ -44,9 +44,9 @@ export default defineConfig({
         rows: [
           [
             "theme",
-            fbt("src/theme.arv when it exists", "Docs table cell — vite theme default"),
+            fbt("`src/theme.arv` when it exists", "Docs table cell — vite theme default"),
             fbt(
-              "Path (relative to the Vite root) of the file whose tokens, recipes, and keyframes every .arv file can see.",
+              "Path (relative to the Vite root) of the file whose tokens, recipes, and keyframes every `.arv` file can see.",
               "Docs table cell — vite theme meaning",
             ),
           ],
@@ -54,7 +54,7 @@ export default defineConfig({
             "dts",
             "false",
             fbt(
-              "Write sibling .d.ts files next to each .arv file. Off by default — types come virtually from the TypeScript plugin; sibling files would shadow them.",
+              "Write sibling `.d.ts` files next to each `.arv` file. Off by default — types come virtually from the TypeScript plugin; sibling files would shadow them.",
               "Docs table cell — vite dts meaning",
             ),
           ],
@@ -64,14 +64,14 @@ export default defineConfig({
       {
         type: "p",
         text: fbt(
-          "When a module imports button.arv, the plugin compiles it against the shared theme environment and returns the generated JS with one line prepended: an import of the phantom module button.arv.css. That module does not exist on disk — the plugin serves the compiled CSS under that name, which hands styling to Vite's CSS pipeline: dev-server injection, build-time extraction, minification, and code-split CSS chunks all behave exactly as for a real stylesheet.",
+          "When a module imports `button.arv`, the plugin compiles it against the shared theme environment and returns the generated JS with one line prepended: an import of the phantom module `button.arv.css`. That module does not exist on disk — the plugin serves the compiled CSS under that name, which hands styling to Vite's CSS pipeline: dev-server injection, build-time extraction, minification, and code-split CSS chunks all behave exactly as for a real stylesheet.",
           "Docs content — vite: phantom css",
         ),
       },
       {
         type: "p",
         text: fbt(
-          "Compile errors surface as Vite errors with file, line, and column — the dev overlay points at the .arv source. Warnings (unknown property, unused recipe…) reach the terminal without blocking the build.",
+          "Compile errors surface as Vite errors with file, line, and column — the dev overlay points at the `.arv` source. Warnings (unknown property, unused recipe…) reach the terminal without blocking the build.",
           "Docs content — vite: diagnostics flow",
         ),
       },
@@ -108,7 +108,7 @@ export default defineConfig({
             ),
           ],
           [
-            fbt("Create or delete .arv files", "Docs table cell — hmr add remove"),
+            fbt("Create or delete `.arv` files", "Docs table cell — hmr add remove"),
             fbt(
               "Watched: new files compile on first import (and get types immediately in dts mode); deleting a file cleans its caches and generated siblings.",
               "Docs table cell — hmr add remove result",

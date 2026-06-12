@@ -37,7 +37,7 @@ component Button {
       {
         type: "p",
         text: fbt(
-          "Recipes hold declarations, &-state blocks, and use statements. They cannot declare variants, slots, or local tokens — a recipe is a fragment, not a component. If one grows in that direction, promote it.",
+          "Recipes hold declarations, `&-state` blocks, and `use` statements. They cannot declare variants, slots, or local tokens — a recipe is a fragment, not a component. If one grows in that direction, promote it.",
           "Docs content — recipes: what they hold",
         ),
       },
@@ -51,7 +51,7 @@ component Button {
       {
         type: "p",
         text: fbt(
-          "Recipes declared in your shared theme file are available to every .arv file in the project — use FocusRing simply works, with no import statement. This is the same ambient-environment mechanism that makes tokens global: the theme is compiled first, and its recipes ride along.",
+          "Recipes declared in your shared theme file are available to every `.arv` file in the project — `use FocusRing` simply works, with no import statement. This is the same ambient-environment mechanism that makes tokens global: the theme is compiled first, and its recipes ride along.",
           "Docs content — recipes: theme env",
         ),
       },
@@ -111,7 +111,7 @@ component Button {
         type: "note",
         tone: "warning",
         text: fbt(
-          "The one place use is not allowed is inside an &-state block — a recipe there would be ambiguous about which selector its own states attach to. Inline the declarations instead.",
+          "The one place use is not allowed is inside an `&-state` block — a recipe there would be ambiguous about which selector its own states attach to. Inline the declarations instead.",
           "Docs note — recipes: no use in states",
         ),
       },
@@ -122,7 +122,7 @@ component Button {
       {
         type: "p",
         text: fbt(
-          "use is textual inclusion: the recipe's declarations are flattened in at exactly the spot the use statement sits. Within one rule, later declarations win — so you override a recipe by writing after it:",
+          "use is textual inclusion: the recipe's declarations are flattened in at exactly the spot the `use` statement sits. Within one rule, later declarations win — so you override a recipe by writing after it:",
           "Docs content — recipes: ordering lead-in",
         ),
       },
@@ -159,7 +159,7 @@ component Card {
       {
         type: "p",
         text: fbt(
-          "Recipes nest to any depth, and the checker walks the chain: an unknown recipe is an error with a suggestion (ARV102), and a cycle — recipe A using B using A — is caught rather than looping forever (ARV103). State blocks flatten too: a recipe's &:hover merges with the consumer's other rules for the same selector.",
+          "Recipes nest to any depth, and the checker walks the chain: an unknown recipe is an error with a suggestion (ARV102), and a cycle — recipe A using B using A — is caught rather than looping forever (ARV103). State blocks flatten too: a recipe's `&:hover` merges with the consumer's other rules for the same selector.",
           "Docs content — recipes: nesting and checks",
         ),
       },
@@ -212,7 +212,7 @@ recipe Surface {
       {
         type: "p",
         text: fbt(
-          "Both hold the same kind of content; the difference is the consumer. A recipe is for other .arv code — it vanishes into its users and emits nothing. A style is for your markup — it emits one class and exports its name. When a fragment needs to be applied directly to an element somewhere, give it a style (which can itself use the recipe).",
+          "Both hold the same kind of content; the difference is the consumer. A recipe is for other `.arv` code — it vanishes into its users and emits nothing. A style is for your markup — it emits one class and exports its name. When a fragment needs to be applied directly to an element somewhere, give it a style (which can itself use the recipe).",
           "Docs content — recipes: vs style",
         ),
       },

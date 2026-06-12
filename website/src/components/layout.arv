@@ -1,7 +1,7 @@
 component DocsLayout {
   base {
     display: grid;
-    max-width: 1200px;
+    max-width: 1240px;
     margin: 0 auto;
     min-height: calc(100vh - 57px);
   }
@@ -21,28 +21,193 @@ component DocsLayout {
       min-width: 0;
       width: 100%;
     }
+    toc {
+      padding: space.6 space.4 space.6 0;
+      position: sticky;
+      top: 57px;
+      height: calc(100vh - 57px);
+      overflow-y: auto;
+    }
   }
 
   variants {
-    sidebar {
-      show {
-        root { grid-template-columns: 240px 1fr; }
-        sidebar { display: block; }
-      }
-      hide {
+    cols {
+      one {
         root { grid-template-columns: 1fr; }
         sidebar { display: none; }
+        toc { display: none; }
+      }
+      two {
+        root { grid-template-columns: 240px 1fr; }
+        sidebar { display: block; }
+        toc { display: none; }
+      }
+      three {
+        root { grid-template-columns: 240px 1fr 200px; }
+        sidebar { display: block; }
+        toc { display: block; }
       }
     }
   }
 
   defaults {
-    sidebar: hide;
+    cols: one;
   }
 
   responsive {
-    lg { sidebar: show; }
+    lg { cols: two; }
+    xl { cols: three; }
   }
+}
+
+component TocRail {
+  base {
+    font-size: font.sm;
+
+    title {
+      font-size: font.xs;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: color.subtle;
+      margin: 0 0 space.2;
+    }
+
+    link {
+      display: block;
+      color: color.muted;
+      text-decoration: none;
+      padding: 3px 0 3px space.3;
+      border-left: 2px solid color.border;
+      &:hover { color: color.text; }
+      &[data-active="true"] {
+        color: color.accent;
+        border-left-color: color.accent;
+      }
+    }
+
+    sub {
+      padding-left: space.5;
+      font-size: font.xs;
+    }
+  }
+
+  slots {
+    root {}
+    title {}
+    link {}
+    sub {}
+  }
+}
+
+component Pager {
+  base {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: space.3;
+    max-width: 42rem;
+    margin-top: space.7;
+
+    item {
+      use Surface;
+      display: flex;
+      flex-direction: column;
+      gap: space.1;
+      padding: space.3 space.4;
+      text-decoration: none;
+      transition: border-color duration.fast;
+      &:hover { border-color: color.subtle; }
+    }
+
+    label {
+      font-size: font.xs;
+      color: color.muted;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    title {
+      font-weight: 600;
+      font-size: font.sm;
+      color: color.text;
+    }
+  }
+
+  slots {
+    root {}
+    item {}
+    label {}
+    title {}
+  }
+}
+
+component DocsMobileNav {
+  base {
+    margin-bottom: space.5;
+
+    trigger {
+      use FocusRing;
+      display: flex;
+      align-items: center;
+      gap: space.2;
+      width: 100%;
+      padding: space.2 space.3;
+      border: 1px solid color.border;
+      border-radius: radius.md;
+      background: color.surfaceRaised;
+      color: color.text;
+      font: inherit;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    chevron {
+      transition: transform duration.fast;
+    }
+
+    panel {
+      display: none;
+      padding: space.3;
+      border: 1px solid color.border;
+      border-top: none;
+      border-radius: 0 0 radius.md radius.md;
+    }
+
+    &[data-state="open"] {
+      trigger { border-radius: radius.md radius.md 0 0; }
+      chevron { transform: rotate(90deg); }
+      panel { display: block; }
+    }
+  }
+
+  slots {
+    root {}
+    trigger {}
+    chevron {}
+    panel {}
+  }
+
+  variants {
+    visibility {
+      shown { display: block; }
+      hidden { display: none; }
+    }
+  }
+
+  defaults {
+    visibility: shown;
+  }
+
+  responsive {
+    lg { visibility: hidden; }
+  }
+}
+
+style proseLink {
+  color: color.accent;
+  text-decoration: underline;
+  text-decoration-color: color.accentMuted;
+  text-underline-offset: 2px;
 }
 
 component Page {
@@ -321,6 +486,7 @@ component Prose {
       font-weight: 600;
       letter-spacing: -0.02em;
       color: color.text;
+      scroll-margin-top: 70px;
     }
 
     h3 {
@@ -328,6 +494,7 @@ component Prose {
       font-size: font.lg;
       font-weight: 600;
       color: color.text;
+      scroll-margin-top: 70px;
     }
   }
 }

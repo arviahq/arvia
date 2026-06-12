@@ -13,7 +13,7 @@ export function states(): DocSection {
       {
         type: "p",
         text: fbt(
-          "An &-block attaches a selector suffix to whatever the surrounding context styles. The & stands for “the element this rule targets” — write anything CSS accepts after it:",
+          "An `&-block` attaches a selector suffix to whatever the surrounding context styles. The & stands for “the element this rule targets” — write anything CSS accepts after it:",
           "Docs content — states: opening",
         ),
       },
@@ -174,7 +174,7 @@ export function states(): DocSection {
       {
         type: "p",
         text: fbt(
-          "The slot is targeted through its base class, which is always present — the rule fires whatever variants are active. From a variant body, the same construct scopes to that variant: tone danger's &:hover { icon { … } } compiles against .Button_tone_danger_root_…:hover.",
+          "The slot is targeted through its base class, which is always present — the rule fires whatever variants are active. From a variant body, the same construct scopes to that variant: tone danger's `&:hover` { icon { … } } compiles against .Button_tone_danger_root_…:hover.",
           "Docs content — states: group hover semantics",
         ),
       },

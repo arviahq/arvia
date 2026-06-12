@@ -55,14 +55,14 @@ arvia gen --storybook --theme src/theme.arv --out stories src/`,
         type: "note",
         tone: "info",
         text: fbt(
-          "Stories import your .arv files, so the Storybook build needs the Arvia Vite plugin too — add arvia() to the Vite config Storybook uses, with the same theme path as your app.",
+          "Stories import your `.arv` files, so the Storybook build needs the Arvia Vite plugin too — add arvia() to the Vite config Storybook uses, with the same theme path as your app.",
           "Docs note — storybook: vite config",
         ),
       },
       {
         type: "p",
         text: fbt(
-          "To see a complete setup, run pnpm demo:storybook in the Arvia monorepo — it generates stories for the demo components and boots Storybook on them. For a full atomic design system showcase with Language/* feature demos, run pnpm design-system:storybook (examples/design-system).",
+          "To see a complete setup, run `pnpm demo:storybook` in the Arvia monorepo — it generates stories for the demo components and boots Storybook on them. For a full atomic design system showcase with Language/* feature demos, run `pnpm design-system:storybook` (examples/design-system).",
           "Docs content — storybook: demo pointer",
         ),
       },

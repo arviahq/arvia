@@ -13,7 +13,7 @@ export function localTokens(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Some values matter to exactly one component: a chip's pill radius, a toolbar's precise height. A tokens block inside a component names those values without polluting the global theme:",
+          "Some values matter to exactly one component: a chip's pill radius, a toolbar's precise height. A `tokens` block inside a component names those values without polluting the global theme:",
           "Docs content — local tokens: opening",
         ),
       },
@@ -35,7 +35,7 @@ export function localTokens(): DocSection {
       {
         type: "p",
         text: fbt(
-          "References use the exact same group.name syntax — there is no separate way to write a local reference. Resolution checks the component's tokens first, then the file's theme block, then the shared theme. In the example, space.pad finds the local value while space.2 falls through to the theme: one component can mix both in a single declaration.",
+          "References use the exact same group.name syntax — there is no separate way to write a local reference. Resolution checks the component's tokens first, then the file's `theme` block, then the shared theme. In the example, `space.pad` finds the local value while `space.2` falls through to the theme: one component can mix both in a single declaration.",
           "Docs content — local tokens: resolution order",
         ),
       },
@@ -64,7 +64,7 @@ component Normal {
         type: "note",
         tone: "warning",
         text: fbt(
-          "Shadowing a theme token is powerful and easy to over-use — a reader seeing space.2 will assume the theme value. Prefer a new name (space.dense) unless the component genuinely reinterprets the scale.",
+          "Shadowing a theme token is powerful and easy to over-use — a reader seeing `space.2` will assume the theme value. Prefer a new name (`space.dense`) unless the component genuinely reinterprets the scale.",
           "Docs note — local tokens: shadowing caution",
         ),
       },
@@ -75,7 +75,7 @@ component Normal {
       {
         type: "p",
         text: fbt(
-          "Local tokens are always inlined to literal values — even when the theme has modes and global tokens compile to CSS variables. They never become custom properties, never appear in the tokens export or the token catalog, and accept no @mode overrides (mode-dependent values belong in the theme). They resolve everywhere a value can appear, including calc() and state blocks:",
+          "Local tokens are always inlined to literal values — even when the theme has modes and global tokens compile to CSS variables. They never become custom properties, never appear in the tokens export or the token catalog, and accept no `@mode` overrides (mode-dependent values belong in the theme). They resolve everywhere a value can appear, including `calc()` and state blocks:",
           "Docs content — local tokens: constants semantics",
         ),
       },
@@ -121,7 +121,7 @@ component Normal {
           [
             fbt("It should flip with dark mode", "Docs table cell — signal moded"),
             fbt(
-              "Theme — only theme tokens take @mode overrides.",
+              "Theme — only theme tokens take `@mode` overrides.",
               "Docs table cell — answer theme moded",
             ),
           ],

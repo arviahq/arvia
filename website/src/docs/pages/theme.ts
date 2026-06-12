@@ -13,7 +13,7 @@ export function theme(): DocSection {
       {
         type: "p",
         text: fbt(
-          "A theme block declares design tokens: named values organized into groups. Tokens are the vocabulary the rest of your styles are written in — every other construct references them with dot notation.",
+          "A `theme` block declares design tokens: named values organized into groups. Tokens are the vocabulary the rest of your styles are written in — every other construct references them with dot notation.",
           "Docs content — theme: opening",
         ),
       },
@@ -41,7 +41,7 @@ export function theme(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Group names are yours to invent — color, space, and radius are conventions, not keywords. A token value is any CSS value text: lengths, colors, font stacks, cubic-bezier() curves, shadows. Token names may start with digits, which makes numeric scales like space.1, space.2 natural to write.",
+          "Group names are yours to invent — color, space, and radius are conventions, not keywords. A token value is any CSS value text: lengths, colors, font stacks, cubic-bezier() curves, shadows. Token names may start with digits, which makes numeric scales like `space.1`, `space.2` natural to write.",
           "Docs content — theme: groups are free-form",
         ),
       },
@@ -49,7 +49,7 @@ export function theme(): DocSection {
         type: "note",
         tone: "info",
         text: fbt(
-          "Two group names are special: breakpoint feeds responsive blocks and container feeds container blocks. They configure queries — they cannot be referenced as values and are not part of the tokens export.",
+          "Two group names are special: breakpoint feeds `responsive` blocks and container feeds `container` blocks. They configure queries — they cannot be referenced as values and are not part of the tokens export.",
           "Docs note — theme: special groups",
         ),
       },
@@ -102,7 +102,7 @@ export function theme(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Aliases resolve at compile time — border.thin becomes 1px solid #111111 in the output. Chains are followed (a = b, b = c works), and aliases respect theme modes: an alias of a moded token carries both mode values. One rule: tokens must be defined before they are referenced; forward references are an error.",
+          "Aliases resolve at compile time — border.thin becomes 1px solid #111111 in the output. Chains are followed (a = b, b = c works), and aliases respect theme `modes:` an alias of a moded token carries both mode values. One rule: tokens must be defined before they are referenced; forward references are an error.",
           "Docs content — theme: alias semantics",
         ),
       },
@@ -113,14 +113,14 @@ export function theme(): DocSection {
       {
         type: "p",
         text: fbt(
-          "The theme file configured in the Vite plugin (src/theme.arv by convention) is compiled first, and its tokens, recipes, and keyframes become the shared environment every other .arv file is checked against. That is why component files reference color.primary with no import — the theme is ambient, like a standard library.",
+          "The theme file configured in the Vite plugin (`src/theme.arv` by convention) is compiled first, and its tokens, recipes, and keyframes become the shared environment every other `.arv` file is checked against. That is why component files reference `color.primary` with no import — the theme is ambient, like a standard library.",
           "Docs content — theme: shared env",
         ),
       },
       {
         type: "p",
         text: fbt(
-          "Other files can declare their own theme blocks too. File-level tokens extend the shared environment for that file only — useful for page-specific values — and a component's tokens block scopes values to a single component (see Local tokens). Within one file, declaring the same group twice or the same token twice is an error (ARV112), so there is always exactly one place a value lives.",
+          "Other files can declare their own `theme` blocks too. File-level tokens extend the shared environment for that file only — useful for page-specific values — and a component's `tokens` block scopes values to a single component (see [Local tokens](/docs/local-tokens)). Within one file, declaring the same group twice or the same token twice is an error (ARV112), so there is always exactly one place a value lives.",
           "Docs content — theme: extension and duplicates",
         ),
       },
@@ -131,7 +131,7 @@ export function theme(): DocSection {
       {
         type: "p",
         text: fbt(
-          "In a single-mode theme (no modes declaration), every reference is inlined to its literal value — the CSS contains 8px, not a variable. Declare modes and the moded tokens become CSS custom properties named --arvia-<group>-<name>, switched by mode (see Theme modes):",
+          "In a single-mode theme (no `modes` declaration), every reference is inlined to its literal value — the CSS contains 8px, not a variable. Declare modes and the moded tokens become CSS custom properties named --arvia-<group>-<name>, switched by mode (see [Theme modes](/docs/theme-modes)):",
           "Docs content — theme: compile single vs moded",
         ),
       },
@@ -154,7 +154,7 @@ export function theme(): DocSection {
       {
         type: "p",
         text: fbt(
-          "The theme file also exports its tokens as a typed object, for the occasional inline style, canvas drawing, or charting library. Values are literals in single-mode themes and var() references in moded themes — so they stay correct when the mode flips:",
+          "The theme file also exports its tokens as a typed object, for the occasional inline style, canvas drawing, or charting library. Values are literals in single-mode themes and `var()` references in moded themes — so they stay correct when the mode flips:",
           "Docs content — theme: tokens export lead-in",
         ),
       },
@@ -185,15 +185,15 @@ import type { ColorToken } from "./theme.arv"; // "primary" | "danger" | …`,
         type: "ul",
         items: [
           fbt(
-            "Name by role where it pays off: color.text and color.surface survive a rebrand; color.gray100 does not.",
+            "Name by role where it pays off: `color.text` and `color.surface` survive a rebrand; `color.gray100` does not.",
             "Docs list item — theme: name by role",
           ),
           fbt(
-            "Use digit-led names for ordered scales (space.1 … space.9, font.sm … font.3xl) — they sort naturally and read like math.",
+            "Use digit-led names for ordered scales (`space.1` … `space.9`, `font.sm` … `font.3xl`) — they sort naturally and read like math.",
             "Docs list item — theme: digit scales",
           ),
           fbt(
-            'Document intent with doc strings — primary = #635bff doc "CTAs and links" — and the meaning shows up on hover in your editor (see Token docs).',
+            'Document intent with doc strings — primary = #635bff doc "CTAs and links" — and the meaning shows up on hover in your editor (see [Token docs](/docs/token-docs)).',
             "Docs list item — theme: doc strings",
           ),
         ],

@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { fbt } from "fbtee";
-import { Link as RouterLinkBase, useMatch } from "react-router-dom";
+import { Link as RouterLinkBase, useLocation, useMatch } from "react-router-dom";
 import { getDocNav } from "../docs/nav";
 import { DocsSearchTrigger, isAlgoliaDocSearchEnabled } from "./DocsSearch";
 
@@ -17,15 +17,19 @@ import { HeroBackground } from "./HeroBackground";
 import {
   Callout,
   DocsLayout,
+  DocsMobileNav,
   DocTable,
   Grid,
   Hero,
   HeroShell,
   Page,
+  Pager,
   Prose,
   SidebarSection,
   Stack,
+  TocRail,
 } from "./layout.arv";
+import { headingId, renderInline } from "./inline";
 import { Link } from "./link.arv";
 import { Nav } from "./nav.arv";
 import { Text } from "./text.arv";
@@ -326,7 +330,7 @@ export function DocContent(props: {
           return (
             <aside key={i} className={callout.root}>
               <span className={callout.label}>{labels[block.tone]}</span>
-              <span className={callout.body}>{block.text}</span>
+              <span className={callout.body}>{renderInline(block.text)}</span>
             </aside>
           );
         }
@@ -349,7 +353,7 @@ export function DocContent(props: {
                     <tr key={ri}>
                       {row.map((cell, ci) => (
                         <td key={ci} className={t.td}>
-                          {cell}
+                          {renderInline(cell)}
                         </td>
                       ))}
                     </tr>
@@ -364,18 +368,18 @@ export function DocContent(props: {
           case "p":
             return (
               <p key={i} className={p.p}>
-                {block.text}
+                {renderInline(block.text)}
               </p>
             );
           case "h2":
             return (
-              <h2 key={i} className={p.h2}>
+              <h2 key={i} id={headingId(block.text)} className={p.h2}>
                 {block.text}
               </h2>
             );
           case "h3":
             return (
-              <h3 key={i} className={p.h3}>
+              <h3 key={i} id={headingId(block.text)} className={p.h3}>
                 {block.text}
               </h3>
             );
@@ -384,7 +388,7 @@ export function DocContent(props: {
               <ul key={i} className={p.ul}>
                 {block.items.map((item) => (
                   <li key={item} className={p.li}>
-                    {item}
+                    {renderInline(item)}
                   </li>
                 ))}
               </ul>
@@ -419,14 +423,131 @@ export function DocsSidebar() {
   );
 }
 
-export function DocsShell(props: { children: ReactNode }) {
+export type TocEntry = { id: string; text: string; level: 2 | 3 };
+
+export function DocsToc(props: { entries: TocEntry[] }) {
+  const rail = TocRail();
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const headings = props.entries
+      .map((entry) => document.getElementById(entry.id))
+      .filter((el): el is HTMLElement => el !== null);
+    if (headings.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (intersections) => {
+        for (const entry of intersections) {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id);
+            return;
+          }
+        }
+      },
+      // Treat the top quarter of the viewport as the "current section" band.
+      { rootMargin: "0% 0% -75% 0%" },
+    );
+    for (const el of headings) observer.observe(el);
+    return () => observer.disconnect();
+  }, [props.entries]);
+
+  if (props.entries.length === 0) return null;
+  return (
+    <nav className={rail.root} aria-label={fbt("On this page", "TOC aria label")}>
+      <p className={rail.title}>
+        <fbt desc="Docs table of contents title">On this page</fbt>
+      </p>
+      {props.entries.map((entry) => (
+        <a
+          key={entry.id}
+          href={`#${entry.id}`}
+          data-active={entry.id === activeId || undefined}
+          className={entry.level === 3 ? `${rail.link} ${rail.sub}` : rail.link}
+        >
+          {entry.text}
+        </a>
+      ))}
+    </nav>
+  );
+}
+
+export function DocsPager(props: {
+  prev?: { slug: string; title: string };
+  next?: { slug: string; title: string };
+}) {
+  const pager = Pager();
+  return (
+    <div className={pager.root}>
+      {props.prev ? (
+        <RouterLinkBase className={pager.item} to={`/docs/${props.prev.slug}`}>
+          <span className={pager.label}>
+            <fbt desc="Pager previous label">Previous</fbt>
+          </span>
+          <span className={pager.title}>{props.prev.title}</span>
+        </RouterLinkBase>
+      ) : (
+        <span />
+      )}
+      {props.next ? (
+        <RouterLinkBase
+          className={pager.item}
+          to={`/docs/${props.next.slug}`}
+          style={{ textAlign: "right" }}
+        >
+          <span className={pager.label}>
+            <fbt desc="Pager next label">Next</fbt>
+          </span>
+          <span className={pager.title}>{props.next.title}</span>
+        </RouterLinkBase>
+      ) : (
+        <span />
+      )}
+    </div>
+  );
+}
+
+function DocsMobileNavView() {
+  const nav = DocsMobileNav();
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  // Navigating to another page closes the drawer.
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
+  return (
+    <div className={nav.root} data-state={open ? "open" : "closed"}>
+      <button
+        type="button"
+        className={nav.trigger}
+        aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}
+      >
+        <span className={nav.chevron} aria-hidden>
+          ▸
+        </span>
+        <fbt desc="Mobile docs navigation trigger">Browse docs</fbt>
+      </button>
+      <div className={nav.panel}>
+        <DocsSidebar />
+      </div>
+    </div>
+  );
+}
+
+export function DocsShell(props: { children: ReactNode; toc?: ReactNode }) {
   const layout = DocsLayout();
   return (
     <div className={layout.root}>
       <div className={layout.sidebar}>
         <DocsSidebar />
       </div>
-      <main className={layout.content}>{props.children}</main>
+      <main className={layout.content}>
+        <DocsMobileNavView />
+        {props.children}
+      </main>
+      <div className={layout.toc}>{props.toc}</div>
     </div>
   );
 }

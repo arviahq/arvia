@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { fbt } from "fbtee";
+import { Link } from "react-router-dom";
 import { Button } from "./button.arv";
 import { CodeBlock } from "./code-block.arv";
 import { highlightCode, langFromLabel } from "./highlight";
+import { isCompleteArvFile, playgroundHref } from "../playground/share";
 import { useSiteTheme } from "../site-theme";
 
 export function Code(props: {
@@ -61,6 +63,15 @@ export function Code(props: {
           </span>
           {props.label}
           <div className={block.actions}>
+            {lang === "arv" && isCompleteArvFile(props.children) ? (
+              <Link
+                className={Button({ tone: "ghost", size: "sm" }).root}
+                to={playgroundHref(props.children)}
+                aria-label={fbt("Open in playground", "Code block playground link label")}
+              >
+                <fbt desc="Code block playground link">Playground</fbt>
+              </Link>
+            ) : null}
             <button
               type="button"
               className={Button({ tone: "ghost", size: "sm" }).root}

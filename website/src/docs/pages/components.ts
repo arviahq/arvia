@@ -124,12 +124,12 @@ const styles = Badge();
           [
             "slots { … }",
             fbt("Declares the component's named parts.", "Docs table cell — slots purpose"),
-            fbt("See Slots.", "Docs table cell — slots details"),
+            fbt("See [Slots](/docs/slots).", "Docs table cell — slots details"),
           ],
           [
             "tokens { … }",
             fbt("Values visible only inside this component.", "Docs table cell — tokens purpose"),
-            fbt("See Local tokens.", "Docs table cell — tokens details"),
+            fbt("See [Local tokens](/docs/local-tokens).", "Docs table cell — tokens details"),
           ],
           [
             "variants / defaults",
@@ -137,7 +137,7 @@ const styles = Badge();
               "The component's prop axes and their fallbacks.",
               "Docs table cell — variants purpose",
             ),
-            fbt("See Variants & defaults.", "Docs table cell — variants details"),
+            fbt("See [Variants & defaults](/docs/variants).", "Docs table cell — variants details"),
           ],
           [
             "compound { … }",
@@ -145,7 +145,7 @@ const styles = Badge();
               "Styles gated on a combination of variant values.",
               "Docs table cell — compound purpose",
             ),
-            fbt("See Compound variants.", "Docs table cell — compound details"),
+            fbt("See [Compound variants](/docs/compound).", "Docs table cell — compound details"),
           ],
           [
             "responsive / container",
@@ -153,12 +153,15 @@ const styles = Badge();
               "Variant switching at breakpoints / container widths.",
               "Docs table cell — responsive purpose",
             ),
-            fbt("See Responsive and Container queries.", "Docs table cell — responsive details"),
+            fbt(
+              "See [Responsive](/docs/responsive) and [Container queries](/docs/container-queries).",
+              "Docs table cell — responsive details",
+            ),
           ],
           [
             "use Recipe;",
             fbt("Pulls a recipe's declarations into the root.", "Docs table cell — use purpose"),
-            fbt("See Recipes & use.", "Docs table cell — use details"),
+            fbt("See [Recipes & use](/docs/recipes).", "Docs table cell — use details"),
           ],
         ],
       },
@@ -213,7 +216,7 @@ styles.icon;  // "Button_icon_0p4oom Button_size_lg_icon_0p4oom"`,
       {
         type: "p",
         text: fbt(
-          "Generated class names follow a fixed scheme — Component_variant_value_slot_hash — so DevTools stays legible: .Button_tone_danger_root_0p4oom tells you the component, why the class applied, the element it styles, and which file it came from. The 6-character hash comes from the file path and component name, not the styles, so names survive edits (see How compilation works).",
+          "Generated class names follow a fixed scheme — `Component_variant_value_slot_hash` — so DevTools stays legible: `.Button_tone_danger_root_0p4oom` tells you the component, why the class applied, the element it styles, and which file it came from. The 6-character hash comes from the file path and component name, not the styles, so names survive edits (see [How compilation works](/docs/compilation)).",
           "Docs content — components: class scheme",
         ),
       },

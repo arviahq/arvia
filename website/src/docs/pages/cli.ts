@@ -13,7 +13,7 @@ export function cli(): DocSection {
       {
         type: "p",
         text: fbt(
-          "The arvia CLI ships with every Vite plugin package and has one command, gen, with three modes: emit TypeScript declarations (the default), generate a token catalog (--docs), or generate Storybook stories (--storybook).",
+          "The arvia CLI ships with every Vite plugin package and has one command, gen, with three `modes:` emit TypeScript declarations (the default), generate a token catalog (--docs), or generate Storybook stories (--storybook).",
           "Docs content — cli: opening",
         ),
       },
@@ -32,14 +32,14 @@ export function cli(): DocSection {
           [
             "[dir]",
             fbt(
-              "Directory to scan for .arv files (default: current directory; node_modules is skipped).",
+              "Directory to scan for `.arv` files (default: current directory; node_modules is skipped).",
               "Docs table cell — cli dir",
             ),
           ],
           [
             "--theme <path>",
             fbt(
-              "The shared theme file. Default: the first theme.arv found under [dir].",
+              "The shared theme file. Default: the first `theme.arv` found under [dir].",
               "Docs table cell — cli theme",
             ),
           ],
@@ -82,7 +82,7 @@ export function cli(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Each file compiles against the theme and gets a sibling .d.ts. Use this in environments where the TypeScript plugin cannot run — CI without arvia-tsc, or non-TS consumers of your design system package. Diagnostics print with file and line; any error makes the command exit non-zero, which doubles as a lint step for .arv sources.",
+          "Each file compiles against the theme and gets a sibling `.d.ts`. Use this in environments where the TypeScript plugin cannot run — CI without `arvia-tsc`, or non-TS consumers of your design system package. Diagnostics print with file and line; any error makes the command exit non-zero, which doubles as a lint step for `.arv` sources.",
           "Docs content — cli: declarations semantics",
         ),
       },
@@ -113,7 +113,7 @@ arvia gen --storybook --theme src/theme.arv --out stories src/`,
         type: "note",
         tone: "tip",
         text: fbt(
-          "For day-to-day type checking prefer arvia-tsc (from the TypeScript plugin package) over generated siblings: it type-checks .arv imports virtually, leaving your working tree clean.",
+          "For day-to-day type checking prefer `arvia-tsc` (from the TypeScript plugin package) over generated siblings: it type-checks `.arv` imports virtually, leaving your working tree clean.",
           "Docs note — cli: prefer arvia-tsc",
         ),
       },

@@ -4,6 +4,11 @@ import { compilation } from "./pages/compilation";
 import { components } from "./pages/components";
 import { compound } from "./pages/compound";
 import { containerQueries } from "./pages/container-queries";
+import { diagnostics } from "./pages/diagnostics";
+import { faq } from "./pages/faq";
+import { fromCssModules } from "./pages/from-css-modules";
+import { fromTailwind } from "./pages/from-tailwind";
+import { fromVanillaExtract } from "./pages/from-vanilla-extract";
 import { global } from "./pages/global";
 import { installation } from "./pages/installation";
 import { introduction } from "./pages/introduction";
@@ -49,6 +54,7 @@ export function getDocs(): Record<string, DocSection> {
     installation: installation(),
     "quick-start": quickStart(),
     "thinking-in-arvia": thinkingInArvia(),
+    faq: faq(),
 
     theme: theme(),
     "theme-modes": themeModes(),
@@ -68,6 +74,11 @@ export function getDocs(): Record<string, DocSection> {
 
     compilation: compilation(),
     patterns: patterns(),
+    diagnostics: diagnostics(),
+
+    "from-tailwind": fromTailwind(),
+    "from-css-modules": fromCssModules(),
+    "from-vanilla-extract": fromVanillaExtract(),
 
     packages: packages(),
     "vite-plugin": vitePlugin(),

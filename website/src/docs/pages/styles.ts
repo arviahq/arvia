@@ -13,7 +13,7 @@ export function styles(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Not everything deserves a component. A style declaration compiles to exactly one hashed CSS class and exports its name as a plain string constant — the right tool for one-off utilities, layout helpers, and page-level styling:",
+          "Not everything deserves a component. A `style` declaration compiles to exactly one hashed CSS class and exports its name as a plain string constant — the right tool for one-off utilities, layout helpers, and page-level styling:",
           "Docs content — styles: opening",
         ),
       },
@@ -58,7 +58,7 @@ style visuallyHidden {
       {
         type: "p",
         text: fbt(
-          "Styles support the full fragment feature set — declarations, token references, use, and &-states — everything except props and structure:",
+          "Styles support the full fragment feature set — declarations, token references, use, and `&-states` — everything except props and structure:",
           "Docs content — styles: contents lead-in",
         ),
       },

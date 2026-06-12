@@ -48,7 +48,7 @@ export function responsive(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Read the responsive block as overrides to defaults: below 768px a prop-less Button is sm; at 768px and above it becomes lg. Everything is mobile-first min-width — declare the small state as the default and step upward.",
+          "Read the `responsive` block as overrides to defaults: below 768px a prop-less Button is sm; at 768px and above it becomes lg. Everything is mobile-first min-width — declare the small state as the default and step upward.",
           "Docs content — responsive: author-time semantics",
         ),
       },
@@ -74,7 +74,7 @@ export function responsive(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Callers get the same power through object props. Any variant covered by a responsive block accepts either a plain value or an object with an initial value and per-breakpoint overrides:",
+          "Callers get the same power through object props. Any variant covered by a `responsive` block accepts either a plain value or an object with an initial value and per-breakpoint overrides:",
           "Docs content — responsive: object props lead-in",
         ),
       },
@@ -110,13 +110,13 @@ Button();                                        // defaults + responsive block`
           [
             "Button()",
             fbt("sm (default)", "Docs table cell — responsive r1 below"),
-            fbt("lg (responsive block)", "Docs table cell — responsive r1 above"),
+            fbt("lg (`responsive` block)", "Docs table cell — responsive r1 above"),
           ],
           [
             'Button({ size: "sm" })',
             "sm",
             fbt(
-              "sm — an explicit prop switches the responsive block off for that variant",
+              "sm — an explicit prop switches the `responsive` block off for that variant",
               "Docs table cell — responsive r2 above",
             ),
           ],
@@ -127,7 +127,7 @@ Button();                                        // defaults + responsive block`
         type: "note",
         tone: "warning",
         text: fbt(
-          "The object form's breakpoint keys come from the component's responsive block — they are what generated the media-wrapped classes. A breakpoint/value pair the component never declared has no CSS behind it, so declare in the responsive block whatever you want callers to use.",
+          "The object form's breakpoint keys come from the component's `responsive` block — they are what generated the media-wrapped classes. A breakpoint/value pair the component never declared has no CSS behind it, so declare in the `responsive` block whatever you want callers to use.",
           "Docs note — responsive: keys from block",
         ),
       },
@@ -166,7 +166,7 @@ Button();                                        // defaults + responsive block`
       {
         type: "p",
         text: fbt(
-          "Responsive blocks answer “how wide is the screen?” — the right question for page-level layout: navigation, grids, gutters. For a component that must adapt to wherever it is dropped — a card in a sidebar versus the same card in the main column — ask “how wide am I?” instead, with a container block. The two compose freely in one component; see Container queries.",
+          "Responsive blocks answer “how wide is the screen?” — the right question for page-level layout: navigation, grids, gutters. For a component that must adapt to wherever it is dropped — a card in a sidebar versus the same card in the main column — ask “how wide am I?” instead, with a `container` block. The two compose freely in one component; see [Container queries](/docs/container-queries).",
           "Docs content — responsive: vs container",
         ),
       },

@@ -25,7 +25,7 @@ export function languageServer(): DocSection {
             "Docs list item — lsp diagnostics",
           ),
           fbt(
-            "Quick fixes — did-you-mean diagnostics carry structured edits, so color.primry → color.primary is one code action.",
+            "Quick fixes — did-you-mean diagnostics carry structured edits, so `color.primry` → `color.primary` is one code action.",
             "Docs list item — lsp quick fixes",
           ),
           fbt(
@@ -37,7 +37,7 @@ export function languageServer(): DocSection {
             "Docs list item — lsp hover",
           ),
           fbt(
-            "Go to definition — from a token reference, use statement, or keyframes reference to where it is declared, across files into the theme.",
+            "Go to definition — from a token reference, `use` statement, or keyframes reference to where it is declared, across files into the theme.",
             "Docs list item — lsp goto def",
           ),
         ],
@@ -73,11 +73,37 @@ export function languageServer(): DocSection {
           ],
         ],
       },
+      { type: "h2", text: fbt("Formatting", "Docs content — heading: lsp formatting") },
+      {
+        type: "p",
+        text: fbt(
+          "The language server also provides document formatting — a canonical `.arv` style with two-space indentation and one-line blocks up to 100 columns. It is deliberately conservative: sources with parse errors are returned unchanged, comments are preserved verbatim, and the formatter fails closed — if the output would differ from the input in anything but whitespace, it refuses and leaves your file alone.",
+          "Docs content — lsp: formatting overview",
+        ),
+      },
+      {
+        type: "code",
+        label: ".vscode/settings.json",
+        lang: "json",
+        code: `{
+  "[arvia]": {
+    "editor.defaultFormatter": "arviahq.arvia",
+    "editor.formatOnSave": true
+  }
+}`,
+      },
+      {
+        type: "p",
+        text: fbt(
+          "For your own tooling, the formatter is a plain function: `formatArv(source, { indent, printWidth })` exported from `@arviahq/compiler`.",
+          "Docs content — lsp: formatArv api",
+        ),
+      },
       { type: "h2", text: fbt("Types for your TSX", "Docs content — heading: lsp types tsx") },
       {
         type: "p",
         text: fbt(
-          "The language server covers .arv files; typed props inside .tsx come from the separate @arviahq/typescript-plugin, which serves declarations for .arv imports as virtual modules inside tsserver — no files on disk during development. The two share the compiler, so both react to edits immediately: add a variant value and the union type at your call sites updates as soon as the file is saved.",
+          "The language server covers `.arv` files; typed props inside .tsx come from the separate @arviahq/typescript-plugin, which serves declarations for `.arv` imports as virtual modules inside tsserver — no files on disk during development. The two share the compiler, so both react to edits immediately: add a variant value and the union type at your call sites updates as soon as the file is saved.",
           "Docs content — lsp: typescript plugin relationship",
         ),
       },
@@ -85,7 +111,7 @@ export function languageServer(): DocSection {
         type: "note",
         tone: "warning",
         text: fbt(
-          "If .arv imports show as any in VS Code, the editor is using its bundled TypeScript instead of the workspace's — run “TypeScript: Select TypeScript Version” → “Use Workspace Version” so tsconfig plugins load.",
+          "If `.arv` imports show as any in VS Code, the editor is using its bundled TypeScript instead of the workspace's — run “TypeScript: Select TypeScript Version” → “Use Workspace Version” so tsconfig plugins load.",
           "Docs note — lsp: workspace ts version",
         ),
       },

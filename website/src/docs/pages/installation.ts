@@ -13,7 +13,7 @@ export function installation(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Arvia integrates through a Vite plugin that compiles .arv imports on the fly. Pick the package that matches your framework — the compiler underneath is identical, only the surrounding JSX tooling differs.",
+          "Arvia integrates through a Vite plugin that compiles `.arv` imports on the fly. Pick the package that matches your framework — the compiler underneath is identical, only the surrounding JSX tooling differs.",
           "Docs content — install: overview",
         ),
       },
@@ -41,7 +41,7 @@ export default defineConfig({
         type: "note",
         tone: "info",
         text: fbt(
-          "The arvia() plugin must come before the framework plugin so .arv imports are compiled before JSX transformation touches them.",
+          "The arvia() plugin must come before the framework plugin so `.arv` imports are compiled before JSX transformation touches them.",
           "Docs note — plugin order",
         ),
       },
@@ -102,7 +102,7 @@ const styles = Button({ size: "lg", tone: "primary" });
       {
         type: "p",
         text: fbt(
-          "The theme option names one shared theme file whose tokens, recipes, and keyframes are visible to every other .arv file in the project — that is how color.primary resolves inside button.arv without an import statement. If you omit the option, the plugin looks for src/theme.arv by convention and uses it when present.",
+          "The theme option names one shared theme file whose tokens, recipes, and keyframes are visible to every other `.arv` file in the project — that is how `color.primary` resolves inside `button.arv` without an import statement. If you omit the option, the plugin looks for `src/theme.arv` by convention and uses it when present.",
           "Docs content — install: theme option semantics",
         ),
       },
@@ -110,7 +110,7 @@ const styles = Button({ size: "lg", tone: "primary" });
       {
         type: "p",
         text: fbt(
-          "Component prop types come from the TypeScript plugin, which serves type declarations for .arv imports virtually — no generated files on disk. Add it to your tsconfig and use arvia-tsc (a thin wrapper around tsc that loads the plugin) for command-line type checking.",
+          "Component prop types come from the TypeScript plugin, which serves type declarations for `.arv` imports virtually — no generated files on disk. Add it to your tsconfig and use `arvia-tsc` (a thin wrapper around tsc that loads the plugin) for command-line type checking.",
           "Docs content — install: typescript plugin",
         ),
       },
@@ -135,7 +135,7 @@ const styles = Button({ size: "lg", tone: "primary" });
       {
         type: "p",
         text: fbt(
-          "Vue single-file components need vue-tsc with both the Vue and Arvia tsconfig plugins. As a fallback for setups where the plugin cannot run, arvia({ dts: true }) writes sibling .d.ts files next to each .arv file instead — but prefer the plugin, since sibling files shadow the virtual types and add noise to your tree.",
+          "Vue single-file components need vue-tsc with both the Vue and Arvia tsconfig plugins. As a fallback for setups where the plugin cannot run, arvia({ dts: true }) writes sibling `.d.ts` files next to each `.arv` file instead — but prefer the plugin, since sibling files shadow the virtual types and add noise to your tree.",
           "Docs content — install: vue tsc and dts fallback",
         ),
       },
@@ -169,11 +169,11 @@ const styles = Button({ size: "lg", tone: "primary" });
         type: "ul",
         items: [
           fbt(
-            "Imports from .arv files are typed as any — the TypeScript plugin is not loaded. Editors use their own tsserver: in VS Code, run “TypeScript: Select TypeScript Version” and pick the workspace version so tsconfig plugins apply.",
+            "Imports from `.arv` files are typed as any — the TypeScript plugin is not loaded. Editors use their own tsserver: in VS Code, run “TypeScript: Select TypeScript Version” and pick the workspace version so tsconfig plugins apply.",
             "Docs list item — troubleshoot any types",
           ),
           fbt(
-            "Tokens from your theme are reported as unknown (ARV101) in other files — the theme file is not being picked up. Check the theme path in vite.config.ts, or move the file to the conventional src/theme.arv location.",
+            "Tokens from your theme are reported as unknown (ARV101) in other files — the theme file is not being picked up. Check the theme path in `vite.config.ts`, or move the file to the conventional `src/theme.arv` location.",
             "Docs list item — troubleshoot theme not found",
           ),
           fbt(

@@ -47,7 +47,7 @@ export function slots(): DocSection {
       {
         type: "p",
         text: fbt(
-          "The slots block declares the parts; declarations inside a slot are that part's base styles. The function returns one class string per declared slot, and the generated ButtonSlots type knows every name — styles.icno is a compile error in TypeScript, and icno inside the .arv file is an ARV120 error with a did-you-mean.",
+          "The `slots` block declares the parts; declarations inside a slot are that part's base styles. The function returns one class string per declared slot, and the generated ButtonSlots type knows every name — styles.icno is a compile error in TypeScript, and icno inside the `.arv` file is an ARV120 error with a did-you-mean.",
           "Docs content — slots: declaration semantics",
         ),
       },
@@ -55,7 +55,7 @@ export function slots(): DocSection {
         type: "note",
         tone: "info",
         text: fbt(
-          "root is implicit. Every component has it whether or not the slots block lists it; loose top-level declarations and bare declarations in base style it. Declaring root {} explicitly is purely stylistic.",
+          "root is implicit. Every component has it whether or not the `slots` block lists it; loose top-level declarations and bare declarations in base style it. Declaring root {} explicitly is purely stylistic.",
           "Docs note — slots: implicit root",
         ),
       },
@@ -66,7 +66,7 @@ export function slots(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Slots are addressable from every styling context — base, variant values, compound blocks, and states. A nested block named after a slot targets that slot under the surrounding condition:",
+          "Slots are addressable from every styling context — base, variant values, `compound` blocks, and states. A nested block named after a slot targets that slot under the surrounding condition:",
           "Docs content — slots: anywhere lead-in",
         ),
       },
@@ -120,7 +120,7 @@ export function slots(): DocSection {
       {
         type: "p",
         text: fbt(
-          "The hover example above is the cross-slot pattern: a slot block inside an &-state styles that slot when the root matches. It compiles to a descendant selector against the slot's base class:",
+          "The hover example above is the cross-slot pattern: a slot block inside an `&-state` styles that slot when the root matches. It compiles to a descendant selector against the slot's base class:",
           "Docs content — slots: cross-slot lead-in",
         ),
       },
@@ -135,7 +135,7 @@ export function slots(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Because the target is the slot's always-present base class, the rule works regardless of which variants are active. The same pattern from a variant body scopes the behavior to that variant — see States for the full picture.",
+          "Because the target is the slot's always-present base class, the rule works regardless of which variants are active. The same pattern from a variant body scopes the behavior to that variant — see [States](/docs/states) for the full picture.",
           "Docs content — slots: cross-slot semantics",
         ),
       },

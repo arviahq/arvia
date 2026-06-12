@@ -74,6 +74,13 @@ component CodeBlock {
     actions {
       margin-left: auto;
       flex-shrink: 0;
+      display: flex;
+      align-items: stretch;
+      gap: 4px;
+
+      & a {
+        text-decoration: none;
+      }
     }
   }
 

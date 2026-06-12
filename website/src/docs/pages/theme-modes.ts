@@ -13,7 +13,7 @@ export function themeModes(): DocSection {
       {
         type: "p",
         text: fbt(
-          "A modes declaration turns selected tokens into mode-aware CSS custom properties. Declare the modes once, then override any token per mode with an @mode block:",
+          "A `modes` declaration turns selected tokens into mode-aware CSS custom properties. Declare the modes once, then override any token per mode with an `@mode` block:",
           "Docs content — modes: opening",
         ),
       },
@@ -46,7 +46,7 @@ export function themeModes(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Modes compile to four kinds of rules — defaults on :root, an OS-preference media query, and one attribute selector per mode for manual control:",
+          "Modes compile to four kinds of rules — defaults on `:root`, an OS-preference media query, and one attribute selector per mode for manual control:",
           "Docs content — modes: generated lead-in",
         ),
       },
@@ -79,7 +79,7 @@ export function themeModes(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Read the cascade: with no attribute set, the OS preference wins via the media query. Setting data-arvia-theme on the root element overrides it, because attribute selectors come later. Every style that references a moded token compiles to var(--arvia-color-…), so the whole page reacts instantly to either signal — no re-render, no JavaScript theme context.",
+          "Read the cascade: with no attribute set, the OS preference wins via the media query. Setting `data-arvia-theme` on the root element overrides it, because attribute selectors come later. Every style that references a moded token compiles to `var(`--arvia-color-…`)`, so the whole page reacts instantly to either signal — no re-render, no JavaScript theme context.",
           "Docs content — modes: cascade explanation",
         ),
       },
@@ -112,7 +112,7 @@ applyMode((localStorage.getItem("theme") as Mode) ?? "system");`,
         type: "note",
         tone: "tip",
         text: fbt(
-          "Removing the attribute returns control to prefers-color-scheme — that is your “system” setting for free. Run the boot line in a small inline script in index.html if you need to beat the first paint.",
+          "Removing the attribute returns control to `prefers-color-scheme` — that is your “system” setting for free. Run the boot line in a small inline script in index.html if you need to beat the first paint.",
           "Docs note — modes: system setting tip",
         ),
       },
@@ -120,7 +120,7 @@ applyMode((localStorage.getItem("theme") as Mode) ?? "system");`,
       {
         type: "p",
         text: fbt(
-          "Modes are not limited to light and dark — declare as many as you need (high-contrast, dim, brand themes). Each gets its own @mode override blocks and attribute selector:",
+          "Modes are not limited to light and dark — declare as many as you need (high-contrast, dim, brand themes). Each gets its own `@mode` override blocks and attribute selector:",
           "Docs content — modes: many modes lead-in",
         ),
       },
@@ -139,7 +139,7 @@ applyMode((localStorage.getItem("theme") as Mode) ?? "system");`,
       {
         type: "p",
         text: fbt(
-          "Only a mode literally named dark participates in the prefers-color-scheme media query; other non-default modes are reachable through data-arvia-theme alone. The first mode remains the :root default either way.",
+          "Only a mode literally named dark participates in the `prefers-color-scheme` media query; other non-default modes are reachable through `data-arvia-theme` alone. The first mode remains the `:root` default either way.",
           "Docs content — modes: dark is special",
         ),
       },
@@ -150,7 +150,7 @@ applyMode((localStorage.getItem("theme") as Mode) ?? "system");`,
       {
         type: "p",
         text: fbt(
-          "Once modes are declared, every theme token compiles to a CSS custom property and every reference to one becomes var(…) — including tokens that never vary, which keeps the output uniform and lets you add a mode override later without touching consumers. Two things stay inlined: component-local tokens (see Local tokens) and values in single-mode projects.",
+          "Once modes are declared, every theme token compiles to a CSS custom property and every reference to one becomes `var(…)` — including tokens that never vary, which keeps the output uniform and lets you add a mode override later without touching consumers. Two things stay inlined: component-local tokens (see [Local tokens](/docs/local-tokens)) and values in single-mode projects.",
           "Docs content — modes: which become vars",
         ),
       },
@@ -162,15 +162,15 @@ applyMode((localStorage.getItem("theme") as Mode) ?? "system");`,
         ],
         rows: [
           [
-            fbt("@dark override without a modes declaration", "Docs table cell — modes err1"),
-            fbt("Error ARV134 — declare modes: first.", "Docs table cell — modes err1 result"),
+            fbt("`@dark` override without a `modes` declaration", "Docs table cell — modes err1"),
+            fbt("Error ARV134 — declare `modes:` first.", "Docs table cell — modes err1 result"),
           ],
           [
-            fbt("@blue override when modes are light | dark", "Docs table cell — modes err2"),
+            fbt("`@blue` override when modes are light | dark", "Docs table cell — modes err2"),
             fbt("Error ARV132 — unknown theme mode.", "Docs table cell — modes err2 result"),
           ],
           [
-            fbt("Mode override inside a component tokens block", "Docs table cell — modes err3"),
+            fbt("Mode override inside a component `tokens` block", "Docs table cell — modes err3"),
             fbt(
               "Rejected — moded values belong in the theme.",
               "Docs table cell — modes err3 result",

@@ -45,11 +45,11 @@ export function tokenDocs(): DocSection {
             "Docs list item — token docs: hover",
           ),
           fbt(
-            "Generated types — doc strings become JSDoc on the tokens export, so tokens.color.primary carries its documentation into TypeScript autocomplete.",
+            "Generated types — doc strings become JSDoc on the tokens export, so tokens.`color.primary` carries its documentation into TypeScript autocomplete.",
             "Docs list item — token docs: jsdoc",
           ),
           fbt(
-            "Token catalogs — arvia gen --docs renders a browsable reference from the same strings.",
+            "Token catalogs — `arvia gen --docs` renders a browsable reference from the same strings.",
             "Docs list item — token docs: catalogs",
           ),
         ],
@@ -98,7 +98,7 @@ arvia gen --docs --format json --theme src/theme.arv --out docs/tokens`,
             "Docs list item — token docs: boundaries",
           ),
           fbt(
-            "Cover the scale's grammar once — a doc on space.1 explaining the step logic teaches the whole group.",
+            "Cover the scale's grammar once — a doc on `space.1` explaining the step logic teaches the whole group.",
             "Docs list item — token docs: scale grammar",
           ),
         ],

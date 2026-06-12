@@ -82,6 +82,8 @@ export function Playground(
     baseCss?: string;
     /** When set, a template select replaces the "editable" header label. */
     templates?: PlaygroundTemplateGroup[];
+    /** Initial editor source (e.g. a snippet shared via URL); overrides templates. */
+    initialSource?: string;
   } = {},
 ) {
   const pg = PlaygroundStyles();
@@ -108,8 +110,12 @@ export function Playground(
   );
 
   const firstTemplate = props.templates?.[0]?.items[0];
-  const [source, setSource] = useState(firstTemplate?.source ?? DEFAULT_SOURCE);
-  const [templateId, setTemplateId] = useState(firstTemplate?.id ?? "");
+  const [source, setSource] = useState(
+    props.initialSource ?? firstTemplate?.source ?? DEFAULT_SOURCE,
+  );
+  const [templateId, setTemplateId] = useState(
+    props.initialSource ? "" : (firstTemplate?.id ?? ""),
+  );
   const [file, setFile] = useState<EditorFile>("arv");
   const [editedTsx, setEditedTsx] = useState<string | null>(null);
   const [tab, setTab] = useState<OutputTab>("preview");
@@ -224,6 +230,11 @@ export function Playground(
                 fontSize: 12,
               }}
             >
+              {props.initialSource ? (
+                <option value="">
+                  {fbt("shared snippet", "Playground template select — snippet loaded from URL")}
+                </option>
+              ) : null}
               {props.templates.map((group) => (
                 <optgroup key={group.label} label={group.label}>
                   {group.items.map((t) => (

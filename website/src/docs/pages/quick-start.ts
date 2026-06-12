@@ -83,7 +83,7 @@ createRoot(document.getElementById("root")!).render(<App />);`,
       {
         type: "p",
         text: fbt(
-          "Importing the theme ships its global rules and CSS variables. Component files do not import the theme — the Vite plugin makes its tokens visible to every .arv file in the project automatically.",
+          "Importing the theme ships its global rules and CSS variables. Component files do not import the theme — the Vite plugin makes its tokens visible to every `.arv` file in the project automatically.",
           "Docs content — quickstart: import theme explanation",
         ),
       },
@@ -124,7 +124,7 @@ createRoot(document.getElementById("root")!).render(<App />);`,
       {
         type: "p",
         text: fbt(
-          "Read it top to bottom: base styles apply always, each size value adds its own padding and font-size, sm is the default when callers pass nothing, and the responsive block bumps the default to lg once the viewport crosses the md breakpoint from the theme.",
+          "Read it top to bottom: base styles apply always, each size value adds its own padding and font-size, sm is the default when callers pass nothing, and the `responsive` block bumps the default to lg once the viewport crosses the md breakpoint from the theme.",
           "Docs content — quickstart: component explanation",
         ),
       },
@@ -200,15 +200,15 @@ export function App() {
         type: "ul",
         items: [
           fbt(
-            "Thinking in Arvia — the mental model behind the language and when to reach for each construct.",
+            "[Thinking in Arvia](/docs/thinking-in-arvia) — the mental model behind the language and when to reach for each construct.",
             "Docs list item — next: thinking",
           ),
           fbt(
-            "Theme & tokens — everything tokens can do: aliases, doc strings, digit-led scales.",
+            "[Theme & tokens](/docs/theme) — everything tokens can do: aliases, doc strings, digit-led scales.",
             "Docs list item — next: theme",
           ),
           fbt(
-            "Components — slots, states, compound variants, and the full component anatomy.",
+            "[Components](/docs/components) — slots, states, compound variants, and the full component anatomy.",
             "Docs list item — next: components",
           ),
         ],

@@ -56,7 +56,7 @@ export function compilation(): DocSection {
           [
             fbt("Emitters", "Docs table cell — emitters"),
             fbt(
-              "Three independent generators write the CSS, the JS module, and the .d.ts declarations from the same IR.",
+              "Three independent generators write the CSS, the JS module, and the `.d.ts` declarations from the same IR.",
               "Docs table cell — emitters what",
             ),
           ],
@@ -73,7 +73,7 @@ export function compilation(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Every class follows Component_variant_value_slot_hash. The 6-character hash is FNV-1a over the file's project-relative path plus the component name — crucially, not over the styles:",
+          "Every class follows `Component_variant_value_slot_hash`. The 6-character hash is FNV-1a over the file's project-relative path plus the component name — crucially, not over the styles:",
           "Docs content — compilation: hash lead-in",
         ),
       },
@@ -99,7 +99,7 @@ export function compilation(): DocSection {
       {
         type: "p",
         text: fbt(
-          "The JS module is data plus one small helper. Per component: a base class map, a variants table, compound entries, defaults, and responsive/container tables. The exported function delegates to a shared helper that walks them:",
+          "The JS module is data plus one small helper. Per component: a base class map, a variants table, `compound` entries, defaults, and responsive/container tables. The exported function delegates to a shared helper that walks them:",
           "Docs content — compilation: js lead-in",
         ),
       },
@@ -154,7 +154,7 @@ export declare function Button(props: ButtonProps): ButtonSlots;`,
       {
         type: "p",
         text: fbt(
-          "Note the encoding of the rules you have met elsewhere: defaults decide optionality, responsive/container blocks decide whether the object form exists and which keys it has, and slots become the return type. In dev, these declarations are served virtually by the TypeScript plugin; arvia gen writes them to disk when you want them material.",
+          "Note the encoding of the rules you have met elsewhere: defaults decide optionality, responsive/`container` blocks decide whether the object form exists and which keys it has, and slots become the return type. In dev, these declarations are served virtually by the TypeScript plugin; `arvia gen` writes them to disk when you want them material.",
           "Docs content — compilation: dts encoding",
         ),
       },
@@ -162,14 +162,14 @@ export declare function Button(props: ButtonProps): ButtonSlots;`,
       {
         type: "p",
         text: fbt(
-          "Put the pieces together: class names do not depend on style content, so editing a padding produces a JS module byte-identical to the previous one. The Vite plugin compares, sees only CSS changed, and swaps the stylesheet through a phantom <file>.arv.css module — no JS re-execution, no React re-render, styles update in place.",
+          "Put the pieces together: class names do not depend on style content, so editing a padding produces a JS module byte-identical to the previous one. The Vite plugin compares, sees only CSS changed, and swaps the stylesheet through a phantom <file>`.arv`.css module — no JS re-execution, no React re-render, styles update in place.",
           "Docs content — compilation: hmr css only",
         ),
       },
       {
         type: "p",
         text: fbt(
-          "Edit the theme file instead and the equation flips: tokens are inlined everywhere (or feed every var()), so any file may be stale — the plugin resets its caches and triggers a full reload. Structural component edits (new variant, new slot) change the JS too and update the module graph normally.",
+          "Edit the theme file instead and the equation flips: tokens are inlined everywhere (or feed every `var()`), so any file may be stale — the plugin resets its caches and triggers a full reload. Structural component edits (new variant, new slot) change the JS too and update the module graph normally.",
           "Docs content — compilation: hmr theme edits",
         ),
       },

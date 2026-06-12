@@ -69,7 +69,7 @@ export function containerQueries(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Container queries need an element declared as a measurement container. Arvia handles that: a component with a container block gets container-type: inline-size on its root automatically, and the override styles are wrapped in @container:",
+          "Container queries need an element declared as a measurement container. Arvia handles that: a component with a `container` block gets `container-type: inline-size` on its root automatically, and the override styles are wrapped in `@container`:",
           "Docs content — container: setup lead-in",
         ),
       },
@@ -106,7 +106,7 @@ export function containerQueries(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Like responsive blocks, container behavior is also available per call site. Container keys are prefixed with $ to keep the two query kinds distinct in one object:",
+          "Like `responsive` blocks, container behavior is also available per call site. Container keys are prefixed with $ to keep the two query kinds distinct in one object:",
           "Docs content — container: dollar lead-in",
         ),
       },
@@ -125,7 +125,7 @@ export function containerQueries(): DocSection {
       {
         type: "p",
         text: fbt(
-          "The semantics mirror responsive props exactly: passing a plain value pins the variant and disables the component's container block for it; the object form sets the initial value and per-container-size overrides; and the available $ keys are the ones the component's container block declared.",
+          "The semantics mirror responsive props exactly: passing a plain value pins the variant and disables the component's `container` block for it; the object form sets the initial value and per-container-size overrides; and the available $ keys are the ones the component's `container` block declared.",
           "Docs content — container: prop semantics",
         ),
       },

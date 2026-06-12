@@ -49,7 +49,7 @@ Button({ size: "sm", tone: "ghost" }); // sm + ghost`,
       {
         type: "p",
         text: fbt(
-          "Axes are orthogonal: every size works with every tone, and the compiler generates one class per value per slot it touches — three sizes and three tones produce six classes, not nine combinations. Styling specific combinations is what compound blocks are for.",
+          "Axes are orthogonal: every size works with every tone, and the compiler generates one class per value per slot it touches — three sizes and three tones produce six classes, not nine combinations. Styling specific combinations is what `compound` blocks are for.",
           "Docs content — variants: orthogonal",
         ),
       },
@@ -60,7 +60,7 @@ Button({ size: "sm", tone: "ghost" }); // sm + ghost`,
       {
         type: "p",
         text: fbt(
-          "The defaults block does double duty: it picks the runtime fallback when a prop is omitted, and it decides the TypeScript signature. A variant with a default is an optional prop; a variant without one is required:",
+          "The `defaults` block does double duty: it picks the runtime fallback when a prop is omitted, and it decides the TypeScript signature. A variant with a default is an optional prop; a variant without one is required:",
           "Docs content — variants: defaults semantics",
         ),
       },
@@ -137,7 +137,7 @@ export declare function Tag(props: TagProps): TagSlots;`,
       {
         type: "p",
         text: fbt(
-          "Arvia has no boolean variant type — model on/off as a two-value axis. The names read better than true/false in both the .arv source and the call site, and they leave room for a third state later:",
+          "Arvia has no boolean variant type — model on/off as a two-value axis. The names read better than true/false in both the `.arv` source and the call site, and they leave room for a third state later:",
           "Docs content — variants: boolean modeling",
         ),
       },
@@ -179,7 +179,7 @@ export declare function Tag(props: TagProps): TagSlots;`,
         type: "note",
         tone: "tip",
         text: fbt(
-          "Responsive and container blocks can re-decide a variant per breakpoint or container width, and callers can pass { initial, md } objects for the same effect — see Responsive and Container queries once your axes are in place.",
+          "Responsive and `container` blocks can re-decide a variant per breakpoint or container width, and callers can pass { initial, md } objects for the same effect — see [Responsive](/docs/responsive) and [Container queries](/docs/container-queries) once your axes are in place.",
           "Docs note — variants: responsive pointer",
         ),
       },

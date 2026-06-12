@@ -76,7 +76,7 @@ Button({ size: "sm" }).root
       {
         type: "p",
         text: fbt(
-          "Compounds compose along every dimension the language has. Multiple compound blocks stack — each matching one applies, in source order. A compound can match three or more axes, style several slots at once, and carry states:",
+          "Compounds compose along every dimension the language has. Multiple `compound` blocks stack — each matching one applies, in source order. A compound can match three or more axes, style several slots at once, and carry states:",
           "Docs content — compound: pushing lead-in",
         ),
       },

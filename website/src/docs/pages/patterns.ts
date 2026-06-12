@@ -115,7 +115,7 @@ recipe Surface {
         type: "note",
         tone: "tip",
         text: fbt(
-          "The &:focus-within block keeps the pattern accessible: keyboard users tabbing to a hidden action button reveal the actions too. Pair reveal-on-hover with focus-within every time.",
+          "The `&:focus-within` block keeps the pattern accessible: keyboard users tabbing to a hidden action button reveal the actions too. Pair reveal-on-hover with focus-within every time.",
           "Docs note — patterns: focus-within",
         ),
       },
@@ -236,7 +236,7 @@ recipe Surface {
       {
         type: "p",
         text: fbt(
-          "Trace a card rendered in a 700px column: the container block flips layout to split, and if it is also featured, the compound matches and widens the media slot. Drag the same card into a 300px sidebar and all of it unwinds — no props, no resize observers.",
+          "Trace a card rendered in a 700px column: the `container` block flips layout to split, and if it is also featured, the compound matches and widens the media slot. Drag the same card into a 300px sidebar and all of it unwinds — no props, no resize observers.",
           "Docs content — patterns: adaptive card trace",
         ),
       },

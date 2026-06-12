@@ -28,22 +28,22 @@ export function packages(): DocSection {
           [
             "@arviahq/vite-plugin-react",
             fbt("Vite plugin + arvia CLI for React projects.", "Docs table cell — pkg react"),
-            fbt("You use React + Vite.", "Docs table cell — pkg react when"),
+            fbt("You `use React` + Vite.", "Docs table cell — pkg react when"),
           ],
           [
             "@arviahq/vite-plugin-preact",
             fbt("Vite plugin + arvia CLI for Preact projects.", "Docs table cell — pkg preact"),
-            fbt("You use Preact + Vite.", "Docs table cell — pkg preact when"),
+            fbt("You `use Preact` + Vite.", "Docs table cell — pkg preact when"),
           ],
           [
             "@arviahq/vite-plugin-vue",
             fbt("Vite plugin + arvia CLI for Vue projects.", "Docs table cell — pkg vue"),
-            fbt("You use Vue + Vite.", "Docs table cell — pkg vue when"),
+            fbt("You `use Vue` + Vite.", "Docs table cell — pkg vue when"),
           ],
           [
             "@arviahq/typescript-plugin",
             fbt(
-              "tsserver plugin + arvia-tsc; serves .arv types virtually.",
+              "tsserver plugin + `arvia-tsc`; serves `.arv` types virtually.",
               "Docs table cell — pkg ts",
             ),
             fbt("Always, alongside any Vite plugin.", "Docs table cell — pkg ts when"),
@@ -69,7 +69,7 @@ export function packages(): DocSection {
           ],
           [
             "@arviahq/language-server",
-            fbt("LSP server for .arv files.", "Docs table cell — pkg lsp"),
+            fbt("LSP server for `.arv` files.", "Docs table cell — pkg lsp"),
             fbt(
               "Editor setups without a bundled extension (e.g. Neovim).",
               "Docs table cell — pkg lsp when",
@@ -78,14 +78,14 @@ export function packages(): DocSection {
           [
             "@arviahq/storybook",
             fbt(
-              "CSF story generator behind arvia gen --storybook.",
+              "CSF story generator behind `arvia gen --storybook`.",
               "Docs table cell — pkg storybook",
             ),
             fbt("You generate stories from components.", "Docs table cell — pkg storybook when"),
           ],
           [
             "@arviahq/docs",
-            fbt("Token catalog generator behind arvia gen --docs.", "Docs table cell — pkg docs"),
+            fbt("Token catalog generator behind `arvia gen --docs`.", "Docs table cell — pkg docs"),
             fbt("You publish a token reference.", "Docs table cell — pkg docs when"),
           ],
         ],

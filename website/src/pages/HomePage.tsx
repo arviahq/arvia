@@ -1,8 +1,10 @@
 import { FeatureGrid, Heading, Page, SiteHero, Text } from "../components/ui";
 import { Playground } from "../components/Playground";
+import { usePageMeta } from "../page-meta";
 
 export function HomePage() {
   const page = Page();
+  usePageMeta();
   return (
     <div>
       <SiteHero />

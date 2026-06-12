@@ -13,7 +13,7 @@ export function introduction(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Arvia is a design system compiler. You describe your design system — tokens, themes, reusable style fragments, and multi-variant components — in .arv files, and the compiler turns them into three artifacts: plain CSS, a tiny typed JavaScript API, and TypeScript declarations. Nothing styling-related runs in the browser at runtime; every class name and every rule exists before your app boots.",
+          "Arvia is a design system compiler. You describe your design system — tokens, themes, reusable style fragments, and multi-variant components — in `.arv` files, and the compiler turns them into three artifacts: plain CSS, a tiny typed JavaScript API, and TypeScript declarations. Nothing styling-related runs in the browser at runtime; every class name and every rule exists before your app boots.",
           "Docs content — intro: what Arvia is",
         ),
       },
@@ -104,7 +104,7 @@ Button({ size: "xl" });
       {
         type: "p",
         text: fbt(
-          "Everything you can write at the top level of an .arv file is one of six constructs. Each has its own page in these docs, but the one-line summary is:",
+          "Everything you can write at the top level of an `.arv` file is one of six constructs. Each has its own page in these docs, but the one-line summary is:",
           "Docs content — intro: six constructs lead-in",
         ),
       },
@@ -153,7 +153,7 @@ Button({ size: "xl" });
           [
             "keyframes name { … }",
             fbt(
-              "A named CSS animation, referenced from components as keyframes.name.",
+              "A named CSS animation, referenced from components as `keyframes.name`.",
               "Docs table cell — keyframes summary",
             ),
           ],
@@ -228,7 +228,7 @@ Button({ size: "xl" });
       {
         type: "p",
         text: fbt(
-          "Ready to set it up? Head to Installation, or skim Thinking in Arvia first if you want the mental model before the mechanics.",
+          "Ready to set it up? Head to [Installation](/docs/installation), or skim [Thinking in Arvia](/docs/thinking-in-arvia) first if you want the mental model before the mechanics.",
           "Docs content — intro: next steps",
         ),
       },

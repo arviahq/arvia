@@ -22,6 +22,10 @@ export function getDocNav() {
           title: fbt("Thinking in Arvia", "Docs nav item"),
           slug: "thinking-in-arvia",
         },
+        {
+          title: fbt("FAQ & troubleshooting", "Docs nav item"),
+          slug: "faq",
+        },
       ],
     },
     {
@@ -49,6 +53,15 @@ export function getDocNav() {
       items: [
         { title: fbt("How compilation works", "Docs nav item"), slug: "compilation" },
         { title: fbt("Advanced patterns", "Docs nav item"), slug: "patterns" },
+        { title: fbt("Diagnostics reference", "Docs nav item"), slug: "diagnostics" },
+      ],
+    },
+    {
+      section: fbt("Migrate", "Docs sidebar section title"),
+      items: [
+        { title: fbt("From Tailwind", "Docs nav item"), slug: "from-tailwind" },
+        { title: fbt("From CSS Modules", "Docs nav item"), slug: "from-css-modules" },
+        { title: fbt("From vanilla-extract", "Docs nav item"), slug: "from-vanilla-extract" },
       ],
     },
     {

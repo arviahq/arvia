@@ -13,7 +13,7 @@ export function thinkingInArvia(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Arvia becomes easy once you internalize one model: an .arv file is not a stylesheet, it is a description of decisions — what tokens exist, what variants a component offers, what changes at a breakpoint. The compiler turns those decisions into CSS classes and a function that picks the right ones. This page builds that model.",
+          "Arvia becomes easy once you internalize one model: an `.arv` file is not a stylesheet, it is a description of decisions — what tokens exist, what variants a component offers, what changes at a breakpoint. The compiler turns those decisions into CSS classes and a function that picks the right ones. This page builds that model.",
           "Docs content — thinking: opening",
         ),
       },
@@ -42,7 +42,7 @@ export function thinkingInArvia(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Arvia has no import statement. Instead, one shared theme file (configured in the Vite plugin, src/theme.arv by convention) forms a global environment: its tokens, recipes, and keyframes are visible to every .arv file in the project. When button.arv says color.primary or use FocusRing, the compiler resolves the name against that environment — that is the whole module system.",
+          "Arvia has no import statement. Instead, one shared theme file (configured in the Vite plugin, `src/theme.arv` by convention) forms a global environment: its tokens, recipes, and keyframes are visible to every `.arv` file in the project. When `button.arv` says `color.primary` or `use FocusRing`, the compiler resolves the name against that environment — that is the whole module system.",
           "Docs content — thinking: shared environment",
         ),
       },
@@ -57,7 +57,7 @@ export function thinkingInArvia(): DocSection {
         type: "note",
         tone: "info",
         text: fbt(
-          "Scoping still exists where it matters: a component's tokens block declares values visible only inside that component, shadowing the theme. Global by default, local by choice.",
+          "Scoping still exists where it matters: a component's `tokens` block declares values visible only inside that component, shadowing the theme. Global by default, local by choice.",
           "Docs note — thinking: local tokens exist",
         ),
       },
@@ -144,7 +144,7 @@ export function thinkingInArvia(): DocSection {
         type: "ul",
         items: [
           fbt(
-            "A variant is an axis callers choose (size, tone). A compound block is extra styling for a specific combination of axes — it adds no props, it refines existing ones.",
+            "A variant is an axis callers choose (size, tone). A `compound` block is extra styling for a specific combination of axes — it adds no props, it refines existing ones.",
             "Docs list item — variant vs compound",
           ),
           fbt(
@@ -152,7 +152,7 @@ export function thinkingInArvia(): DocSection {
             "Docs list item — theme vs local token",
           ),
           fbt(
-            "A responsive block follows the viewport; a container block follows the component's own rendered width. Prefer containers for anything that can appear in both a sidebar and a main column.",
+            "A `responsive` block follows the viewport; a `container` block follows the component's own rendered width. Prefer containers for anything that can appear in both a sidebar and a main column.",
             "Docs list item — responsive vs container",
           ),
         ],
@@ -161,7 +161,7 @@ export function thinkingInArvia(): DocSection {
       {
         type: "p",
         text: fbt(
-          "Because class names are hashed from the file path and component name — never from the style content — editing a padding value changes only the CSS, byte-for-byte leaving the JS alone. That is why dev-server updates are instant CSS swaps, and why the generated output stays diffable and predictable in production. When you want to see exactly what you shipped, read How compilation works.",
+          "Because class names are hashed from the file path and component name — never from the style content — editing a padding value changes only the CSS, byte-for-byte leaving the JS alone. That is why dev-server updates are instant CSS swaps, and why the generated output stays diffable and predictable in production. When you want to see exactly what you shipped, read [How compilation works](/docs/compilation).",
           "Docs content — thinking: trust output",
         ),
       },

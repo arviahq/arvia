@@ -9084,6 +9084,3654 @@
         }
       ],
       "types": []
+    },
+    "6n0mwd4HJHgMOdM+ehSrPg==": {
+      "description": "Docs nav item",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "FAQ & troubleshooting",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "nLT4stPrHC5TRPgi1txYrw==": {
+      "description": "Docs nav item",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Diagnostics reference",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "j4qHRQvQ0nBrft4HwE1ERQ==": {
+      "description": "Docs sidebar section title",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Migrate",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "WZyNPkiumy2N9w/GvGeN2A==": {
+      "description": "Docs nav item",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "From Tailwind",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "cBKTNMKawFdPvWU/Wvydog==": {
+      "description": "Docs nav item",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "From CSS Modules",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "SofmTkPDDOLd+jCuz2EHhw==": {
+      "description": "Docs nav item",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "From vanilla-extract",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "TqBFOfxpGlSS0OCIbMfXzw==": {
+      "description": "Docs content — cli: opening",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The arvia CLI ships with every Vite plugin package and has one command, gen, with three `modes:` emit TypeScript declarations (the default), generate a token catalog (--docs), or generate Storybook stories (--storybook).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Jbf5Bz+ytAG3ko4FZBRHug==": {
+      "description": "Docs table cell — cli dir",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Directory to scan for `.arv` files (default: current directory; node_modules is skipped).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "8DK8scfyhZGsezdtFQuuZQ==": {
+      "description": "Docs table cell — cli theme",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The shared theme file. Default: the first `theme.arv` found under [dir].",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "iZgI6ZHRRSnH6JK4/5qLBQ==": {
+      "description": "Docs content — cli: declarations semantics",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Each file compiles against the theme and gets a sibling `.d.ts`. Use this in environments where the TypeScript plugin cannot run — CI without `arvia-tsc`, or non-TS consumers of your design system package. Diagnostics print with file and line; any error makes the command exit non-zero, which doubles as a lint step for `.arv` sources.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "DzLuEUpTjmvBBBd6LolSTQ==": {
+      "description": "Docs note — cli: prefer arvia-tsc",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "For day-to-day type checking prefer `arvia-tsc` (from the TypeScript plugin package) over generated siblings: it type-checks `.arv` imports virtually, leaving your working tree clean.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "MGw+mg6TYQE9tw0Y1gi8yg==": {
+      "description": "Docs table cell — emitters what",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Three independent generators write the CSS, the JS module, and the `.d.ts` declarations from the same IR.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "5oKqriUGtbGmD52ilGYLLw==": {
+      "description": "Docs content — compilation: hash lead-in",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Every class follows `Component_variant_value_slot_hash`. The 6-character hash is FNV-1a over the file's project-relative path plus the component name — crucially, not over the styles:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "3gEzaKwvaYAgLAE244n5yg==": {
+      "description": "Docs content — compilation: js lead-in",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The JS module is data plus one small helper. Per component: a base class map, a variants table, `compound` entries, defaults, and responsive/container tables. The exported function delegates to a shared helper that walks them:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Cs1MB+PxI+mYCLcBTPEzrQ==": {
+      "description": "Docs content — compilation: dts encoding",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Note the encoding of the rules you have met elsewhere: defaults decide optionality, responsive/`container` blocks decide whether the object form exists and which keys it has, and slots become the return type. In dev, these declarations are served virtually by the TypeScript plugin; `arvia gen` writes them to disk when you want them material.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "+HMQG0dOl0BkGYkWjtFlhA==": {
+      "description": "Docs content — compilation: hmr css only",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Put the pieces together: class names do not depend on style content, so editing a padding produces a JS module byte-identical to the previous one. The Vite plugin compares, sees only CSS changed, and swaps the stylesheet through a phantom <file>`.arv`.css module — no JS re-execution, no React re-render, styles update in place.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "+m83Haf7R8+m0rFduM7EMA==": {
+      "description": "Docs content — compilation: hmr theme edits",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Edit the theme file instead and the equation flips: tokens are inlined everywhere (or feed every `var()`), so any file may be stale — the plugin resets its caches and triggers a full reload. Structural component edits (new variant, new slot) change the JS too and update the module graph normally.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "FDezalTRgxmYbWJAJohhYw==": {
+      "description": "Docs table cell — slots details",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "See [Slots](/docs/slots).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "PgNaXi0dTK4zxqcHWWZzxw==": {
+      "description": "Docs table cell — tokens details",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "See [Local tokens](/docs/local-tokens).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "f9S0g82Z2AGfBEX6Q98t/A==": {
+      "description": "Docs table cell — variants details",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "See [Variants & defaults](/docs/variants).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "RYOZGDkv6L+WMVLOD0abFg==": {
+      "description": "Docs table cell — compound details",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "See [Compound variants](/docs/compound).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "2eyNrJiHAB28ImK9Ax3Xuw==": {
+      "description": "Docs table cell — responsive details",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "See [Responsive](/docs/responsive) and [Container queries](/docs/container-queries).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "WmMFAVqvt/mlGDm+r+4PAw==": {
+      "description": "Docs table cell — use details",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "See [Recipes & use](/docs/recipes).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "0gWeaZ/Rmb4XVee/1L7csA==": {
+      "description": "Docs content — components: class scheme",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Generated class names follow a fixed scheme — `Component_variant_value_slot_hash` — so DevTools stays legible: `.Button_tone_danger_root_0p4oom` tells you the component, why the class applied, the element it styles, and which file it came from. The 6-character hash comes from the file path and component name, not the styles, so names survive edits (see [How compilation works](/docs/compilation)).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "QjHMX2oxr9hiCtMO+5jkIg==": {
+      "description": "Docs content — compound: pushing lead-in",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Compounds compose along every dimension the language has. Multiple `compound` blocks stack — each matching one applies, in source order. A compound can match three or more axes, style several slots at once, and carry states:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "vX+1pEvQ9yfSNR2GMog1Xw==": {
+      "description": "Docs content — container: setup lead-in",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Container queries need an element declared as a measurement container. Arvia handles that: a component with a `container` block gets `container-type: inline-size` on its root automatically, and the override styles are wrapped in `@container`:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "pLzk+SKgWM+j7ax0fxyJfQ==": {
+      "description": "Docs content — container: dollar lead-in",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Like `responsive` blocks, container behavior is also available per call site. Container keys are prefixed with $ to keep the two query kinds distinct in one object:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "hT89zm2oPEmx6Y5A+aBNnA==": {
+      "description": "Docs content — container: prop semantics",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The semantics mirror responsive props exactly: passing a plain value pins the variant and disables the component's `container` block for it; the object form sets the initial value and per-container-size overrides; and the available $ keys are the ones the component's `container` block declared.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "WXnJehgvEKDDYAoV/lT3uA==": {
+      "description": "Docs page title — Diagnostics reference",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Diagnostics reference",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "29cCHrGBaBgxf5mRl79jiQ==": {
+      "description": "Docs page description — Diagnostics reference.",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Every ARV code the compiler can emit, what it means, and how to fix it.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "iGuUKw/XsDlxkMdQWXV/gQ==": {
+      "description": "Docs content — diagnostics: opening",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Arvia diagnostics are numbered by area, carry a severity, and where possible a did-you-mean hint with a structured fix your editor can apply in one action. Errors stop the compiler from emitting CSS/JS/types for that file; warnings compile normally. The same codes appear everywhere — build output, editor squiggles, and `arvia gen`.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "n9VLBGtfdcRYkT60u3bmLA==": {
+      "description": "Docs content — heading: diag syntax",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Syntax (ARV001–ARV010)",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "aV1TDBXxbvZ2rJq3Q2jnow==": {
+      "description": "Docs table header — severity",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Severity",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "T4o7bzkaYsLzHS1b90eraQ==": {
+      "description": "Docs table header — diag meaning",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Meaning",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "0GG0D5y6Np+jWuXKl3cecg==": {
+      "description": "Docs table cell — severity error",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "error",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "f4HkTuM6BVZ6cFQzsOXlaQ==": {
+      "description": "Docs table cell — diag 001",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Unexpected character — something the lexer cannot start a token with.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "VCkOXVPVlrGB/iLFNU87hw==": {
+      "description": "Docs table cell — diag 002",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Unterminated `/* … */` block comment.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "QOl9edZm5FA5e5aePlHM7w==": {
+      "description": "Docs table cell — diag 003",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Bad declaration value: an unterminated string, or no value before the `;`.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "BGAbmi9xPiYfJVKFGE1rzA==": {
+      "description": "Docs table cell — diag 004",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Malformed selector — missing `{` after it, or a `{` with no selector before it.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "w900NPGEiD9DC/6c4GXqfw==": {
+      "description": "Docs table cell — diag 010",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "General parse error — unexpected token for the current construct. The message names exactly what was expected; the parser recovers and keeps checking the rest of the file.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "wrqx0zA2C9YVNmttpwX0qg==": {
+      "description": "Docs content — heading: diag refs",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Names & references (ARV101–ARV103)",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "n8VOobzJTmF70IlZPxXRrg==": {
+      "description": "Docs table cell — diag 101",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Unknown token reference (`color.primry`) — only fires for known theme groups, so ordinary dotted CSS values pass. Comes with a did-you-mean fix. Also used for forward references between theme tokens: define before use.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "pGTZvgxLCnI643Ik3pfVPA==": {
+      "description": "Docs table cell — diag 102",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`use` names a recipe that does not exist. The hint tells you when the name is actually a style — styles cannot be `use`d.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "nFxvLa80nTXVzZOOIJ+MJQ==": {
+      "description": "Docs table cell — diag 103",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Recipe cycle — A uses B uses A.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "aeYnwe9IZ8VIx/qqN7mFRA==": {
+      "description": "Docs content — heading: diag dup",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Duplicates & naming (ARV110–ARV119)",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "2Y8c5k9JBf23q4Mau/hJjQ==": {
+      "description": "Docs table cell — diag 110",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Duplicate component name in one file.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "qKb57mU1Aj6dVkB9LAb0SA==": {
+      "description": "Docs table cell — diag 111",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Duplicate recipe name in one file.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "xUU4vbGWu62WuEu2sZZ00g==": {
+      "description": "Docs table cell — diag 112",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Duplicate theme group, token, breakpoint, or container size — each value has exactly one home per file.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "T8rrdESuZ1yL+22CNaS3zQ==": {
+      "description": "Docs table cell — diag 113",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Duplicate slot, including redeclaring the implicit `root`.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "TlJqAZdNPfVuk9I7KRWNpg==": {
+      "description": "Docs table cell — diag 114",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Duplicate variant axis or duplicate value within an axis.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "0xrJlqvTltz5LvZlmEWmAQ==": {
+      "description": "Docs table cell — diag 115",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Duplicate section block — a component allows one `base`, one `slots`, etc.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "8byggfy/+47z40/c6+rQpg==": {
+      "description": "Docs table cell — diag 116",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Component or style name is not a valid JavaScript identifier (they become exports).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "SqO1vhtZiuJD+L2H5qiVYg==": {
+      "description": "Docs table cell — diag 117",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Duplicate style name, or a style clashing with a component name.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "cCRQGSm0mpzEMR8o/pxcCA==": {
+      "description": "Docs table cell — diag 118",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Duplicate local token inside a component `tokens` block.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "rTOLhZfqSl6Vg7bX5Z3rFw==": {
+      "description": "Docs table cell — diag 119",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Mode override inside component tokens — local tokens are compile-time constants; moded values belong in the theme.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "bSj1nSEjKty3KJqPgEFHAw==": {
+      "description": "Docs content — heading: diag component",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Component structure (ARV120–ARV126)",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "YAOdpO8sqL/l5rRq5v97Nw==": {
+      "description": "Docs table cell — diag 120",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "A sub-block targets a slot the component never declared. Did-you-mean fix included.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "xp8XC40jgTK1ajA9bu4Kkw==": {
+      "description": "Docs table cell — diag 121",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Compound matcher names an unknown variant axis.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "kF/Ayw15gaJialXSQiIkxQ==": {
+      "description": "Docs table cell — diag 122",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Compound matcher names an unknown value for a known axis.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "hcA+VzOsv+5z8Jl3T8brbQ==": {
+      "description": "Docs table cell — severity warning",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "warning",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "+hwWo9Lzd2yCJMWzyoHnUQ==": {
+      "description": "Docs table cell — diag 123",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Empty compound — no matchers or no styles. Compilation continues; the block does nothing.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "LsX9dgYX7DBO3IKL0VvDbw==": {
+      "description": "Docs table cell — diag 124",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`defaults` references an unknown variant or value. Fix included.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "/T/yEWrAbdCViDp/1I/Hqw==": {
+      "description": "Docs table cell — diag 125",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "A component or style named `tokens` in a file that exports theme tokens — it would collide with the `tokens` export.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "8wDIQ/fR3LZsIiL0E2o0kg==": {
+      "description": "Docs table cell — diag 126",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The same variant matched twice in one compound block.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "1d0CMQrkSvbmlJ+TLhXpZQ==": {
+      "description": "Docs content — heading: diag modes",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Theme modes (ARV130–ARV136)",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "jGHzzpSiD1XKjygssHwx8A==": {
+      "description": "Docs table cell — diag 130",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "A `modes:` declaration in a regular file conflicts with the shared theme's modes — modes are declared once, in the theme file.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "0oiEKHh+8KyiuiWDpv36PA==": {
+      "description": "Docs table cell — diag 131",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`modes:` lists fewer than two mode names.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Ou6xoAywewHXCGujG3zxYg==": {
+      "description": "Docs table cell — diag 132",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`@mode` override for a mode that is not in the `modes:` list.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "q1AUl71NW4DIhmZQenDcKw==": {
+      "description": "Docs table cell — diag 133",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Mode override for a token that has no base declaration — declare the token first.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "DEtSU+jZILeBUhInJtuoqg==": {
+      "description": "Docs table cell — diag 134",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`@mode` override used without any `modes:` declaration.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "BM2/ozJcKlJuIVvMFt/dWA==": {
+      "description": "Docs table cell — diag 135",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Mode override on a breakpoint token — breakpoints cannot vary per mode.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "+eEJ0TBg5Hz3C2cLAeRulw==": {
+      "description": "Docs table cell — diag 136",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Mode override on a container size token — same rule as breakpoints.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "NkXSGE1u4xbbF/kMsG61IQ==": {
+      "description": "Docs content — heading: diag queries",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Responsive & containers (ARV140–ARV144, ARV160–ARV164)",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "5VLnVRli8IB4954lmm/7aA==": {
+      "description": "Docs table cell — diag 140",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Duplicate breakpoint (or container size) entry in one `responsive` / `container` block.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "MTXXNSjT6iIz9R6s34LaMQ==": {
+      "description": "Docs table cell — diag 141",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Unknown breakpoint or container size — declare them in `theme { breakpoint { … } }` / `theme { container { … } }`.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "DZ05DWzzydWOH2RmdLmMBg==": {
+      "description": "Docs table cell — diag 142",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The same variant overridden twice at one breakpoint / container size.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "R6x6qO/yGRfRAu1KcMSkRw==": {
+      "description": "Docs table cell — diag 143",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Override references an unknown variant axis.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "w7y7wGCxxFAU7Pe+33IXtQ==": {
+      "description": "Docs table cell — diag 144",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Override references an unknown value for a known axis.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "ajsQcibglswpR29E3f65ug==": {
+      "description": "Docs content — heading: diag keyframes",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Keyframes (ARV150–ARV151)",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "IG8BVaEf3XoN5wIKc0nEzg==": {
+      "description": "Docs table cell — diag 150",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Duplicate `keyframes` name in one file.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "rGA+hX53aJ1bTZ8lyOaqOQ==": {
+      "description": "Docs table cell — diag 151",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`keyframes.name` reference to an animation that does not exist. Did-you-mean hint included.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "hqpEPhvH6tSPwbIX1V2gPA==": {
+      "description": "Docs content — heading: diag unused",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Unused declarations (ARV171–ARV173)",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "tj7ab71xVcsRfRquXzH9fg==": {
+      "description": "Docs table cell — diag 171",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "A component-local token nothing references — provably dead, since locals have one consumer.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "7MqrntXUiNPbkJ1UD88t6Q==": {
+      "description": "Docs table cell — diag 172",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "A file-local recipe nothing uses. Suppressed for the shared theme file, whose consumers live elsewhere.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "wsyJkiVtxpPeV/ZUYlEP8g==": {
+      "description": "Docs table cell — diag 173",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "A variant axis with no values.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "OCPKONF3DwR+tR1+SDeCpQ==": {
+      "description": "Docs content — heading: diag css",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "CSS checks (ARV180–ARV181)",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "y1I8EJKUi5W4yJcuI7oWVA==": {
+      "description": "Docs table cell — diag 180",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Unknown CSS property name (`colr:`) — custom properties (`--x`) are exempt. Did-you-mean fix included.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "0L61jBnOPA0PfsyQGdQ8YA==": {
+      "description": "Docs table cell — diag 181",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Value doesn't match the property's expected syntax (`display: 12px`). Skipped for values containing `var()` and unresolved refs, and tolerates `!important`.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "5MxEcWToiOPSVIu9MA/YJg==": {
+      "description": "Docs note — diagnostics: css option",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The CSS checks are configurable when you call the compiler yourself: `css: \"names\"` keeps property-name checks but skips value syntax, `css: false` disables both. The Vite plugin runs them in full.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "iUUkrfm05yAMh+5swAqJ6g==": {
+      "description": "Docs page title — FAQ & troubleshooting",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "FAQ & troubleshooting",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "k0hf94KctqHkkH9Vi1H+/Q==": {
+      "description": "Docs page description — FAQ and troubleshooting.",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The questions everyone hits in their first week, answered precisely.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "YA70QZsXzpK8UKxCKxLwzg==": {
+      "description": "Docs content — heading: faq no styles",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "My styles don't apply at all",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "sLiyuUTgHwY+Ms6RSIoTQA==": {
+      "description": "Docs content — faq: no styles",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Almost always: the theme file was never imported. Importing a component file loads its CSS, but global rules and the `--arvia-*` token variables ship with the theme file itself — `import \"./theme.arv\";` once in your entry point. If a single component looks unstyled instead, check that you put `styles.root` (a string of class names) on the element, not the `styles` object.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "n83TS8wAKG+ZIzAR55zWtQ==": {
+      "description": "Docs content — heading: faq any",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Imports from .arv are typed as any",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "PJWRWGOVq3o5ae44dMDwlw==": {
+      "description": "Docs content — faq: any types",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The TypeScript plugin isn't loaded. Two usual causes: the editor is running its bundled TypeScript instead of the workspace version (in VS Code run “TypeScript: Select TypeScript Version” → workspace), or `@arviahq/typescript-plugin` is missing from `compilerOptions.plugins` in tsconfig. On the command line, use `arvia-tsc` rather than plain `tsc` — tsconfig plugins don't load in stock `tsc`.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "qN5R4uocLucSZlAzjmdJvg==": {
+      "description": "Docs content — heading: faq theme not found",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Unknown token errors in every file except the theme",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "cYpVWIMUNvA1x4AdNSloMw==": {
+      "description": "Docs content — faq: theme not found",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The shared theme isn't being picked up, so each file is checked against an empty environment. Set `arvia({ theme: \"src/theme.arv\" })` in the Vite config (or move the file to the conventional `src/theme.arv`). In monorepos remember the path is relative to each app's Vite root — every app config points at the theme, even a shared one.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "SbJJACKGEocZ7DYAhKjUxQ==": {
+      "description": "Docs content — heading: faq no component",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Why is there no <Button> component?",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "SDIgOVDQvi1I1VVy0O5aYw==": {
+      "description": "Docs content — faq: no component",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "By design. Arvia generates styling functions, not UI components — you keep ownership of markup, refs, accessibility, and events, and the same `.arv` file serves React, Preact, Vue, or plain DOM. The pattern is a thin wrapper per framework; see [Components](/docs/components) for the canonical one.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "hAjH9pZOQNFu3gaTiKWk0w==": {
+      "description": "Docs content — heading: faq dynamic",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "How do I style with runtime values?",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "XJ3hlvSeEi+NvMUkl+xVAQ==": {
+      "description": "Docs content — faq: dynamic values",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Arvia compiles ahead of time, so a value computed at runtime (a user-picked color, a measured width) cannot become a class. Use the platform's escape hatch: set an inline style or a CSS custom property, and keep everything static in the component. The `tokens` export helps mix the two worlds:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "XdNRbexwFwCmOpgLRO69HA==": {
+      "description": "Docs content — heading: faq boolean",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Why no boolean variants?",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "aFeptoZcStWROXX/xqbYTA==": {
+      "description": "Docs content — faq: boolean variants",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Two-value axes do the same job with better names: `state { idle {} invalid {} }` reads clearly in source and call site, and leaves room for a third state without an API break. Map your boolean at the call site: `state: invalid ? \"invalid\" : \"idle\"`. See [Variants & defaults](/docs/variants).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "dxNUqLVhEpgaQrOhg/BtHA==": {
+      "description": "Docs content — heading: faq moved file",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "My class names changed after I moved a file",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "f51TvofRN082AxxAyFVuZA==": {
+      "description": "Docs content — faq: moved file",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Expected: the 6-character hash comes from the file's project-relative path plus the component name (see [How compilation works](/docs/compilation)). Renaming or moving a file gives its components new hashes. Nothing breaks — JS and CSS regenerate together — but don't persist generated class names anywhere (snapshots, analytics selectors); target stable attributes instead.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "jjw2PzIdOWaex2pPnSw9MA==": {
+      "description": "Docs content — heading: faq cascade",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "A style overrides my component — or refuses to",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "uUN0J8c9gT7Ey6npaOhCeg==": {
+      "description": "Docs content — faq: cascade",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Every generated class has the same single-class specificity, so stylesheet order decides ties. The order is deliberate: base → variants → responsive/container → compounds within a component, and standalone `style` declarations after all components (utilities last). If a utility must always win regardless of order, make it win on specificity explicitly — but first ask whether the property belongs in the component as a variant.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "aFRXu/bYdDrTO/SQ+QJveA==": {
+      "description": "Docs content — heading: faq collision",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Two files export the same component name",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "vbAb4PAholHeMxawevM/5Q==": {
+      "description": "Docs content — faq: collision",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Allowed — hashes keep their CSS apart — and the Vite plugin warns because importing both into one module forces aliasing (`import { Button as IconButton }`). If the warning surprises you, it is usually a copy-pasted file; rename one component.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "eJHoRoul/IQak/9cuPqI2Q==": {
+      "description": "Docs content — heading: faq without vite",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Does Arvia work without Vite?",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "WogkVWoRYxSwSMLEmFEYsA==": {
+      "description": "Docs content — faq: without vite",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The compiler is a plain function — `compile(source, options)` from `@arviahq/compiler` returns `{ css, js, dts, diagnostics }` — so any bundler or build script can integrate it; the Vite plugin is ~300 lines you can mirror. First-party support is Vite-only today, and `arvia gen` covers type generation anywhere.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "zZ732vyRdnOGxMQ+0NrLuQ==": {
+      "description": "Docs note — faq: more help",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Not answered here? The [diagnostics reference](/docs/diagnostics) explains every compiler message, and each language page documents its construct's edge cases.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "602chjTrwg5bDnhz8mT4Eg==": {
+      "description": "Docs page title — Coming from CSS Modules",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Coming from CSS Modules",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "kgDoxAwzXU7rPtiJHBTtNQ==": {
+      "description": "Docs page description — Migrating from CSS Modules.",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Keep the scoping you like; replace the conditional-className logic you don't.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "wvus6lW2O5vG89ZUSvdB9g==": {
+      "description": "Docs content — cssm: opening",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "CSS Modules users already live the Arvia workflow: styles in a sibling file, scoped class names, an import that yields classes. What CSS Modules never had is knowledge of your design system — variants live in JS conditionals, tokens are unchecked `var()` strings, and `composes` is the whole composition story. That layer is exactly what Arvia adds:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "btD3VltXXuSzJ/FJ5dKvgw==": {
+      "description": "Docs table header — cssm concept",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "CSS Modules concept",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "YLsUlux4mwxKGq8Emi1dNA==": {
+      "description": "Docs table header — cssm arvia equivalent",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Arvia equivalent",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "hx+MhXEwqZj0Fog0CP6caQ==": {
+      "description": "Docs table cell — cssm class arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`component Button { }` in button.arv",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "oyKq1M4KWyUFP/eYPP8abg==": {
+      "description": "Docs table cell — cssm usage arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`Button().root` — same idea, typed",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "C14wKIKAUXr8cSFBdOMdug==": {
+      "description": "Docs table cell — cssm composes arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`use Focusable;` — resolved through the shared theme, no path",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "meA4gUgKTQhOReB5TGrAXg==": {
+      "description": "Docs table cell — cssm global arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`global { .third-party { } }`",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "gm0CT4cc4bBrsgLhE4QEiw==": {
+      "description": "Docs table cell — cssm vars arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`space.2` — checked, with did-you-mean fixes",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "C8vuvLwebwg5c47YHt2vfQ==": {
+      "description": "Docs table cell — cssm clsx",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "clsx(styles.button, isLarge && styles.large)",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "6yrj8ugOjyiI5sHIf6wtXQ==": {
+      "description": "Docs table cell — cssm clsx arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`Button({ size: \"lg\" })` — variants replace the conditional logic",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "lWzlJ+ZK5SYeGguSRH/fRQ==": {
+      "description": "Docs content — heading: cssm example",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The migration in one example",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "WbWElFFUXhSK8nXklwl7jw==": {
+      "description": "Docs content — cssm: example explanation",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The modifier-class pattern (`.cardSelected`, `.cardCompact`) becomes variants: the combination logic leaves your component code, misspelling a modifier becomes a type error, and the title's class arrives from the same call instead of a second `styles.title` lookup.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "unDvXc989WSF4KbrpRGSlA==": {
+      "description": "Docs content — heading: cssm carries over",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "What carries over unchanged",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "ptfenH1sBy+wA9NHoegggA==": {
+      "description": "Docs list item — cssm carry model",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The mental model: styles in files next to components, imported as named values, scoped by generated class names.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "BGtNxU5IVMRwJlioog7Omg==": {
+      "description": "Docs list item — cssm carry css",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Plain CSS knowledge — every declaration inside a block is ordinary CSS, and `&:hover` works like CSS nesting.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "UY0/egO9+MwHeCB8Ed63/g==": {
+      "description": "Docs list item — cssm carry styles",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Single classes without ceremony: a `style` declaration is the moral equivalent of one CSS Modules class (see [Styles](/docs/styles)).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "s/NpJ2jDYe+KClhjnxllZA==": {
+      "description": "Docs content — heading: cssm gotchas",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "What to watch out for",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "GEjS8pEle2zxybuFh8yhCw==": {
+      "description": "Docs list item — cssm gotcha descendant",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "No descendant selectors between your own elements — `.card .title { }` becomes a `title` slot. Selectors that reach into markup you don't own stay possible via `& .child` states and `global`.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "hi7gcoAyltC/ozs20CEqjg==": {
+      "description": "Docs list item — cssm gotcha composes",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Composition is by name, not by path: `use Surface` resolves through the [shared theme](/docs/recipes), so shared fragments live in theme.arv rather than an imported shared.css.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "vNYjwhF+POmO/cYIDw/Nsg==": {
+      "description": "Docs list item — cssm gotcha media",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Media queries move from the stylesheet into [responsive](/docs/responsive) and [container](/docs/container-queries) blocks — declared per component, switching variants instead of raw properties.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "RrX8C4wgTTMF+3H9sbzE0A==": {
+      "description": "Docs page title — Coming from Tailwind",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Coming from Tailwind",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "XxGadbN4Nrkoj6nptO95uA==": {
+      "description": "Docs page description — Migrating from Tailwind.",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Map utility-first habits onto tokens, variants, and compiled components.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "SvViJFsjbFzuD0ZvockVaA==": {
+      "description": "Docs content — tw: opening",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Tailwind and Arvia agree on the big things — design tokens enforced at build time, zero runtime styling — and disagree on where composition lives. Tailwind composes utilities in markup; Arvia compiles a component definition and hands your markup finished class names. Your Tailwind instincts map almost one-to-one:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "FUq4wrJYnIym939AiGrOsQ==": {
+      "description": "Docs table header — tailwind concept",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Tailwind concept",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "YUraZX5T81sKVifplpFdRg==": {
+      "description": "Docs table header — arvia equivalent",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Arvia equivalent",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "unK9jwkZuJcHuQiIzI/CnA==": {
+      "description": "Docs table cell — tw config",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "theme scale in tailwind.config",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "GdK3jkQSJPAuh4XAcz5oDw==": {
+      "description": "Docs table cell — tw config arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`theme { }` block — tokens like `space.4`, `color.primary`",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "ugpV8gBtPI4KNG7wACZ+6w==": {
+      "description": "Docs table cell — tw utilities",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "utility classes in className",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "HCv3FCoTv7PI9fBiM47HHg==": {
+      "description": "Docs table cell — tw utilities arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "declarations inside a `component` or `style`",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "7fQm+C2IVX8dY0pl9r7q9g==": {
+      "description": "Docs table cell — tw apply arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`recipe` + `use` — composition without emitting classes",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "QsMbFM9pKJMK2RtdFHBb6g==": {
+      "description": "Docs table cell — tw responsive arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`responsive { md { layout: row; } }` or `{ initial, md }` props",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "7RsMgY9k+QKelFXKUykcRw==": {
+      "description": "Docs table cell — tw dark arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`modes: light | dark;` + `@dark { }` token overrides",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "ygtYkCN1tdEA4hRsNpQlAQ==": {
+      "description": "Docs table cell — tw states arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`&:hover { }`, `&:focus-visible { }` states",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "EqYcqBBicEr501u/THySbQ==": {
+      "description": "Docs table cell — tw group arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "cross-slot states: `&:hover { icon { … } }` — no group class needed",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Jim6d6ajKzG5KmyMjmvivA==": {
+      "description": "Docs table cell — tw container arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`container { wide { … } }` blocks with `$wide` props",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "IaEQP/vyM8y+6uRoLePRow==": {
+      "description": "Docs table cell — tw cva",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "cva / tailwind-variants",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "zyJS7Jcq5+LtuH//BCXNcA==": {
+      "description": "Docs table cell — tw cva arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "built in: `variants`, `defaults`, `compound` — fully typed",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "sYfYQrwvUG2VXDohkyPXlw==": {
+      "description": "Docs content — heading: tw button",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The same button, twice",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "RMTMJPKvqNEtaAiI8XlX+Q==": {
+      "description": "Docs content — tw: button comparison",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Same decision space, different home: the definition moved out of a JS helper into a compiled file, the strings became checked declarations, and the variant props are typed without `VariantProps` gymnastics. The call site is what cva gives you, minus the className assembly: `Button({ size: \"lg\" }).root`.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "2D7JtzEQh2CTNM06E2Ec/w==": {
+      "description": "Docs content — heading: tw stop doing",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "What you stop doing",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "qPOq+WGw2G56msB06EZC2g==": {
+      "description": "Docs list item — tw stop scanning",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Scanning long className strings to find which utility sets the padding — each property appears once, in a named place.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "G6tE4HcOr/y73MsJzF6Oug==": {
+      "description": "Docs list item — tw stop merge",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Fighting class-merge order with twMerge — variants, compounds, and utilities have a defined cascade order (see [FAQ](/docs/faq)).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "tYcTGRgRiWqoXWrtfO/uFg==": {
+      "description": "Docs list item — tw stop group",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Inventing group/peer classes for parent-state styling — cross-slot states compile the descendant selector for you.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "RPD9mSMwAT30WkirxrIpNg==": {
+      "description": "Docs content — heading: tw gotchas",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "What to watch out for",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "p0j3GzNHGR6VQ++g/paunQ==": {
+      "description": "Docs list item — tw gotcha arbitrary",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "No arbitrary values in markup. `w-[137px]` becomes a declaration in the component — or a [local token](/docs/local-tokens) when the magic number deserves a name.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "fbg7+LjZrcvEaHl0JK1qYQ==": {
+      "description": "Docs list item — tw gotcha utilities",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Utilities still exist, as `style` declarations — but reach for them after components, not before. The Tailwind habit of composing five utilities per element usually wants to be one component with variants.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "r4GwecSpASMUjbBy4Z7B5A==": {
+      "description": "Docs list item — tw gotcha responsive",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Responsive overrides switch whole variant values, not single properties. Group what changes at a breakpoint into a variant (`layout: stacked | row`) instead of overriding properties one by one.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Joo6LmYQtJjuHcxn1q7pZg==": {
+      "description": "Docs page title — Coming from vanilla-extract",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Coming from vanilla-extract",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "lbzE9IAFpY0qQEtoSwJKgQ==": {
+      "description": "Docs page description — Migrating from vanilla-extract.",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Same zero-runtime philosophy, expressed as a language instead of a TypeScript API.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "VR87rQUeMEHAtZnxIOcamQ==": {
+      "description": "Docs content — ve: opening",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "vanilla-extract is Arvia's closest relative: build-time CSS, typed themes, a recipes API for variants. The shift is from describing styles with TypeScript values to describing them in a dedicated language — trading TS expressiveness inside style files for CSS-native syntax, a compiler with did-you-mean diagnostics, and slots/states without selector objects. The APIs map nearly one-to-one:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "gmCwsmyHKdXILHXU3J9ruQ==": {
+      "description": "Docs table header — ve concept",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "vanilla-extract",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "bKDgYQ9wx/0WjN8sv9jKWQ==": {
+      "description": "Docs table header — ve arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Arvia",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "xK37ypLcr1PLhpjsB4w9WQ==": {
+      "description": "Docs table cell — ve theme arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`theme { }` — one shared theme, `modes:` for variants of it",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "aI/P3rDFaxHlmEOQZzZf5Q==": {
+      "description": "Docs table cell — ve style arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`style name { }` — same concept, same export shape",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "JAsxSRWz/hy1G90motXA7w==": {
+      "description": "Docs table cell — ve recipe arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`component` with `base` / `variants` / `compound` / `defaults`",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "YTK/cJtPBgA8kHEnvzuFOw==": {
+      "description": "Docs table cell — ve selectors arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`&:hover { }` — selector syntax instead of object keys",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "9EMaYh+J3/QcioBoIJJZaA==": {
+      "description": "Docs table cell — ve global arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`global { body { } }`",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Lxw7pHsZyOO7weSXSVNydQ==": {
+      "description": "Docs table cell — ve keyframes arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`keyframes name { from { } to { } }` — hashed the same way",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "PQs+X206Z+Lz3fQStMj95w==": {
+      "description": "Docs table cell — ve sprinkles arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "no direct equivalent — tokens + `style` utilities cover most uses",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "CbiCGScWYtbPzCh2vCy53w==": {
+      "description": "Docs table cell — ve media arvia",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`responsive { }` / `container { }` blocks switching variants",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "qqeXAx5t/N5/FDiGdsuGaQ==": {
+      "description": "Docs content — heading: ve recipe",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "recipe() → component, line by line",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "PTDhNz5GH53IF3w4mjZTcA==": {
+      "description": "Docs content — ve: recipe comparison",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Every key found its block; the template-literal token plumbing (`vars.space[1]`) became plain references with compiler checking. The call site is identical in spirit — `button({ size: \"lg\" })` returned one class string; `Button({ size: \"lg\" })` returns one per slot, so multi-element components stop needing a second and third `style()` export.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "jBD1Al8AsyH29xUDsgq2TQ==": {
+      "description": "Docs content — heading: ve adds",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "What Arvia adds on top",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "EqgiVimLrsvP9PnTCVReaQ==": {
+      "description": "Docs list item — ve adds slots",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "[Slots](/docs/slots) — one definition styles root, icon, and label together, with cross-slot states (`&:hover { icon { … } }`) that recipes can't express without manual selectors.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "apq1Yq6mieVX0CH4z2LEjQ==": {
+      "description": "Docs list item — ve adds responsive",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "[Responsive](/docs/responsive) and [container](/docs/container-queries) variant switching, including the typed `{ initial, md, $wide }` call-site form.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "F95ksLPg1f511N/v/MxZsQ==": {
+      "description": "Docs list item — ve adds lsp",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "A language server: token hover with values, completion, go-to-definition, and did-you-mean fixes in `.arv` files — beyond what generic TS tooling sees inside style objects.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "yHkTbUbcj3eWGsDYN/xhDA==": {
+      "description": "Docs content — heading: ve gotchas",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "What to watch out for",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Xukm/8W1hp6f6sWH/uUQkw==": {
+      "description": "Docs list item — ve gotcha no js",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "No JavaScript inside style files: loops, helper functions, and computed style objects don't exist in `.arv`. Repetition is handled by [recipes](/docs/recipes) and [tokens](/docs/theme); anything truly dynamic moves to the call site (see the [FAQ](/docs/faq)).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "WaeC1lAjBe31Qdroa+nmSg==": {
+      "description": "Docs list item — ve gotcha themes",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "One shared theme contract instead of multiple `createTheme` instances: alternate themes are `modes:` on the same token set, switched with `data-arvia-theme` — not differently-shaped theme objects.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "i74tmbyXAFXuaza9s3mIvQ==": {
+      "description": "Docs list item — ve gotcha sprinkles",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Sprinkles-style atomic props have no direct counterpart. The common 80% — a constrained set of spacing/color values — is what tokens already enforce; for layout primitives, build a small `Box`-like component with variants.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "2uxD4u0WEVuheoHhR2ziwQ==": {
+      "description": "Docs content — global: opening",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Most of your styles belong to components, but every app has rules that target the document itself: box-sizing resets, body typography, scrollbar tweaks, overrides for third-party widgets. The `global` block holds exactly those:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "sdG+uZNEKvGAEub0IJNv1w==": {
+      "description": "Docs content — global: rule semantics",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Each rule is a selector followed by declarations. Selectors are passed through to the CSS untouched — element names, classes, attribute selectors, pseudo-classes, comma-separated lists, anything the browser accepts. Values get the full token treatment: `color.background` above compiles to the token's value (or its CSS variable in moded themes).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "HI1UtYFv4LG2dlYy7HlZ9A==": {
+      "description": "Docs content — global: where they live",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Global rules ship with the file that declares them, so the usual home is your theme file — import it once in your app entry and the resets arrive together with the token variables. Any `.arv` file may declare a `global` block, though: a docs-page file can carry the styles for rendered markdown, scoped to wherever that file is imported.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "BaCFdNder85WqDcwJJ3jCw==": {
+      "description": "Docs list item — global: flat only",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Flat rules only: selector { declarations }. There is no nesting and no `&-states` — write a second rule (a:hover { … }) instead.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "vm55UtSo/6dGLs2dPwWYEQ==": {
+      "description": "Docs list item — global: no at-rules",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "No at-rules: `@media` and @supports cannot wrap global rules. Viewport-dependent styling belongs in components via `responsive` blocks; the mode media query is generated for you by theme modes.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "oU/c4ob80gC2dhjGDjA8Ug==": {
+      "description": "Docs content — global: vs style",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Both produce plain CSS, so the line is ownership of the selector. A `style` declaration exports a generated class you attach in markup — scoped, hashed, composable. A global rule styles names that already exist — elements, vendor classes. If you find yourself inventing a class name inside global, you wanted a style.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "bfyRinTYgzPcaiZFsKVbCA==": {
+      "description": "Docs content — install: overview",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Arvia integrates through a Vite plugin that compiles `.arv` imports on the fly. Pick the package that matches your framework — the compiler underneath is identical, only the surrounding JSX tooling differs.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "97OgiQ5YdlG1NQlEI1Mfzw==": {
+      "description": "Docs note — plugin order",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The arvia() plugin must come before the framework plugin so `.arv` imports are compiled before JSX transformation touches them.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "jOXoWqA42i9IE0ei/4xvsw==": {
+      "description": "Docs content — install: theme option semantics",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The theme option names one shared theme file whose tokens, recipes, and keyframes are visible to every other `.arv` file in the project — that is how `color.primary` resolves inside `button.arv` without an import statement. If you omit the option, the plugin looks for `src/theme.arv` by convention and uses it when present.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "oU6fLL5+2R2vf6AlWlWheA==": {
+      "description": "Docs content — install: typescript plugin",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Component prop types come from the TypeScript plugin, which serves type declarations for `.arv` imports virtually — no generated files on disk. Add it to your tsconfig and use `arvia-tsc` (a thin wrapper around tsc that loads the plugin) for command-line type checking.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "+GqCra2h6xY4mx2vPnNzmw==": {
+      "description": "Docs content — install: vue tsc and dts fallback",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Vue single-file components need vue-tsc with both the Vue and Arvia tsconfig plugins. As a fallback for setups where the plugin cannot run, arvia({ dts: true }) writes sibling `.d.ts` files next to each `.arv` file instead — but prefer the plugin, since sibling files shadow the virtual types and add noise to your tree.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "araSaevY9pu8sek2/hO6+A==": {
+      "description": "Docs list item — troubleshoot any types",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Imports from `.arv` files are typed as any — the TypeScript plugin is not loaded. Editors use their own tsserver: in VS Code, run “TypeScript: Select TypeScript Version” and pick the workspace version so tsconfig plugins apply.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "bS/TVi3GNz1ULAofsQ8CLA==": {
+      "description": "Docs list item — troubleshoot theme not found",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Tokens from your theme are reported as unknown (ARV101) in other files — the theme file is not being picked up. Check the theme path in `vite.config.ts`, or move the file to the conventional `src/theme.arv` location.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "FGmuyC+rVdQ9YR3uoBJ9Xw==": {
+      "description": "Docs content — intro: what Arvia is",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Arvia is a design system compiler. You describe your design system — tokens, themes, reusable style fragments, and multi-variant components — in `.arv` files, and the compiler turns them into three artifacts: plain CSS, a tiny typed JavaScript API, and TypeScript declarations. Nothing styling-related runs in the browser at runtime; every class name and every rule exists before your app boots.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "w9cqVL/EsGYn9VI5M159vw==": {
+      "description": "Docs content — intro: six constructs lead-in",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Everything you can write at the top level of an `.arv` file is one of six constructs. Each has its own page in these docs, but the one-line summary is:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "DfeO+f2v6W0n06rbxDfOqg==": {
+      "description": "Docs table cell — keyframes summary",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "A named CSS animation, referenced from components as `keyframes.name`.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "7+RKpdgCf3fpUZZELbgAfA==": {
+      "description": "Docs content — intro: next steps",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Ready to set it up? Head to [Installation](/docs/installation), or skim [Thinking in Arvia](/docs/thinking-in-arvia) first if you want the mental model before the mechanics.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Dwj69JXwNEYbhyLmvcwFhw==": {
+      "description": "Docs content — keyframes: opening",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "A `keyframes` block declares a CSS animation. Steps are from, to, or percentages, and values resolve tokens like everywhere else. Components reference an animation as `keyframes.name`:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "QZ+NnVIkvWWoi5yUjwfUWA==": {
+      "description": "Docs content — keyframes: hashing lead-in",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Animation names share one global namespace in CSS, so the compiler hashes them the same way it hashes class names — fadeIn becomes something like fadeIn_1kqpaa, and the `keyframes.fadeIn` reference resolves to the hashed name:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "YHtL/puzmVfd9KoDTvMCUQ==": {
+      "description": "Docs content — keyframes: hashing consequences",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Two files can each declare a fadeIn without colliding, and your animation never fights one from a third-party stylesheet. The flip side: always reference through `keyframes.name` — a hand-written animation: fadeIn would point at a name that does not exist in the output.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "30nGWmXRFgAdpcGRvbBRIQ==": {
+      "description": "Docs content — keyframes: reduced motion lead-in",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Honor `prefers-reduced-motion` at the document level. Arvia's `global` block intentionally has no at-rule support, so this one rule belongs in a small plain CSS file next to your entry point — `!important` lets it cut through every hashed class:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "bvyKIgSwoZuzX1TkgyYUgg==": {
+      "description": "Docs list item — lsp quick fixes",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Quick fixes — did-you-mean diagnostics carry structured edits, so `color.primry` → `color.primary` is one code action.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "ujt55vY5LML83aLz1wqkEQ==": {
+      "description": "Docs list item — lsp goto def",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Go to definition — from a token reference, `use` statement, or keyframes reference to where it is declared, across files into the theme.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Fvez47wxp++HEz70mpq5/A==": {
+      "description": "Docs content — heading: lsp formatting",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Formatting",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "vCbnQI81A2Igor6yg0AjRQ==": {
+      "description": "Docs content — lsp: formatting overview",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The language server also provides document formatting — a canonical `.arv` style with two-space indentation and one-line blocks up to 100 columns. It is deliberately conservative: sources with parse errors are returned unchanged, comments are preserved verbatim, and the formatter fails closed — if the output would differ from the input in anything but whitespace, it refuses and leaves your file alone.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "ClJWegt0I/t/C4Ob+4EkeQ==": {
+      "description": "Docs content — lsp: formatArv api",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "For your own tooling, the formatter is a plain function: `formatArv(source, { indent, printWidth })` exported from `@arviahq/compiler`.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "/bJ6BcdhkMTTITcXRsUWoQ==": {
+      "description": "Docs content — lsp: typescript plugin relationship",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The language server covers `.arv` files; typed props inside .tsx come from the separate @arviahq/typescript-plugin, which serves declarations for `.arv` imports as virtual modules inside tsserver — no files on disk during development. The two share the compiler, so both react to edits immediately: add a variant value and the union type at your call sites updates as soon as the file is saved.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "W3Vpz13lK0MntdcxZ1K+tw==": {
+      "description": "Docs note — lsp: workspace ts version",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "If `.arv` imports show as any in VS Code, the editor is using its bundled TypeScript instead of the workspace's — run “TypeScript: Select TypeScript Version” → “Use Workspace Version” so tsconfig plugins load.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "fEXRnkynqYYJcstkuvHGYA==": {
+      "description": "Docs content — local tokens: opening",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Some values matter to exactly one component: a chip's pill radius, a toolbar's precise height. A `tokens` block inside a component names those values without polluting the global theme:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "05SgXiS+Xe7D1qRa6r+LCA==": {
+      "description": "Docs content — local tokens: resolution order",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "References use the exact same group.name syntax — there is no separate way to write a local reference. Resolution checks the component's tokens first, then the file's `theme` block, then the shared theme. In the example, `space.pad` finds the local value while `space.2` falls through to the theme: one component can mix both in a single declaration.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "K1aet7gjiBnGYcZyQPKxwQ==": {
+      "description": "Docs note — local tokens: shadowing caution",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Shadowing a theme token is powerful and easy to over-use — a reader seeing `space.2` will assume the theme value. Prefer a new name (`space.dense`) unless the component genuinely reinterprets the scale.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Ato2Lwg0/p/FqSOPS4Ruzg==": {
+      "description": "Docs content — local tokens: constants semantics",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Local tokens are always inlined to literal values — even when the theme has modes and global tokens compile to CSS variables. They never become custom properties, never appear in the tokens export or the token catalog, and accept no `@mode` overrides (mode-dependent values belong in the theme). They resolve everywhere a value can appear, including `calc()` and state blocks:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Fd+s0hGt2W4qcd2TReossA==": {
+      "description": "Docs table cell — answer theme moded",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Theme — only theme tokens take `@mode` overrides.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "0EHy8IXHl8ory4nk+6aWoA==": {
+      "description": "Docs table cell — pkg react when",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "You `use React` + Vite.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "sfTVRI12f8wvZLd13FKTKA==": {
+      "description": "Docs table cell — pkg preact when",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "You `use Preact` + Vite.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Aw9q3+nc/wGS8YVb8/FZhQ==": {
+      "description": "Docs table cell — pkg vue when",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "You `use Vue` + Vite.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "EKv2yX1FxGihuknLttovvA==": {
+      "description": "Docs table cell — pkg ts",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "tsserver plugin + `arvia-tsc`; serves `.arv` types virtually.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "gfk7FZedlIfWYgXBZojGaQ==": {
+      "description": "Docs table cell — pkg lsp",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "LSP server for `.arv` files.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "RMlmxjB4k/RwrpkRJ7Y4Vw==": {
+      "description": "Docs table cell — pkg storybook",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "CSF story generator behind `arvia gen --storybook`.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "rpJG7XIQtxVJE3uR4CxDCw==": {
+      "description": "Docs table cell — pkg docs",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Token catalog generator behind `arvia gen --docs`.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Yx+BVUOywPQm3jpv42JDMw==": {
+      "description": "Docs note — patterns: focus-within",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The `&:focus-within` block keeps the pattern accessible: keyboard users tabbing to a hidden action button reveal the actions too. Pair reveal-on-hover with focus-within every time.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Wf5anmk1b9lfAJVKhJStGQ==": {
+      "description": "Docs content — patterns: adaptive card trace",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Trace a card rendered in a 700px column: the `container` block flips layout to split, and if it is also featured, the compound matches and widens the media slot. Drag the same card into a 300px sidebar and all of it unwinds — no props, no resize observers.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "KTgYf85/x6ZrrnsrmUsxvQ==": {
+      "description": "Docs content — quickstart: import theme explanation",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Importing the theme ships its global rules and CSS variables. Component files do not import the theme — the Vite plugin makes its tokens visible to every `.arv` file in the project automatically.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "jm4zXQg3i6+ERmo8wDI+Ng==": {
+      "description": "Docs content — quickstart: component explanation",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Read it top to bottom: base styles apply always, each size value adds its own padding and font-size, sm is the default when callers pass nothing, and the `responsive` block bumps the default to lg once the viewport crosses the md breakpoint from the theme.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "4KrK5C9hcV8QRUJdhCvemQ==": {
+      "description": "Docs list item — next: thinking",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "[Thinking in Arvia](/docs/thinking-in-arvia) — the mental model behind the language and when to reach for each construct.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "s8w0yyJt4ppy2bNBrIt+7w==": {
+      "description": "Docs list item — next: theme",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "[Theme & tokens](/docs/theme) — everything tokens can do: aliases, doc strings, digit-led scales.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "GxBYvRlFOlVv0YwyXCDG8w==": {
+      "description": "Docs list item — next: components",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "[Components](/docs/components) — slots, states, compound variants, and the full component anatomy.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "FoYeH9d2NsV21Jr188H+ow==": {
+      "description": "Docs content — recipes: what they hold",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Recipes hold declarations, `&-state` blocks, and `use` statements. They cannot declare variants, slots, or local tokens — a recipe is a fragment, not a component. If one grows in that direction, promote it.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "zMzUycHeH0t8DnF84yXheA==": {
+      "description": "Docs content — recipes: theme env",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Recipes declared in your shared theme file are available to every `.arv` file in the project — `use FocusRing` simply works, with no import statement. This is the same ambient-environment mechanism that makes tokens global: the theme is compiled first, and its recipes ride along.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "+ZGvvyzlligUMwZRmDV2SQ==": {
+      "description": "Docs note — recipes: no use in states",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The one place use is not allowed is inside an `&-state` block — a recipe there would be ambiguous about which selector its own states attach to. Inline the declarations instead.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "/CCD9ZilLdUjVWH3cvDRVA==": {
+      "description": "Docs content — recipes: ordering lead-in",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "use is textual inclusion: the recipe's declarations are flattened in at exactly the spot the `use` statement sits. Within one rule, later declarations win — so you override a recipe by writing after it:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "AqxIRtWo5MvzoYpkxudjhw==": {
+      "description": "Docs content — recipes: nesting and checks",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Recipes nest to any depth, and the checker walks the chain: an unknown recipe is an error with a suggestion (ARV102), and a cycle — recipe A using B using A — is caught rather than looping forever (ARV103). State blocks flatten too: a recipe's `&:hover` merges with the consumer's other rules for the same selector.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "JMAhKtgOTWyYpWRq2BHfZA==": {
+      "description": "Docs content — recipes: vs style",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Both hold the same kind of content; the difference is the consumer. A recipe is for other `.arv` code — it vanishes into its users and emits nothing. A style is for your markup — it emits one class and exports its name. When a fragment needs to be applied directly to an element somewhere, give it a style (which can itself use the recipe).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "7fUjR9ByfDA56TDo8a772A==": {
+      "description": "Docs content — responsive: author-time semantics",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Read the `responsive` block as overrides to defaults: below 768px a prop-less Button is sm; at 768px and above it becomes lg. Everything is mobile-first min-width — declare the small state as the default and step upward.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "ygX2mrX9AM+GUk9/IPqxRQ==": {
+      "description": "Docs content — responsive: object props lead-in",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Callers get the same power through object props. Any variant covered by a `responsive` block accepts either a plain value or an object with an initial value and per-breakpoint overrides:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "CSufcxv2Tc5Tfd5tVZ0+cw==": {
+      "description": "Docs table cell — responsive r1 above",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "lg (`responsive` block)",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "zaXH8H22lmbvHqB8FKYDXA==": {
+      "description": "Docs table cell — responsive r2 above",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "sm — an explicit prop switches the `responsive` block off for that variant",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "70qs2Et8wiTPe32pg7Ka2Q==": {
+      "description": "Docs note — responsive: keys from block",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The object form's breakpoint keys come from the component's `responsive` block — they are what generated the media-wrapped classes. A breakpoint/value pair the component never declared has no CSS behind it, so declare in the `responsive` block whatever you want callers to use.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "YltfW1Kw+5kJGZUz7AlvjA==": {
+      "description": "Docs content — responsive: vs container",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Responsive blocks answer “how wide is the screen?” — the right question for page-level layout: navigation, grids, gutters. For a component that must adapt to wherever it is dropped — a card in a sidebar versus the same card in the main column — ask “how wide am I?” instead, with a `container` block. The two compose freely in one component; see [Container queries](/docs/container-queries).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "WgfZVy8B7l6uB68ugDb5UQ==": {
+      "description": "Docs content — slots: declaration semantics",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The `slots` block declares the parts; declarations inside a slot are that part's base styles. The function returns one class string per declared slot, and the generated ButtonSlots type knows every name — styles.icno is a compile error in TypeScript, and icno inside the `.arv` file is an ARV120 error with a did-you-mean.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "CeL9mVXyJJEvXrgnmPjVCg==": {
+      "description": "Docs note — slots: implicit root",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "root is implicit. Every component has it whether or not the `slots` block lists it; loose top-level declarations and bare declarations in base style it. Declaring root {} explicitly is purely stylistic.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "++EiHLcQ68177KShfL0OOQ==": {
+      "description": "Docs content — slots: anywhere lead-in",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Slots are addressable from every styling context — base, variant values, `compound` blocks, and states. A nested block named after a slot targets that slot under the surrounding condition:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "/fyV0JjW/I3a+nuEU75eVA==": {
+      "description": "Docs content — slots: cross-slot lead-in",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The hover example above is the cross-slot pattern: a slot block inside an `&-state` styles that slot when the root matches. It compiles to a descendant selector against the slot's base class:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "wDniVOGPfdX/trjSKovOSg==": {
+      "description": "Docs content — slots: cross-slot semantics",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Because the target is the slot's always-present base class, the rule works regardless of which variants are active. The same pattern from a variant body scopes the behavior to that variant — see [States](/docs/states) for the full picture.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Vp0OufnqdrX3lsIx4fuQPw==": {
+      "description": "Docs content — states: opening",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "An `&-block` attaches a selector suffix to whatever the surrounding context styles. The & stands for “the element this rule targets” — write anything CSS accepts after it:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "oLM4nvEHVqYlF5iXg9mtXA==": {
+      "description": "Docs content — states: group hover semantics",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The slot is targeted through its base class, which is always present — the rule fires whatever variants are active. From a variant body, the same construct scopes to that variant: tone danger's `&:hover` { icon { … } } compiles against .Button_tone_danger_root_…:hover.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Yw1xO+Kz3PRNoyAM8sAOsQ==": {
+      "description": "Docs note — storybook: vite config",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Stories import your `.arv` files, so the Storybook build needs the Arvia Vite plugin too — add arvia() to the Vite config Storybook uses, with the same theme path as your app.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "cKhxqlqliHzxrOasx7wqMg==": {
+      "description": "Docs content — storybook: demo pointer",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "To see a complete setup, run `pnpm demo:storybook` in the Arvia monorepo — it generates stories for the demo components and boots Storybook on them. For a full atomic design system showcase with Language/* feature demos, run `pnpm design-system:storybook` (examples/design-system).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "HET0pyimxraEtC0bEpOtiQ==": {
+      "description": "Docs content — styles: opening",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Not everything deserves a component. A `style` declaration compiles to exactly one hashed CSS class and exports its name as a plain string constant — the right tool for one-off utilities, layout helpers, and page-level styling:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "iAqSk18Uit2hurVU3O73BA==": {
+      "description": "Docs content — styles: contents lead-in",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Styles support the full fragment feature set — declarations, token references, use, and `&-states` — everything except props and structure:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "htl+lsLSWwI2CqLLKFT81g==": {
+      "description": "Docs content — modes: opening",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "A `modes` declaration turns selected tokens into mode-aware CSS custom properties. Declare the modes once, then override any token per mode with an `@mode` block:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "PgAjODE+Z3lMV5vj7WMOhg==": {
+      "description": "Docs content — modes: generated lead-in",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Modes compile to four kinds of rules — defaults on `:root`, an OS-preference media query, and one attribute selector per mode for manual control:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "d1t7q3ArELJdOe9C1bgzMg==": {
+      "description": "Docs content — modes: cascade explanation",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Read the cascade: with no attribute set, the OS preference wins via the media query. Setting `data-arvia-theme` on the root element overrides it, because attribute selectors come later. Every style that references a moded token compiles to `var(`--arvia-color-…`)`, so the whole page reacts instantly to either signal — no re-render, no JavaScript theme context.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "+IJUINIJDiAyX4QvSK3EZQ==": {
+      "description": "Docs note — modes: system setting tip",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Removing the attribute returns control to `prefers-color-scheme` — that is your “system” setting for free. Run the boot line in a small inline script in index.html if you need to beat the first paint.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "DXGGp+gFtpKobqhebuRzgA==": {
+      "description": "Docs content — modes: many modes lead-in",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Modes are not limited to light and dark — declare as many as you need (high-contrast, dim, brand themes). Each gets its own `@mode` override blocks and attribute selector:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "H6OlwitSLDVkx2QXOm7O8A==": {
+      "description": "Docs content — modes: dark is special",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Only a mode literally named dark participates in the `prefers-color-scheme` media query; other non-default modes are reachable through `data-arvia-theme` alone. The first mode remains the `:root` default either way.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "nZQaIHqeESyHOagYtuPvcA==": {
+      "description": "Docs content — modes: which become vars",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Once modes are declared, every theme token compiles to a CSS custom property and every reference to one becomes `var(…)` — including tokens that never vary, which keeps the output uniform and lets you add a mode override later without touching consumers. Two things stay inlined: component-local tokens (see [Local tokens](/docs/local-tokens)) and values in single-mode projects.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "JBeOiOnVxST2dk0FDCfV5g==": {
+      "description": "Docs table cell — modes err1",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`@dark` override without a `modes` declaration",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "NLMQx8CPodJiWwjdgrvY8Q==": {
+      "description": "Docs table cell — modes err1 result",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Error ARV134 — declare `modes:` first.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "YxE+abzh1umQBnehl5p2Cw==": {
+      "description": "Docs table cell — modes err2",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`@blue` override when modes are light | dark",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "viRNTwYCZBYrKtwiX7miRg==": {
+      "description": "Docs table cell — modes err3",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Mode override inside a component `tokens` block",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Uzz/dbdh2rZXCTATZms3pQ==": {
+      "description": "Docs content — theme: opening",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "A `theme` block declares design tokens: named values organized into groups. Tokens are the vocabulary the rest of your styles are written in — every other construct references them with dot notation.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "xsw76KEe/jrCXlbh3RRUDg==": {
+      "description": "Docs content — theme: groups are free-form",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Group names are yours to invent — color, space, and radius are conventions, not keywords. A token value is any CSS value text: lengths, colors, font stacks, cubic-bezier() curves, shadows. Token names may start with digits, which makes numeric scales like `space.1`, `space.2` natural to write.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "rFNJNkpGF1LddFnqYRp2cg==": {
+      "description": "Docs note — theme: special groups",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Two group names are special: breakpoint feeds `responsive` blocks and container feeds `container` blocks. They configure queries — they cannot be referenced as values and are not part of the tokens export.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "UOgHgBgNa/A22wRJi0Q7XQ==": {
+      "description": "Docs content — theme: alias semantics",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Aliases resolve at compile time — border.thin becomes 1px solid #111111 in the output. Chains are followed (a = b, b = c works), and aliases respect theme `modes:` an alias of a moded token carries both mode values. One rule: tokens must be defined before they are referenced; forward references are an error.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "CanJPgIgHlAyPSKcLrL9GQ==": {
+      "description": "Docs content — theme: shared env",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The theme file configured in the Vite plugin (`src/theme.arv` by convention) is compiled first, and its tokens, recipes, and keyframes become the shared environment every other `.arv` file is checked against. That is why component files reference `color.primary` with no import — the theme is ambient, like a standard library.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "hhJoem5sUz2ghn1k0wvtaQ==": {
+      "description": "Docs content — theme: extension and duplicates",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Other files can declare their own `theme` blocks too. File-level tokens extend the shared environment for that file only — useful for page-specific values — and a component's `tokens` block scopes values to a single component (see [Local tokens](/docs/local-tokens)). Within one file, declaring the same group twice or the same token twice is an error (ARV112), so there is always exactly one place a value lives.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "ZNInSboUScnMlHo62zLQ0g==": {
+      "description": "Docs content — theme: compile single vs moded",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "In a single-mode theme (no `modes` declaration), every reference is inlined to its literal value — the CSS contains 8px, not a variable. Declare modes and the moded tokens become CSS custom properties named --arvia-<group>-<name>, switched by mode (see [Theme modes](/docs/theme-modes)):",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "0WPFEW4xfU+2HKh7h0roow==": {
+      "description": "Docs content — theme: tokens export lead-in",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The theme file also exports its tokens as a typed object, for the occasional inline style, canvas drawing, or charting library. Values are literals in single-mode themes and `var()` references in moded themes — so they stay correct when the mode flips:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "iGEyKi/8iP/rBxs4V7vc9g==": {
+      "description": "Docs list item — theme: name by role",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Name by role where it pays off: `color.text` and `color.surface` survive a rebrand; `color.gray100` does not.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "VEvBDCJHNVgRpEhRxZUHtg==": {
+      "description": "Docs list item — theme: digit scales",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Use digit-led names for ordered scales (`space.1` … `space.9`, `font.sm` … `font.3xl`) — they sort naturally and read like math.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "rLWqVaiVX5rvxNIrOHisXQ==": {
+      "description": "Docs list item — theme: doc strings",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Document intent with doc strings — primary = #635bff doc \"CTAs and links\" — and the meaning shows up on hover in your editor (see [Token docs](/docs/token-docs)).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "91StjFKZkQbDk7kBQtVHzA==": {
+      "description": "Docs content — thinking: opening",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Arvia becomes easy once you internalize one model: an `.arv` file is not a stylesheet, it is a description of decisions — what tokens exist, what variants a component offers, what changes at a breakpoint. The compiler turns those decisions into CSS classes and a function that picks the right ones. This page builds that model.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "UOLRYOnfCsh2QM0foI2tXQ==": {
+      "description": "Docs content — thinking: shared environment",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Arvia has no import statement. Instead, one shared theme file (configured in the Vite plugin, `src/theme.arv` by convention) forms a global environment: its tokens, recipes, and keyframes are visible to every `.arv` file in the project. When `button.arv` says `color.primary` or `use FocusRing`, the compiler resolves the name against that environment — that is the whole module system.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "ZMU4Vi99pWTnW3V+8u4aoQ==": {
+      "description": "Docs note — thinking: local tokens exist",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Scoping still exists where it matters: a component's `tokens` block declares values visible only inside that component, shadowing the theme. Global by default, local by choice.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "DCFr0xNDOy0jRdYZhHtOWg==": {
+      "description": "Docs list item — variant vs compound",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "A variant is an axis callers choose (size, tone). A `compound` block is extra styling for a specific combination of axes — it adds no props, it refines existing ones.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "XS9kODiG6Fm6ZpJXIfgErA==": {
+      "description": "Docs list item — responsive vs container",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "A `responsive` block follows the viewport; a `container` block follows the component's own rendered width. Prefer containers for anything that can appear in both a sidebar and a main column.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "KAdfM67rlKw8cLOK/oGZbQ==": {
+      "description": "Docs content — thinking: trust output",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Because class names are hashed from the file path and component name — never from the style content — editing a padding value changes only the CSS, byte-for-byte leaving the JS alone. That is why dev-server updates are instant CSS swaps, and why the generated output stays diffable and predictable in production. When you want to see exactly what you shipped, read [How compilation works](/docs/compilation).",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Ai4zr1prZJNyzEzmmBCIhA==": {
+      "description": "Docs list item — token docs: jsdoc",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Generated types — doc strings become JSDoc on the tokens export, so tokens.`color.primary` carries its documentation into TypeScript autocomplete.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "f/BW6d3l29yxextuIiFTDQ==": {
+      "description": "Docs list item — token docs: catalogs",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Token catalogs — `arvia gen --docs` renders a browsable reference from the same strings.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Pl2RIWeP5iKlfEz3/VbC/A==": {
+      "description": "Docs list item — token docs: scale grammar",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Cover the scale's grammar once — a doc on `space.1` explaining the step logic teaches the whole group.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "0C13ey+2Rl00CDo9IuKQQQ==": {
+      "description": "Docs content — variants: orthogonal",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Axes are orthogonal: every size works with every tone, and the compiler generates one class per value per slot it touches — three sizes and three tones produce six classes, not nine combinations. Styling specific combinations is what `compound` blocks are for.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "aL7rZT0YJT7Z36cNqnm4zg==": {
+      "description": "Docs content — variants: defaults semantics",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The `defaults` block does double duty: it picks the runtime fallback when a prop is omitted, and it decides the TypeScript signature. A variant with a default is an optional prop; a variant without one is required:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "NSNG8jAOM7a45Z78nciUGg==": {
+      "description": "Docs content — variants: boolean modeling",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Arvia has no boolean variant type — model on/off as a two-value axis. The names read better than true/false in both the `.arv` source and the call site, and they leave room for a third state later:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "u0clobu2MVCWI38KoAxhvQ==": {
+      "description": "Docs note — variants: responsive pointer",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Responsive and `container` blocks can re-decide a variant per breakpoint or container width, and callers can pass { initial, md } objects for the same effect — see [Responsive](/docs/responsive) and [Container queries](/docs/container-queries) once your axes are in place.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "FfjGe4aQlZUmJ9mmfsADTQ==": {
+      "description": "Docs content — vite: opening",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The Vite plugin makes `.arv` files importable modules: each import compiles to the generated JavaScript, with the CSS routed through Vite's own pipeline. The integration is identical across frameworks — only the JSX plugin next to it differs:",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "JR7bONl7lMHmwIRKjPQGvw==": {
+      "description": "Docs table cell — vite theme default",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "`src/theme.arv` when it exists",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "Pg6Zf+CurbGPnhdTL1Q1RQ==": {
+      "description": "Docs table cell — vite theme meaning",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Path (relative to the Vite root) of the file whose tokens, recipes, and keyframes every `.arv` file can see.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "m3rZnrGiGN8qYPR1MkjEvA==": {
+      "description": "Docs table cell — vite dts meaning",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Write sibling `.d.ts` files next to each `.arv` file. Off by default — types come virtually from the TypeScript plugin; sibling files would shadow them.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "At01ktIoUr8m4DjDY7iJ9A==": {
+      "description": "Docs content — vite: phantom css",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "When a module imports `button.arv`, the plugin compiles it against the shared theme environment and returns the generated JS with one line prepended: an import of the phantom module `button.arv.css`. That module does not exist on disk — the plugin serves the compiled CSS under that name, which hands styling to Vite's CSS pipeline: dev-server injection, build-time extraction, minification, and code-split CSS chunks all behave exactly as for a real stylesheet.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "7djaYDPPflJICb5DN6BaWA==": {
+      "description": "Docs content — vite: diagnostics flow",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Compile errors surface as Vite errors with file, line, and column — the dev overlay points at the `.arv` source. Warnings (unknown property, unused recipe…) reach the terminal without blocking the build.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "rwXL/pK58Yd2/xEMc8rqOQ==": {
+      "description": "Docs table cell — hmr add remove",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Create or delete `.arv` files",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "+z0Jw4LqWC63kzPqybCpfA==": {
+      "description": "Code block playground link label",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Open in playground",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "p2EZ+WujABjE3pD4z0CYIA==": {
+      "description": "Code block playground link",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Playground",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "xVKgZ7P+dAUPiQlnP8hAEg==": {
+      "description": "Playground template select — snippet loaded from URL",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "shared snippet",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "YFTfuARrIiyy4ANSnVqMvw==": {
+      "description": "TOC aria label",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "On this page",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "ffH5ifx34bbMF2RgeTvOhg==": {
+      "description": "Docs table of contents title",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "On this page",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "lpo2NCf0r82bq7070O2msQ==": {
+      "description": "Pager previous label",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Previous",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "inKTZxwvm9yLeQKej5D2FQ==": {
+      "description": "Pager next label",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Next",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "0bpLLmyc5NOj+DB3v8lf+w==": {
+      "description": "Mobile docs navigation trigger",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Browse docs",
+          "variations": {}
+        }
+      ],
+      "types": []
     }
   }
 }
