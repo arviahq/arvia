@@ -1,0 +1,186 @@
+================================================================================
+Theme with modes, doc strings and mode overrides
+================================================================================
+
+theme {
+  modes: light | dark;
+
+  color {
+    primary = #635bff doc "Brand";
+    surface = #ffffff;
+    @dark {
+      surface = #16161a;
+    }
+  }
+  space { 1 = 4px; 2xl = 32px; }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (theme_block
+    (modes_decl (identifier) (identifier))
+    (token_group
+      name: (identifier)
+      (token_entry name: (token_name) (raw_value) (doc_suffix (string)))
+      (token_entry name: (token_name) (raw_value))
+      (mode_block
+        mode: (identifier)
+        (token_entry name: (token_name) (raw_value))))
+    (token_group
+      name: (identifier)
+      (token_entry name: (token_name) (raw_value))
+      (token_entry name: (token_name) (raw_value)))))
+
+================================================================================
+Component with base, slots, variants, defaults and states
+================================================================================
+
+component Button {
+  base {
+    color: color.primary;
+    &:hover {
+      color: red;
+      icon { transform: translateX(2px); }
+    }
+    icon { display: flex; }
+  }
+  slots { icon {} }
+  variants {
+    tone {
+      primary { background: blue; }
+    }
+  }
+  defaults { tone: primary; }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (component_decl
+    name: (identifier)
+    (base_block
+      (declaration property: (property_name) (raw_value))
+      (state_block
+        (raw_selector)
+        (declaration property: (property_name) (raw_value))
+        (slot_block
+          name: (identifier)
+          (declaration property: (property_name) (raw_value))))
+      (slot_block
+        name: (identifier)
+        (declaration property: (property_name) (raw_value))))
+    (slots_block (slot_decl name: (identifier)))
+    (variants_block
+      (variant_decl
+        name: (identifier)
+        (variant_value
+          name: (token_name)
+          (declaration property: (property_name) (raw_value)))))
+    (defaults_block (setting variant: (identifier) value: (token_name)))))
+
+================================================================================
+Globals, keyframes, recipes, styles and use
+================================================================================
+
+global {
+  html, body { margin: 0; }
+}
+
+keyframes spin {
+  from { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+recipe Surface { border: 1px solid #eee; }
+
+style Truncate { overflow: hidden; }
+
+component Card { use Surface; }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (global_block
+    (global_rule (raw_selector) (declaration property: (property_name) (raw_value))))
+  (keyframes_decl
+    name: (identifier)
+    (keyframe_step (raw_selector) (declaration property: (property_name) (raw_value)))
+    (keyframe_step (raw_selector) (declaration property: (property_name) (raw_value))))
+  (recipe_decl
+    name: (identifier)
+    (declaration property: (property_name) (raw_value)))
+  (style_decl
+    name: (identifier)
+    (declaration property: (property_name) (raw_value)))
+  (component_decl
+    name: (identifier)
+    (use_statement recipe: (identifier))))
+
+================================================================================
+Responsive, container, compound and component tokens
+================================================================================
+
+component Box {
+  tokens { m { pad = 4px; } }
+  variants { size { sm {} lg {} } }
+  responsive {
+    md { size: lg; }
+  }
+  container {
+    sm { size: sm; }
+  }
+  compound {
+    size: lg;
+    root { padding: m.pad; }
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (component_decl
+    name: (identifier)
+    (tokens_block
+      (token_group name: (identifier) (token_entry name: (token_name) (raw_value))))
+    (variants_block
+      (variant_decl
+        name: (identifier)
+        (variant_value name: (token_name))
+        (variant_value name: (token_name))))
+    (responsive_block
+      (conditional_entry key: (token_name) (setting variant: (identifier) value: (token_name))))
+    (container_block
+      (conditional_entry key: (token_name) (setting variant: (identifier) value: (token_name))))
+    (compound_block
+      (setting variant: (identifier) value: (token_name))
+      (slot_block
+        name: (identifier)
+        (declaration property: (property_name) (raw_value))))))
+
+================================================================================
+Values with functions, strings, comments and custom properties
+================================================================================
+
+component X {
+  base {
+    // line comment
+    width: calc(space.4 * 2);
+    background: url("a;b.png") no-repeat; /* block */
+    --brand: #ff0000;
+    grid-template-areas: "a b" "c d";
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (component_decl
+    name: (identifier)
+    (base_block
+      (comment)
+      (declaration property: (property_name) (raw_value))
+      (declaration property: (property_name) (raw_value))
+      (comment)
+      (declaration property: (property_name) (raw_value))
+      (declaration property: (property_name) (raw_value)))))
