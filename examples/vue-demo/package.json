@@ -1,0 +1,20 @@
+{
+  "name": "vue-demo",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "arvia-tsc --noEmit"
+  },
+  "dependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@arviahq/vite-plugin-vue": "workspace:*",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "vite": "^7.3.0"
+  }
+}

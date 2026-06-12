@@ -21,6 +21,7 @@ const packages = [
   "vite-plugin",
   "vite-plugin-react",
   "vite-plugin-preact",
+  "vite-plugin-vue",
 ];
 
 const tarballs = [];

@@ -33,6 +33,9 @@
     },
     "./cli": {
       "require": "./dist/cli.cjs"
+    },
+    "./vue-cli": {
+      "require": "./dist/vue-cli.cjs"
     }
   },
   "publishConfig": {
@@ -50,9 +53,16 @@
     "@volar/typescript": "^2.4.15"
   },
   "devDependencies": {
+    "@vue/language-core": "^3.3.4",
     "typescript": "^5.8.3"
   },
   "peerDependencies": {
+    "@vue/language-core": "^3.0.0",
     "typescript": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@vue/language-core": {
+      "optional": true
+    }
   }
 }

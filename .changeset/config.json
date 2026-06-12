@@ -11,12 +11,13 @@
       "@arviahq/docs",
       "@arviahq/storybook",
       "@arviahq/vite-plugin-react",
-      "@arviahq/vite-plugin-preact"
+      "@arviahq/vite-plugin-preact",
+      "@arviahq/vite-plugin-vue"
     ]
   ],
   "linked": [],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["arvia", "demo", "website"]
+  "ignore": ["arvia", "demo", "vue-demo", "website"]
 }

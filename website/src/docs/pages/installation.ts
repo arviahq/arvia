@@ -116,7 +116,7 @@ const styles = Button({ size: "lg", tone: "primary" });
       },
       {
         type: "code",
-        label: "tsconfig.json (React / Preact)",
+        label: "tsconfig.json",
         code: `{
   "compilerOptions": {
     "plugins": [{ "name": "@arviahq/typescript-plugin" }]
@@ -135,8 +135,8 @@ const styles = Button({ size: "lg", tone: "primary" });
       {
         type: "p",
         text: fbt(
-          "Vue single-file components need vue-tsc with both the Vue and Arvia tsconfig plugins. As a fallback for setups where the plugin cannot run, arvia({ dts: true }) writes sibling `.d.ts` files next to each `.arv` file instead — but prefer the plugin, since sibling files shadow the virtual types and add noise to your tree.",
-          "Docs content — install: vue tsc and dts fallback",
+          "In Vue projects, the `arvia-tsc` shipped by @arviahq/vite-plugin-vue is Vue-aware — it loads the Vue language plugin alongside Arvia's, so `.arv` imports inside `.vue` single-file components typecheck; use it in place of vue-tsc. As a fallback for setups where the plugin cannot run, arvia({ dts: true }) writes sibling `.d.ts` files next to each `.arv` file instead — but prefer the plugin, since sibling files shadow the virtual types and add noise to your tree.",
+          "Docs content — install: vue-aware arvia-tsc and dts fallback",
         ),
       },
       { type: "h2", text: fbt("Editor setup", "Docs content — heading: editor setup") },

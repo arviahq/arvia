@@ -12732,6 +12732,234 @@
         }
       ],
       "types": []
+    },
+    "MqZPVnKtaf8VOLV89NpXJA==": {
+      "description": "Docs content — install: vue-aware arvia-tsc and dts fallback",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "In Vue projects, the `arvia-tsc` shipped by @arviahq/vite-plugin-vue is Vue-aware — it loads the Vue language plugin alongside Arvia's, so `.arv` imports inside `.vue` single-file components typecheck; use it in place of vue-tsc. As a fallback for setups where the plugin cannot run, arvia({ dts: true }) writes sibling `.d.ts` files next to each `.arv` file instead — but prefer the plugin, since sibling files shadow the virtual types and add noise to your tree.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "jn17OeU44ymGyeClLJ4Caw==": {
+      "description": "Footer link — introduction",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Introduction",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "0lYeJh2yRiWyQXeEoeHjjg==": {
+      "description": "Footer link — quick start",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Démarrage rapide",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "BtD01nvlERjt7cIVNOWmBw==": {
+      "description": "Footer link — thinking",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Thinking in Arvia",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "z25jmD6cHXDWGZdX50HJ+Q==": {
+      "description": "Footer link — faq",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "FAQ & troubleshooting",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "BZ1uFvPyTMxDG/iExxDbAg==": {
+      "description": "Footer link — compilation",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "How compilation works",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "9zO3+TDyBwcSPmvxv1e6Wg==": {
+      "description": "Footer link — diagnostics",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Diagnostics reference",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "0Pmcq8MQbyVqJDzpS4GbvA==": {
+      "description": "Footer link — patterns",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Advanced patterns",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "KDUEt00MahBJOZGdRY3gMA==": {
+      "description": "Footer link — migration",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Migration guides",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "vwPiR9D4QYXUJpw3nNA6QQ==": {
+      "description": "Footer link — npm",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "npm packages",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "81wtI52PczPH/t6Oj5JHBg==": {
+      "description": "Footer link — vscode",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "VS Code extension",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "sWc3W/FZ43thEodRo1PXVw==": {
+      "description": "Footer tagline",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "The design system compiler for the web. Write .arv files, ship plain CSS and typed APIs.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "8763c9z1QEWM55+5ztJQNQ==": {
+      "description": "Footer column title — docs",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Docs",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "hMpmDrM9BnbutSqx3tcABA==": {
+      "description": "Footer column title — reference",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Reference",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "XarmSiaEsr2soFFp9fNv/w==": {
+      "description": "Footer column title — ecosystem",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Ecosystem",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "LvH6QM43tLRRfNN7jNqMng==": {
+      "description": "Footer link — playground",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Playground",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "4WXqX0cEBrsR0ECz2f4kAw==": {
+      "description": "Footer note — built with",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "This site is built entirely with React and",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "4UYxfBCNj+qeCYp8jqsW0g==": {
+      "description": "Footer note — built with, second part",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "— every component you see is compiled from .arv files.",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "E5h7vStAeJhILByPV05u5g==": {
+      "description": "Footer license note",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "MIT licensed",
+          "variations": {}
+        }
+      ],
+      "types": []
     }
   }
 }

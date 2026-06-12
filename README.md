@@ -74,9 +74,28 @@ export default defineConfig({
 });
 ```
 
+### Vue
+
+```bash
+npm install -D @arviahq/vite-plugin-vue @vitejs/plugin-vue vue
+```
+
+```ts
+// vite.config.ts
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import { arvia } from "@arviahq/vite-plugin-vue";
+
+export default defineConfig({
+  plugins: [arvia({ theme: "src/theme.arv" }), vue()],
+});
+```
+
+The `arvia-tsc` shipped by this package is Vue-aware — it loads the Vue language plugin alongside Arvia's, so `.arv` imports inside `.vue` single-file components typecheck. Use it in place of `vue-tsc`.
+
 ### Other frameworks
 
-`@arviahq/vite-plugin` is the framework-agnostic core the entrypoints above re-export — pair it with any Vite setup (Svelte, Solid, Lit, server-rendered templates). A dedicated Vue entrypoint is in progress.
+`@arviahq/vite-plugin` is the framework-agnostic core the entrypoints above re-export — pair it with any Vite setup (Svelte, Solid, Lit, server-rendered templates).
 
 See **Docs → Quick start** in the site for the full setup.
 
@@ -95,17 +114,18 @@ See **Docs → Quick start** in the site for the full setup.
 
 ## Packages
 
-| Package                                                  | Install? | Purpose                                              |
-| -------------------------------------------------------- | -------- | ---------------------------------------------------- |
-| `@arviahq/vite-plugin-react`                             | **yes**  | React + Vite entrypoint (plugin, CLI, TypeScript)    |
-| `@arviahq/vite-plugin-preact`                            | **yes**  | Preact + Vite entrypoint (plugin, CLI, TypeScript)   |
-| `@arviahq/vite-plugin`                                   | agnostic | Framework-agnostic Vite plugin + `arvia` CLI         |
-| `@arviahq/typescript-plugin`                             |          | tsserver plugin + `arvia-tsc` for typed `.arv` props |
-| `@arviahq/compiler`                                      |          | Core compiler                                        |
-| `@arviahq/language-server`                               |          | LSP for `.arv` files                                 |
-| `@arviahq/storybook`                                     |          | Storybook story generator                            |
-| `@arviahq/docs`                                          |          | Token catalog generator                              |
-| [`arvia` VS Code extension](./packages/vscode-extension) | vsix     | Syntax highlighting, diagnostics, completion, hover  |
+| Package                                                  | Install? | Purpose                                                    |
+| -------------------------------------------------------- | -------- | ---------------------------------------------------------- |
+| `@arviahq/vite-plugin-react`                             | **yes**  | React + Vite entrypoint (plugin, CLI, TypeScript)          |
+| `@arviahq/vite-plugin-preact`                            | **yes**  | Preact + Vite entrypoint (plugin, CLI, TypeScript)         |
+| `@arviahq/vite-plugin-vue`                               | **yes**  | Vue + Vite entrypoint (plugin, CLI, Vue-aware `arvia-tsc`) |
+| `@arviahq/vite-plugin`                                   | agnostic | Framework-agnostic Vite plugin + `arvia` CLI               |
+| `@arviahq/typescript-plugin`                             |          | tsserver plugin + `arvia-tsc` for typed `.arv` props       |
+| `@arviahq/compiler`                                      |          | Core compiler                                              |
+| `@arviahq/language-server`                               |          | LSP for `.arv` files                                       |
+| `@arviahq/storybook`                                     |          | Storybook story generator                                  |
+| `@arviahq/docs`                                          |          | Token catalog generator                                    |
+| [`arvia` VS Code extension](./packages/vscode-extension) | vsix     | Syntax highlighting, diagnostics, completion, hover        |
 
 ## Development
 
