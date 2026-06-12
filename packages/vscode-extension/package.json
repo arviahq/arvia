@@ -1,7 +1,7 @@
 {
   "name": "arvia",
   "displayName": "Arvia",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "Syntax highlighting, diagnostics, completion and hover for .arv design system files.",
   "categories": [
