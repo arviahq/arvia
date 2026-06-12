@@ -19,8 +19,7 @@
   "types": "bindings/node",
   "scripts": {
     "generate": "tree-sitter generate",
-    "test": "tree-sitter generate && tree-sitter test",
-    "build": "tree-sitter generate"
+    "test": "tree-sitter generate && tree-sitter test"
   },
   "tree-sitter": [
     {
