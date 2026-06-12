@@ -38,7 +38,7 @@ Then open [localhost:5173](http://localhost:5173) — start at **Docs → Introd
 
 ## Install
 
-Arvia ships framework-specific Vite entrypoints. Pick React or Preact:
+Arvia is framework-agnostic: the compiler emits plain CSS and dependency-free JavaScript, so anything that renders a `class` attribute can consume it. Framework-specific Vite entrypoints bundle the plugin, CLI, and TypeScript setup:
 
 ### React
 
@@ -74,29 +74,38 @@ export default defineConfig({
 });
 ```
 
+### Other frameworks
+
+`@arviahq/vite-plugin` is the framework-agnostic core the entrypoints above re-export — pair it with any Vite setup (Svelte, Solid, Lit, server-rendered templates). A dedicated Vue entrypoint is in progress.
+
 See **Docs → Quick start** in the site for the full setup.
 
-## VS Code extension
+## Editor support
 
-Syntax highlighting, diagnostics, completion, and hover for `.arv` files. The packaged extension ships in this repo at [`packages/vscode-extension/arvia.vsix`](./packages/vscode-extension/arvia.vsix):
+- **VS Code** — syntax highlighting, diagnostics, completion, hover, and formatting. The packaged extension ships in this repo at [`packages/vscode-extension/arvia.vsix`](./packages/vscode-extension/arvia.vsix):
 
-```bash
-code --install-extension packages/vscode-extension/arvia.vsix
-```
+  ```bash
+  code --install-extension packages/vscode-extension/arvia.vsix
+  ```
 
-Or in VS Code: **Extensions → ⋯ → Install from VSIX…** Works in Cursor and other VS Code forks too.
+  Or in VS Code: **Extensions → ⋯ → Install from VSIX…** Works in Cursor and other VS Code forks too.
+
+- **Zed** — install the Arvia extension from [`packages/zed-extension`](./packages/zed-extension).
+- **Neovim & others** — tree-sitter grammar in [`packages/tree-sitter-arvia`](./packages/tree-sitter-arvia), plus `@arviahq/language-server` for any LSP client.
 
 ## Packages
 
-| Package                                                  | Install? | Purpose                                             |
-| -------------------------------------------------------- | -------- | --------------------------------------------------- |
-| `@arviahq/vite-plugin-react`                             | **yes**  | React + Vite entrypoint (plugin, CLI, TypeScript)   |
-| `@arviahq/vite-plugin-preact`                            | **yes**  | Preact + Vite entrypoint (plugin, CLI, TypeScript)  |
-| `@arviahq/compiler`                                      |          | Core compiler                                       |
-| `@arviahq/language-server`                               |          | LSP for `.arv` files                                |
-| `@arviahq/storybook`                                     |          | Storybook story generator                           |
-| `@arviahq/docs`                                          |          | Token catalog generator                             |
-| [`arvia` VS Code extension](./packages/vscode-extension) | vsix     | Syntax highlighting, diagnostics, completion, hover |
+| Package                                                  | Install? | Purpose                                              |
+| -------------------------------------------------------- | -------- | ---------------------------------------------------- |
+| `@arviahq/vite-plugin-react`                             | **yes**  | React + Vite entrypoint (plugin, CLI, TypeScript)    |
+| `@arviahq/vite-plugin-preact`                            | **yes**  | Preact + Vite entrypoint (plugin, CLI, TypeScript)   |
+| `@arviahq/vite-plugin`                                   | agnostic | Framework-agnostic Vite plugin + `arvia` CLI         |
+| `@arviahq/typescript-plugin`                             |          | tsserver plugin + `arvia-tsc` for typed `.arv` props |
+| `@arviahq/compiler`                                      |          | Core compiler                                        |
+| `@arviahq/language-server`                               |          | LSP for `.arv` files                                 |
+| `@arviahq/storybook`                                     |          | Storybook story generator                            |
+| `@arviahq/docs`                                          |          | Token catalog generator                              |
+| [`arvia` VS Code extension](./packages/vscode-extension) | vsix     | Syntax highlighting, diagnostics, completion, hover  |
 
 ## Development
 
