@@ -1,0 +1,1460 @@
+[
+  {
+    "hash": "Iq9x1rHZx/dJ/lhROYnTiA==",
+    "desc": "Playground page description part 3",
+    "text": "— the preview, CSS, and types compile live in your browser. Load any demo from the select.",
+    "tokens": []
+  },
+  {
+    "hash": "k2zyyTyqxGJO1nQKBYLNjg==",
+    "desc": "Homepage playground section description part 3",
+    "text": "— the preview, CSS, and TypeScript types compile live in your browser.",
+    "tokens": []
+  },
+  {
+    "hash": "55IeE8c0qqtjTU0lo7q9AA==",
+    "desc": "A list of items of various types separated by bullets, for example: \"San Francisco \\u2022 London \\u2022 Tokyo\". {previous items} contains one or more items.",
+    "text": "{list of items} • {last item}",
+    "tokens": []
+  },
+  {
+    "hash": "icNetEL/crQv/PS6yhySVQ==",
+    "desc": "A list of items of various types, for example: \"item1, item2, item3 and item4\"",
+    "text": "{list of items} and {last item}",
+    "tokens": []
+  },
+  {
+    "hash": "8eSaAzrWtAqn9ktNKfkaEg==",
+    "desc": "A list of items of various types, for example: \"item1, item2, item3 or item4\"",
+    "text": "{list of items} or {last item}",
+    "tokens": []
+  },
+  {
+    "hash": "6PRJS0QalZfvaN8CkKCUCw==",
+    "desc": "A list of items of various types, for example: \"item1, item2, item3, item4\"",
+    "text": "{list of items}, {last item}",
+    "tokens": []
+  },
+  {
+    "hash": "5hL7VXOBVnetm46YAjpX0g==",
+    "desc": "A list of items of various types with a serial comma, for example: \"item1, item2, and item3\"",
+    "text": "{list of items}, and {last item}",
+    "tokens": []
+  },
+  {
+    "hash": "8kLAQ3ffiiFnQ/bWPqXfuQ==",
+    "desc": "A list of items of various types with a serial comma, for example: \"item1, item2, or item3\"",
+    "text": "{list of items}, or {last item}",
+    "tokens": []
+  },
+  {
+    "hash": "AXXbKEUZuc0ji1IClRrOOw==",
+    "desc": "A list of items of various types separated by bullets, for example: \"San Francisco \\u2022 London \\u2022 Tokyo\". {previous items} and {following items} are themselves lists that contain one or more items.",
+    "text": "{previous items} • {following items}",
+    "tokens": []
+  },
+  {
+    "hash": "89ACgPMtnwlLDSeqhLBx2Q==",
+    "desc": "A list of items of various types separated by commas, for example: \"San Francisco, London, Tokyo\". {previous items} and {following items} are themselves lists that contain one or more items.",
+    "text": "{previous items}, {following items}",
+    "tokens": []
+  },
+  {
+    "hash": "Oc/9PrbjfyLHS60BXceD1A==",
+    "desc": "A list of items of various types, for example: \"San Francisco; London; Tokyo\". {previous items} and {following items} are themselves lists that contain one or more items.",
+    "text": "{previous items}; {following items}",
+    "tokens": []
+  },
+  {
+    "hash": "+IBI7kr/mMKdzp+3stDvkw==",
+    "desc": "A list of items of various types, for example: \"San Francisco; London; Tokyo\". {previous items} itself contains one or more items.",
+    "text": "{previous items}; {last item}",
+    "tokens": []
+  },
+  {
+    "hash": "2SOxgAmSeG649l6suOxveg==",
+    "desc": "Docs list item — @arviahq/compiler — lexer, parser, checker, code…",
+    "text": "@arviahq/compiler — lexer, parser, checker, code generation",
+    "tokens": []
+  },
+  {
+    "hash": "CoqjvsQH7Tt7/gSVthI/ng==",
+    "desc": "Docs list item — @arviahq/language-server — LSP for editors",
+    "text": "@arviahq/language-server — LSP for editors",
+    "tokens": []
+  },
+  {
+    "hash": "fPbHtieQH9Y8Yikjz8Go7g==",
+    "desc": "Docs list item — @arviahq/typescript-plugin — tsconfig plugin + a…",
+    "text": "@arviahq/typescript-plugin — tsconfig plugin + arvia-tsc",
+    "tokens": []
+  },
+  {
+    "hash": "m/lYxVQ4sp335COEJ4P8UQ==",
+    "desc": "Docs list item — @arviahq/vite-plugin — framework-agnostic Vite i…",
+    "text": "@arviahq/vite-plugin — framework-agnostic Vite integration",
+    "tokens": []
+  },
+  {
+    "hash": "IbWIuM03oO21kB4T/vHIJw==",
+    "desc": "Docs list item — @arviahq/vite-plugin-preact — Preact + Vite (Vit…",
+    "text": "@arviahq/vite-plugin-preact — Preact + Vite (Vite plugin + arvia CLI)",
+    "tokens": []
+  },
+  {
+    "hash": "DxBx9/IZ6PVXiylzFbsYTw==",
+    "desc": "Docs list item — @arviahq/vite-plugin-react — React + Vite (Vite …",
+    "text": "@arviahq/vite-plugin-react — React + Vite (Vite plugin + arvia CLI)",
+    "tokens": []
+  },
+  {
+    "hash": "4SGVwx+WG6Gjxc5QLtk+eA==",
+    "desc": "Playground generated App.tsx placeholder comment",
+    "text": "// define a component or style to see its usage",
+    "tokens": []
+  },
+  {
+    "hash": "AZzqTz+VrBB9gT8GDz/J8A==",
+    "desc": "Docs content — 1. Define tokens",
+    "text": "1. Define tokens",
+    "tokens": []
+  },
+  {
+    "hash": "YzSBY4Hes7RbSxNYhEPg2w==",
+    "desc": "Docs content — 2. Import the theme",
+    "text": "2. Import the theme",
+    "tokens": []
+  },
+  {
+    "hash": "lneYsmvNjOFmZ9Eag1soyw==",
+    "desc": "Docs content — 3. Create a component",
+    "text": "3. Create a component",
+    "tokens": []
+  },
+  {
+    "hash": "sxxnP4Q+efNiDbR1mY40ag==",
+    "desc": "Docs content — 4. Use in your app",
+    "text": "4. Use in your app",
+    "tokens": []
+  },
+  {
+    "hash": "9OLgMLUHE0zOLPTGgWtCeQ==",
+    "desc": "Docs content — A nested slot block inside base, a variant value…",
+    "text": "A nested slot block inside base, a variant value, a compound rule, or an &-state targets that slot when the surrounding condition applies — here the icon shifts on hover of the root and scales up for size: lg.",
+    "tokens": []
+  },
+  {
+    "hash": "2//EyAmsUKN4RnhUXd4ESw==",
+    "desc": "Docs content — A slot block inside a state styles that slot whe…",
+    "text": "A slot block inside a state styles that slot when the owner matches — the classic icon-reacts-to-button-hover pattern:",
+    "tokens": []
+  },
+  {
+    "hash": "Pjd2VNd4EB/d8OXYTebfVQ==",
+    "desc": "Docs content — A theme block defines named token groups. Refere…",
+    "text": "A theme block defines named token groups. Reference tokens with dot notation: color.primary, space.4, radius.md.",
+    "tokens": []
+  },
+  {
+    "hash": "JVkvv5Hc1iEZOvGPtQdfOg==",
+    "desc": "Docs content — A tokens block inside a component declares value…",
+    "text": "A tokens block inside a component declares values visible only to that component. Lookups check component tokens first, then the file and shared theme — same group.name syntax, no new reference style.",
+    "tokens": []
+  },
+  {
+    "hash": "/ktji6OONYtoCJx9GI8wfg==",
+    "desc": "Docs page description — Add Arvia to a Vite project (React or Preact).",
+    "text": "Add Arvia to a Vite project (React or Preact).",
+    "tokens": []
+  },
+  {
+    "hash": "yaa7+BL0azvA1asa33uAwQ==",
+    "desc": "Docs content — Arvia is a framework-agnostic design system comp…",
+    "text": "Arvia is a framework-agnostic design system compiler. You write .arv files that describe themes, tokens, recipes, and components — the compiler emits optimized CSS and typed TypeScript APIs with zero runtime styling cost. Use the generated APIs from React, Preact, or any JSX framework.",
+    "tokens": []
+  },
+  {
+    "hash": "Atsmq9+kKlVjerMXzuQlPw==",
+    "desc": "Docs page description — Auto-generate stories from component variants.",
+    "text": "Auto-generate stories from component variants.",
+    "tokens": []
+  },
+  {
+    "hash": "fYuK4wC/kYCC0T5WvxbPzA==",
+    "desc": "Feature card body — variant autocomplete",
+    "text": "Autocomplete for every variant prop. Catch invalid combinations early.",
+    "tokens": []
+  },
+  {
+    "hash": "1b0JxNNQLpQMiKIusPiR0Q==",
+    "desc": "Playground demo component label",
+    "text": "Badge",
+    "tokens": []
+  },
+  {
+    "hash": "4PXGTLgppmmUVgCKhY0Tag==",
+    "desc": "Playground starter template label",
+    "text": "Badge",
+    "tokens": []
+  },
+  {
+    "hash": "pgDINW5CIIpUF4CotdZdCA==",
+    "desc": "Docs content — Bare declarations at the top level map to the im…",
+    "text": "Bare declarations at the top level map to the implicit root slot. Named slot blocks style child elements.",
+    "tokens": []
+  },
+  {
+    "hash": "JmqDHnvLC6IQgusk0x2rWA==",
+    "desc": "Feature card body — responsive variants",
+    "text": "Breakpoint and container-query variants with object props.",
+    "tokens": []
+  },
+  {
+    "hash": "GANBxiPw/HfUNjLNVFW0Yg==",
+    "desc": "Docs page description — Breakpoint overrides.",
+    "text": "Breakpoint overrides.",
+    "tokens": []
+  },
+  {
+    "hash": "/1uF+02ojl8d86WsvcTeYg==",
+    "desc": "Docs page description — Breakpoint-driven variant overrides.",
+    "text": "Breakpoint-driven variant overrides.",
+    "tokens": []
+  },
+  {
+    "hash": "N9ttxXN+di7kFBwvlKfyiA==",
+    "desc": "Playground demo component label",
+    "text": "Button",
+    "tokens": []
+  },
+  {
+    "hash": "zoMreXM97xTdc5Q2qQccHQ==",
+    "desc": "Playground starter template label",
+    "text": "Button",
+    "tokens": []
+  },
+  {
+    "hash": "DUeZ5/NDqDw7EKB5p+SnGA==",
+    "desc": "Playground demo component label",
+    "text": "Card",
+    "tokens": []
+  },
+  {
+    "hash": "iQV79lQU6hUHq7KsAUlxqg==",
+    "desc": "Docs page title — CLI",
+    "text": "CLI",
+    "tokens": []
+  },
+  {
+    "hash": "6IZN6op2AqeYQQFn6Cc2Ow==",
+    "desc": "Docs nav item",
+    "text": "CLI",
+    "tokens": []
+  },
+  {
+    "hash": "jmxCw2DOh4cxVh0m1+f0lw==",
+    "desc": "Playground preview button label",
+    "text": "Click me",
+    "tokens": []
+  },
+  {
+    "hash": "q8rjcItYCM6lV1qE94Dxyw==",
+    "desc": "Docs page description — Compile .arv files at build time with HMR.",
+    "text": "Compile .arv files at build time with HMR.",
+    "tokens": []
+  },
+  {
+    "hash": "KcL7SNL+OabWoP4iIuJfog==",
+    "desc": "Hero subtitle second line",
+    "text": "Compile to optimized CSS, generated types, and typed component APIs — zero runtime overhead.",
+    "tokens": []
+  },
+  {
+    "hash": "8QjaT4j7N6/qsbLsaAlBHQ==",
+    "desc": "Docs list item — Compiles each .arv import to JS + extracted CSS",
+    "text": "Compiles each .arv import to JS + extracted CSS",
+    "tokens": []
+  },
+  {
+    "hash": "AU8ghEouPhe6mckGvG+t2A==",
+    "desc": "Docs content — Compiles to .Button_root:hover .Button_icon { … …",
+    "text": "Compiles to .Button_root:hover .Button_icon { … }. Works from variant bodies too; the target always matches the slot's base class.",
+    "tokens": []
+  },
+  {
+    "hash": "EMmLSA6Ybod3wSMv7SkW6Q==",
+    "desc": "Docs list item — Completion for tokens, variants, and keywords",
+    "text": "Completion for tokens, variants, and keywords",
+    "tokens": []
+  },
+  {
+    "hash": "nPgmK+mnJazkKWRLo5xZZQ==",
+    "desc": "Docs page description — Component-scoped tokens that shadow the theme.",
+    "text": "Component-scoped tokens that shadow the theme.",
+    "tokens": []
+  },
+  {
+    "hash": "tvqNVaz7/DEKbxj7lT7LWQ==",
+    "desc": "Docs page description — Component-scoped values.",
+    "text": "Component-scoped values.",
+    "tokens": []
+  },
+  {
+    "hash": "/BaefFLX1OlYpz+mvDGG4A==",
+    "desc": "Docs page title — Components",
+    "text": "Components",
+    "tokens": []
+  },
+  {
+    "hash": "5yWSmyrd3zSfVJIN6mOhIw==",
+    "desc": "Docs nav item",
+    "text": "Components",
+    "tokens": []
+  },
+  {
+    "hash": "8aFxr7VnPSBTpSBfqva5KA==",
+    "desc": "Docs page description — Composable style fragments.",
+    "text": "Composable style fragments.",
+    "tokens": []
+  },
+  {
+    "hash": "ZANgbkXCmtAcl59/FxiNqQ==",
+    "desc": "Docs content — Compound blocks target a slot and only emit when…",
+    "text": "Compound blocks target a slot and only emit when every listed variant matches the current props.",
+    "tokens": []
+  },
+  {
+    "hash": "UvC5i0Ycpwpwq6w3TBoRkQ==",
+    "desc": "Playground recipe title",
+    "text": "Compound variants",
+    "tokens": []
+  },
+  {
+    "hash": "qgNyZljOOXPrtCG6CowzcQ==",
+    "desc": "Docs page title — Compound variants",
+    "text": "Compound variants",
+    "tokens": []
+  },
+  {
+    "hash": "qgNyZljOOXPrtCG6CowzcQ==",
+    "desc": "Docs page title — Compound variants",
+    "text": "Compound variants",
+    "tokens": []
+  },
+  {
+    "hash": "XkYnN3mM+4Ven3vfEVT3CA==",
+    "desc": "Docs nav item",
+    "text": "Compound variants",
+    "tokens": []
+  },
+  {
+    "hash": "lyVbcdlWIkttkH47lN2Pig==",
+    "desc": "Docs content — Container props use a $ prefix. The root slot ge…",
+    "text": "Container props use a $ prefix. The root slot gets container-type: inline-size automatically.",
+    "tokens": []
+  },
+  {
+    "hash": "/QrOsSw8iBO+9I7w+/CfiQ==",
+    "desc": "Playground recipe title",
+    "text": "Container queries",
+    "tokens": []
+  },
+  {
+    "hash": "YkeV77p2eqE+3OFZzUnRhg==",
+    "desc": "Docs page title — Container queries",
+    "text": "Container queries",
+    "tokens": []
+  },
+  {
+    "hash": "YkeV77p2eqE+3OFZzUnRhg==",
+    "desc": "Docs page title — Container queries",
+    "text": "Container queries",
+    "tokens": []
+  },
+  {
+    "hash": "WZDHjDg6Lovx8J4vPt/l/w==",
+    "desc": "Docs nav item",
+    "text": "Container queries",
+    "tokens": []
+  },
+  {
+    "hash": "0sdXMm0uoa/UsONF8CiQMg==",
+    "desc": "Docs page description — Container-width layout.",
+    "text": "Container-width layout.",
+    "tokens": []
+  },
+  {
+    "hash": "PBqguULy2B8oXfBAMeAKcw==",
+    "desc": "Copy button success state",
+    "text": "Copied",
+    "tokens": []
+  },
+  {
+    "hash": "TyY+ys0qLd3GuXePc/2EBQ==",
+    "desc": "Copy button success label",
+    "text": "Copied",
+    "tokens": []
+  },
+  {
+    "hash": "rF6mPBvuqpYpsTdgJIzV6w==",
+    "desc": "Copy button label",
+    "text": "Copy",
+    "tokens": []
+  },
+  {
+    "hash": "izSLtbRsice0dDOj8tT5Ug==",
+    "desc": "Copy button label",
+    "text": "Copy code",
+    "tokens": []
+  },
+  {
+    "hash": "c5jEGOrXU2/BF4n7yX7SHw==",
+    "desc": "Playground output tab label",
+    "text": "css",
+    "tokens": []
+  },
+  {
+    "hash": "1kZGNHLJ9lOVan43/ZU6aw==",
+    "desc": "Playground empty preview hint",
+    "text": "define a component or style to preview it",
+    "tokens": []
+  },
+  {
+    "hash": "haeiaWeFx77ebt91ukwaNw==",
+    "desc": "Playground template group label",
+    "text": "Demo components",
+    "tokens": []
+  },
+  {
+    "hash": "bo1JVdoNBYako58euZZMcg==",
+    "desc": "Hero headline first line",
+    "text": "Design systems deserve",
+    "tokens": []
+  },
+  {
+    "hash": "vDC6btPmSNWefA8If0+z3Q==",
+    "desc": "Feature card title — design tokens",
+    "text": "Design tokens",
+    "tokens": []
+  },
+  {
+    "hash": "nzqNMNqQI/iMih4n9fV8xQ==",
+    "desc": "Docs page description — Design tokens as the foundation of every style.",
+    "text": "Design tokens as the foundation of every style.",
+    "tokens": []
+  },
+  {
+    "hash": "Xp6F8AHEvx1g6n7IxpaVcg==",
+    "desc": "Docs list item — Diagnostics for syntax and type errors",
+    "text": "Diagnostics for syntax and type errors",
+    "tokens": []
+  },
+  {
+    "hash": "t0Wxxbu4y4zZK+jwgfyR9w==",
+    "desc": "Docs page description — doc metadata on tokens.",
+    "text": "doc metadata on tokens.",
+    "tokens": []
+  },
+  {
+    "hash": "kszvYOGaxgivx6iaDCiM2g==",
+    "desc": "Docs content — Doc strings appear in LSP hover and in generated…",
+    "text": "Doc strings appear in LSP hover and in generated token catalogs via arvia gen --docs.",
+    "tokens": []
+  },
+  {
+    "hash": "sI/suPDQ8lPhQYEFXTOuNw==",
+    "desc": "Main navigation link to documentation",
+    "text": "Docs",
+    "tokens": []
+  },
+  {
+    "hash": "gPOTQh/pCd9aes8jnUcStw==",
+    "desc": "Docs page description — Document tokens for designers and developers.",
+    "text": "Document tokens for designers and developers.",
+    "tokens": []
+  },
+  {
+    "hash": "yIsUjsOANo/Dzfqlw4XmlQ==",
+    "desc": "Docs page description — Document-level rules.",
+    "text": "Document-level rules.",
+    "tokens": []
+  },
+  {
+    "hash": "AzdqHwO0BIlf3u+OhLpYPg==",
+    "desc": "Homepage playground section description part 1",
+    "text": "Edit the",
+    "tokens": []
+  },
+  {
+    "hash": "7T8l09r4+9vcMCmZxqcg3g==",
+    "desc": "Playground page description part 1",
+    "text": "Edit the",
+    "tokens": []
+  },
+  {
+    "hash": "yMvzH+XwfdQQRNIzNZS9yA==",
+    "desc": "Playground editor header label",
+    "text": "editable",
+    "tokens": []
+  },
+  {
+    "hash": "lOAx4lVQ4TqlLa5vB5wJbQ==",
+    "desc": "Docs page description — Editor intelligence for .arv files.",
+    "text": "Editor intelligence for .arv files.",
+    "tokens": []
+  },
+  {
+    "hash": "0WabqDVQpTvkr6jrVtNE0Q==",
+    "desc": "Docs page description — Exported one-class utilities.",
+    "text": "Exported one-class utilities.",
+    "tokens": []
+  },
+  {
+    "hash": "cnDwVqJHfZipMjAH7fxzyg==",
+    "desc": "Hero subtitle first line",
+    "text": "Extend familiar CSS with first-class tokens, themes, variants, slots, and components.",
+    "tokens": []
+  },
+  {
+    "hash": "V3VJi/BgOGY8xlYPZkkFyw==",
+    "desc": "Docs page description — From zero to a styled button in minutes.",
+    "text": "From zero to a styled button in minutes.",
+    "tokens": []
+  },
+  {
+    "hash": "exdvDyqEJ9mNH522WgZvdg==",
+    "desc": "Feature card title — toolchain",
+    "text": "Full toolchain",
+    "tokens": []
+  },
+  {
+    "hash": "m8muyWkNlmI6NnM5XpH4Mg==",
+    "desc": "Docs page description — Generate types and docs without running Vite.",
+    "text": "Generate types and docs without running Vite.",
+    "tokens": []
+  },
+  {
+    "hash": "6iOnoVpRjzNK1IFjmV9Zew==",
+    "desc": "Primary hero call to action",
+    "text": "Get started",
+    "tokens": []
+  },
+  {
+    "hash": "VDpPOlRA4/a1CIp4a64z8g==",
+    "desc": "Docs sidebar section title",
+    "text": "Getting started",
+    "tokens": []
+  },
+  {
+    "hash": "aKZn2oSQNESkJwP4YJQbrw==",
+    "desc": "Docs page title — Global styles",
+    "text": "Global styles",
+    "tokens": []
+  },
+  {
+    "hash": "aKZn2oSQNESkJwP4YJQbrw==",
+    "desc": "Docs page title — Global styles",
+    "text": "Global styles",
+    "tokens": []
+  },
+  {
+    "hash": "X2fHuP0QdGyiz2pkNeMR+A==",
+    "desc": "Docs nav item",
+    "text": "Global styles",
+    "tokens": []
+  },
+  {
+    "hash": "VxE9L7rDYKckjoNPHDKXNw==",
+    "desc": "Docs content — Group hover",
+    "text": "Group hover",
+    "tokens": []
+  },
+  {
+    "hash": "dvWKhGHwUGE1mzHBf4O+xA==",
+    "desc": "Docs list item — Hover showing token values and doc strings",
+    "text": "Hover showing token values and doc strings",
+    "tokens": []
+  },
+  {
+    "hash": "3RxGp7B68T4zje5OICE74Q==",
+    "desc": "Docs page title — Implicit root",
+    "text": "Implicit root",
+    "tokens": []
+  },
+  {
+    "hash": "rqTIRgFEsysCmGAQwcM3IQ==",
+    "desc": "Playground recipe title",
+    "text": "Implicit root slot",
+    "tokens": []
+  },
+  {
+    "hash": "IAVsLM/li+GxU5qdOaDtjA==",
+    "desc": "Docs content — Import your theme file once (e.g. in main.tsx) t…",
+    "text": "Import your theme file once (e.g. in main.tsx) to ship global rules alongside token variables.",
+    "tokens": []
+  },
+  {
+    "hash": "aXkirpe3OwLHhDCCkJlVOA==",
+    "desc": "Docs content — Install @arviahq/vite-plugin-react for React + V…",
+    "text": "Install @arviahq/vite-plugin-react for React + Vite projects, or @arviahq/vite-plugin-preact for Preact + Vite. The compiler and TypeScript plugin are framework-agnostic — future @arviahq/vite-plugin-vue will reuse them.",
+    "tokens": []
+  },
+  {
+    "hash": "/P8mcpZ5zW0XCqedXzOHqA==",
+    "desc": "Docs content — Install the Arvia VS Code extension for syntax h…",
+    "text": "Install the Arvia VS Code extension for syntax highlighting, diagnostics, completion, and hover docs on tokens.",
+    "tokens": []
+  },
+  {
+    "hash": "mPcJUOqZuiNEDaczC7aagA==",
+    "desc": "Docs page title — Installation",
+    "text": "Installation",
+    "tokens": []
+  },
+  {
+    "hash": "1u/7FUuTIA2UKCCO4fSJtA==",
+    "desc": "Docs nav item",
+    "text": "Installation",
+    "tokens": []
+  },
+  {
+    "hash": "dqV7snRHoP01iQRXXK2I9w==",
+    "desc": "Docs page title — Introduction",
+    "text": "Introduction",
+    "tokens": []
+  },
+  {
+    "hash": "ltEazAvd+khRzZOxvT9mkQ==",
+    "desc": "Docs nav item",
+    "text": "Introduction",
+    "tokens": []
+  },
+  {
+    "hash": "h5XOC5jKFDy3Ho2lA+jCCQ==",
+    "desc": "Playground recipe title",
+    "text": "Keyframes",
+    "tokens": []
+  },
+  {
+    "hash": "0SLDTtKHOE6QfmEQgywBTQ==",
+    "desc": "Docs page title — Keyframes",
+    "text": "Keyframes",
+    "tokens": []
+  },
+  {
+    "hash": "0SLDTtKHOE6QfmEQgywBTQ==",
+    "desc": "Docs page title — Keyframes",
+    "text": "Keyframes",
+    "tokens": []
+  },
+  {
+    "hash": "BZHG0X+7CtjGdNWoJ5ribQ==",
+    "desc": "Docs nav item",
+    "text": "Keyframes",
+    "tokens": []
+  },
+  {
+    "hash": "3gWxZ32f2StuSPlKIhU9MQ==",
+    "desc": "Docs sidebar section title",
+    "text": "Language",
+    "tokens": []
+  },
+  {
+    "hash": "SX2uWTTbx7imUlxTOC6nnw==",
+    "desc": "Language selector aria label",
+    "text": "Language",
+    "tokens": []
+  },
+  {
+    "hash": "WYrLmkva6DtiB16NX7YIIQ==",
+    "desc": "Docs page title — Language server",
+    "text": "Language server",
+    "tokens": []
+  },
+  {
+    "hash": "lLxtkOkjj/9Mg9bKSTR/dg==",
+    "desc": "Docs nav item",
+    "text": "Language server",
+    "tokens": []
+  },
+  {
+    "hash": "gWjJ/Fv+bQvGZOqd9LiAzw==",
+    "desc": "Docs page description — Layout that responds to container width, not vie…",
+    "text": "Layout that responds to container width, not viewport.",
+    "tokens": []
+  },
+  {
+    "hash": "3QH5jvX1t0I64K7x6ofGeA==",
+    "desc": "Docs page description — Light and dark with @dark overrides.",
+    "text": "Light and dark with @dark overrides.",
+    "tokens": []
+  },
+  {
+    "hash": "s/pMHhoYL6KqIbjHnxShyA==",
+    "desc": "Docs page description — Light/dark themes with system preference and opt…",
+    "text": "Light/dark themes with system preference and optional overrides.",
+    "tokens": []
+  },
+  {
+    "hash": "SjKWDGGumMxY2Rvns2B81g==",
+    "desc": "Playground recipe title",
+    "text": "Local tokens",
+    "tokens": []
+  },
+  {
+    "hash": "pNEVwFhx0w2VFe7iRdSyRw==",
+    "desc": "Docs page title — Local tokens",
+    "text": "Local tokens",
+    "tokens": []
+  },
+  {
+    "hash": "pNEVwFhx0w2VFe7iRdSyRw==",
+    "desc": "Docs page title — Local tokens",
+    "text": "Local tokens",
+    "tokens": []
+  },
+  {
+    "hash": "W/Xwplpvn/p2gdv1GZrbpQ==",
+    "desc": "Docs nav item",
+    "text": "Local tokens",
+    "tokens": []
+  },
+  {
+    "hash": "BhFbnE4oZzB1Z0oxDTeWwg==",
+    "desc": "Docs content — Local tokens are compile-time constants: they in…",
+    "text": "Local tokens are compile-time constants: they inline to literals even when theme modes are active, never become CSS variables, and never leak into other components, exports, or the token catalog. Mode overrides (@dark) are not allowed inside component tokens — moded values belong in the theme.",
+    "tokens": []
+  },
+  {
+    "hash": "4sRBrBrV7BRkfPtsY9uWIw==",
+    "desc": "Feature card body — composition",
+    "text": "Multi-part components and reusable style fragments with use.",
+    "tokens": []
+  },
+  {
+    "hash": "OZkvHNLAKb7ulE7Lgpddzw==",
+    "desc": "Docs page description — Multi-variant rules.",
+    "text": "Multi-variant rules.",
+    "tokens": []
+  },
+  {
+    "hash": "CoSnghlr2H1tpNpij86zZQ==",
+    "desc": "Docs page description — Named animations referenced from components.",
+    "text": "Named animations referenced from components.",
+    "tokens": []
+  },
+  {
+    "hash": "by54RdClnAHBYU4bmFK/Ng==",
+    "desc": "Docs page description — Named animations.",
+    "text": "Named animations.",
+    "tokens": []
+  },
+  {
+    "hash": "gQcJWotlYqmU3pT5nS0pMg==",
+    "desc": "Docs page description — Named design tokens in groups.",
+    "text": "Named design tokens in groups.",
+    "tokens": []
+  },
+  {
+    "hash": "JLGVECwsNM+E5baVWHRgDA==",
+    "desc": "Docs page description — Named parts of a component.",
+    "text": "Named parts of a component.",
+    "tokens": []
+  },
+  {
+    "hash": "6G8VLdnln8a14chMoyoXdQ==",
+    "desc": "Docs page description — Named parts of a multi-element component, each w…",
+    "text": "Named parts of a multi-element component, each with its own class.",
+    "tokens": []
+  },
+  {
+    "hash": "ZWSt5e6SOtg2kXTKOhnEww==",
+    "desc": "Playground recipe title",
+    "text": "Nested recipes",
+    "tokens": []
+  },
+  {
+    "hash": "waf3Rn/gP91C9saVMWclfw==",
+    "desc": "Docs search empty state",
+    "text": "No results for {query}",
+    "tokens": []
+  },
+  {
+    "hash": "Z/1HOWVbLEvbAzJ5eGSFFQ==",
+    "desc": "Docs content — Not everything is a component. A style declarati…",
+    "text": "Not everything is a component. A style declaration compiles to a single hashed class and exports it as a plain string constant — ideal for one-off utilities, layout helpers, and page-level styles.",
+    "tokens": []
+  },
+  {
+    "hash": "o/TRn/nTbC5J5I+h5natiw==",
+    "desc": "Docs page description — npm packages under @arviahq.",
+    "text": "npm packages under @arviahq.",
+    "tokens": []
+  },
+  {
+    "hash": "L0Ujzx5/XO6CJzQTf8ER9Q==",
+    "desc": "Playground page description part 2",
+    "text": "or",
+    "tokens": []
+  },
+  {
+    "hash": "KcaFZQV7ZjNacjooTkmrFA==",
+    "desc": "Homepage playground section description part 2",
+    "text": "or switch to",
+    "tokens": []
+  },
+  {
+    "hash": "AcKvGU/RXsOgoUebiR/UMw==",
+    "desc": "Playground output pane header",
+    "text": "output",
+    "tokens": []
+  },
+  {
+    "hash": "DFN9eTF1to/dSk3InnYrZg==",
+    "desc": "Docs content — Override variants per breakpoint from your app w…",
+    "text": "Override variants per breakpoint from your app with object props:",
+    "tokens": []
+  },
+  {
+    "hash": "G3U0fl4ddd15WgjX/Byveg==",
+    "desc": "Docs page title — Packages",
+    "text": "Packages",
+    "tokens": []
+  },
+  {
+    "hash": "o0vSMauqajzxvJfZ+JKl9w==",
+    "desc": "Docs nav item",
+    "text": "Packages",
+    "tokens": []
+  },
+  {
+    "hash": "V1lRN0GlTxzHq22TYaPjug==",
+    "desc": "Docs list item — Phantom .arv.css modules integrate with Vite's C…",
+    "text": "Phantom .arv.css modules integrate with Vite's CSS pipeline",
+    "tokens": []
+  },
+  {
+    "hash": "p+OtsI6By9T8DGAuDK6+Aw==",
+    "desc": "Playground page title",
+    "text": "Playground",
+    "tokens": []
+  },
+  {
+    "hash": "jUXL7FNTCw6gbBpgiYWGnw==",
+    "desc": "Main navigation link to playground",
+    "text": "Playground",
+    "tokens": []
+  },
+  {
+    "hash": "3EIYAnn8ohxh4M0SKqapxw==",
+    "desc": "Docs content — Preact",
+    "text": "Preact",
+    "tokens": []
+  },
+  {
+    "hash": "3EIYAnn8ohxh4M0SKqapxw==",
+    "desc": "Docs content — Preact",
+    "text": "Preact",
+    "tokens": []
+  },
+  {
+    "hash": "nHQNvXIKSAeJfmPgjBYpHQ==",
+    "desc": "Playground output tab label",
+    "text": "preview",
+    "tokens": []
+  },
+  {
+    "hash": "9wp1M95aGBBzhoYmo42uYQ==",
+    "desc": "Docs page description — Prop-driven style branches with defaults.",
+    "text": "Prop-driven style branches with defaults.",
+    "tokens": []
+  },
+  {
+    "hash": "tUucmuMMKKeqkC1ip31mvw==",
+    "desc": "Docs page description — Prop-driven style branches.",
+    "text": "Prop-driven style branches.",
+    "tokens": []
+  },
+  {
+    "hash": "Y0l8b9ty/iLLkIn14kaPsQ==",
+    "desc": "Playground recipe title",
+    "text": "Pseudo states",
+    "tokens": []
+  },
+  {
+    "hash": "9464Q6s1kJaa7ykj2mt8AQ==",
+    "desc": "Docs page description — Pseudo-class styles.",
+    "text": "Pseudo-class styles.",
+    "tokens": []
+  },
+  {
+    "hash": "uVUReKTKAeQ2MDeg14xHJw==",
+    "desc": "Docs page description — Pseudo-classes, combinators, and group hover.",
+    "text": "Pseudo-classes, combinators, and group hover.",
+    "tokens": []
+  },
+  {
+    "hash": "erzt/hdP2u6TXmW9Wvs+Ew==",
+    "desc": "Playground demo component label",
+    "text": "Pulse",
+    "tokens": []
+  },
+  {
+    "hash": "jLxwrNoLSVkpXqmrsLkzxw==",
+    "desc": "Docs page title — Quick start",
+    "text": "Quick start",
+    "tokens": []
+  },
+  {
+    "hash": "0Uqu0a4WEK3OcEbYtU4mpA==",
+    "desc": "Docs nav item",
+    "text": "Quick start",
+    "tokens": []
+  },
+  {
+    "hash": "tTpxXiJxPYJJ1jCTgxWm6w==",
+    "desc": "Docs content — React",
+    "text": "React",
+    "tokens": []
+  },
+  {
+    "hash": "tTpxXiJxPYJJ1jCTgxWm6w==",
+    "desc": "Docs content — React",
+    "text": "React",
+    "tokens": []
+  },
+  {
+    "hash": "uzOwiVLi28KjrFvpQTcZLQ==",
+    "desc": "Playground template group label",
+    "text": "Recipes",
+    "tokens": []
+  },
+  {
+    "hash": "AKkF/pSg/f3VtQJUHzFAtQ==",
+    "desc": "Docs page title — Recipes",
+    "text": "Recipes",
+    "tokens": []
+  },
+  {
+    "hash": "AKkF/pSg/f3VtQJUHzFAtQ==",
+    "desc": "Docs page title — Recipes",
+    "text": "Recipes",
+    "tokens": []
+  },
+  {
+    "hash": "eBXYBLropSs+S7ZCULloMg==",
+    "desc": "Docs nav item",
+    "text": "Recipes",
+    "tokens": []
+  },
+  {
+    "hash": "U+XpN7JffbekEu1FEYE7iA==",
+    "desc": "Docs content — Recipes can include pseudo-states and nest other…",
+    "text": "Recipes can include pseudo-states and nest other recipes. They never generate standalone APIs — only components do.",
+    "tokens": []
+  },
+  {
+    "hash": "FWH42paoNVFBFubfaeut+A==",
+    "desc": "Docs page description — Resets, typography, and document-level rules.",
+    "text": "Resets, typography, and document-level rules.",
+    "tokens": []
+  },
+  {
+    "hash": "EKdeyZNgDKN8gIaEkHOExQ==",
+    "desc": "Playground recipe title",
+    "text": "Responsive",
+    "tokens": []
+  },
+  {
+    "hash": "VnGF9SpoknGQTd5J5RRbgA==",
+    "desc": "Playground starter template label",
+    "text": "Responsive",
+    "tokens": []
+  },
+  {
+    "hash": "14y6b98Ef94DODje2jekqw==",
+    "desc": "Docs page title — Responsive",
+    "text": "Responsive",
+    "tokens": []
+  },
+  {
+    "hash": "14y6b98Ef94DODje2jekqw==",
+    "desc": "Docs page title — Responsive",
+    "text": "Responsive",
+    "tokens": []
+  },
+  {
+    "hash": "SHnZc3cDVvwCCHuKVrpLdQ==",
+    "desc": "Docs nav item",
+    "text": "Responsive",
+    "tokens": []
+  },
+  {
+    "hash": "Zj1YBWS/WWzq4F9ZzrlPxw==",
+    "desc": "Feature card title — responsive layout",
+    "text": "Responsive & containers",
+    "tokens": []
+  },
+  {
+    "hash": "v5+QnafX+MLPjYI5xp5+gg==",
+    "desc": "Docs page description — Reusable style fragments composed with use.",
+    "text": "Reusable style fragments composed with use.",
+    "tokens": []
+  },
+  {
+    "hash": "ctj2N04t0oT5EMQrV+Moag==",
+    "desc": "Docs search trigger label",
+    "text": "Search",
+    "tokens": []
+  },
+  {
+    "hash": "TYZNxz7HQL0JUOC3pJa+FQ==",
+    "desc": "Open docs search dialog",
+    "text": "Search documentation",
+    "tokens": []
+  },
+  {
+    "hash": "oVYyiefs16+rF3x+8Pxgcw==",
+    "desc": "Docs search dialog aria label",
+    "text": "Search documentation",
+    "tokens": []
+  },
+  {
+    "hash": "kUTt5uz0YeZviOL/p1EY0Q==",
+    "desc": "Docs search input placeholder",
+    "text": "Search documentation…",
+    "tokens": []
+  },
+  {
+    "hash": "8kGMU/gE66uX64x2vEH5ag==",
+    "desc": "Homepage playground section heading",
+    "text": "See what you ship",
+    "tokens": []
+  },
+  {
+    "hash": "SViHz9PzqixKJNdfuL36Ug==",
+    "desc": "Docs content — Selector lists expand per part. Whitespace after…",
+    "text": "Selector lists expand per part. Whitespace after & is significant: `& .child` styles descendants and `& > svg` direct children, while `&.active` stays a compound on the same element.",
+    "tokens": []
+  },
+  {
+    "hash": "gPfReRyoO9YJMvuQVbsAhg==",
+    "desc": "Playground recipe title",
+    "text": "Slots",
+    "tokens": []
+  },
+  {
+    "hash": "hx4X7QjukBjqbwbkfGwM0Q==",
+    "desc": "Playground starter template label",
+    "text": "Slots",
+    "tokens": []
+  },
+  {
+    "hash": "6h5vnkaqADtiKNcVH/ZiTw==",
+    "desc": "Docs page title — Slots",
+    "text": "Slots",
+    "tokens": []
+  },
+  {
+    "hash": "6h5vnkaqADtiKNcVH/ZiTw==",
+    "desc": "Docs page title — Slots",
+    "text": "Slots",
+    "tokens": []
+  },
+  {
+    "hash": "HpnOgF12t9/jfdYFsD75OQ==",
+    "desc": "Docs nav item",
+    "text": "Slots",
+    "tokens": []
+  },
+  {
+    "hash": "LEBOfM/VHjX/KRLebh3v1g==",
+    "desc": "Feature card title — slots and recipes",
+    "text": "Slots & recipes",
+    "tokens": []
+  },
+  {
+    "hash": "9Y86sECvM3b3/t1g9jg0Yw==",
+    "desc": "Docs page description — Slots, base styles, and typed component APIs.",
+    "text": "Slots, base styles, and typed component APIs.",
+    "tokens": []
+  },
+  {
+    "hash": "KjpNkAi6V5QWgSMQ8j03Xw==",
+    "desc": "Playground demo component label",
+    "text": "Stack",
+    "tokens": []
+  },
+  {
+    "hash": "v3yG42dmMYP4211L2Jp91g==",
+    "desc": "Docs page description — Standalone exported classes — no component cerem…",
+    "text": "Standalone exported classes — no component ceremony.",
+    "tokens": []
+  },
+  {
+    "hash": "n/UrtmTYsMAXAJjHcVrzOA==",
+    "desc": "Playground template group label",
+    "text": "Starters",
+    "tokens": []
+  },
+  {
+    "hash": "bYYqOrmZqbWYmYrTw6J0hg==",
+    "desc": "Docs page title — States",
+    "text": "States",
+    "tokens": []
+  },
+  {
+    "hash": "bYYqOrmZqbWYmYrTw6J0hg==",
+    "desc": "Docs page title — States",
+    "text": "States",
+    "tokens": []
+  },
+  {
+    "hash": "sMYxZlvKtktYeX965Um0Pg==",
+    "desc": "Docs nav item",
+    "text": "States",
+    "tokens": []
+  },
+  {
+    "hash": "h/uNCAZPsfUByzb5xNIgWQ==",
+    "desc": "Docs page title — Storybook",
+    "text": "Storybook",
+    "tokens": []
+  },
+  {
+    "hash": "TiL/wuxCK5OvXjg83r9uaw==",
+    "desc": "Docs nav item",
+    "text": "Storybook",
+    "tokens": []
+  },
+  {
+    "hash": "8hJheC1Y17HqJIfsDJNOVw==",
+    "desc": "Docs page title — Styles",
+    "text": "Styles",
+    "tokens": []
+  },
+  {
+    "hash": "8hJheC1Y17HqJIfsDJNOVw==",
+    "desc": "Docs page title — Styles",
+    "text": "Styles",
+    "tokens": []
+  },
+  {
+    "hash": "FQtXSA5WuE30nuscyZb0zA==",
+    "desc": "Docs nav item",
+    "text": "Styles",
+    "tokens": []
+  },
+  {
+    "hash": "T0z6bFGqJbrZrN62vPhc+Q==",
+    "desc": "Playground recipe title",
+    "text": "Styles (exported class)",
+    "tokens": []
+  },
+  {
+    "hash": "q2mnNnGerV86X72QVWORQg==",
+    "desc": "Feature card body — compile-time styles",
+    "text": "Styles compile at build time. No style recalculation in the browser.",
+    "tokens": []
+  },
+  {
+    "hash": "eCwXz5ZRPgDmXgAMGs/CJQ==",
+    "desc": "Docs content — Styles support declarations, use, and &-states —…",
+    "text": "Styles support declarations, use, and &-states — but no slots or variants. When a style grows variants, graduate it to a component. Styles are emitted after components in the CSS, so a composed style wins the cascade.",
+    "tokens": []
+  },
+  {
+    "hash": "Gyr/ek+pDKjvVslEqnwH2g==",
+    "desc": "Docs page description — Styles that apply when multiple variants match.",
+    "text": "Styles that apply when multiple variants match.",
+    "tokens": []
+  },
+  {
+    "hash": "CmYkH0UlQxOCauiofdeohA==",
+    "desc": "Docs content — Styling slots from anywhere",
+    "text": "Styling slots from anywhere",
+    "tokens": []
+  },
+  {
+    "hash": "5PG0uoneuMn8BCr5mIvpOQ==",
+    "desc": "Label before supported framework links",
+    "text": "Supported frameworks:",
+    "tokens": []
+  },
+  {
+    "hash": "x+LLZmLphLDp3JA8cs5zLA==",
+    "desc": "Theme toggle — switch to dark mode",
+    "text": "Switch to dark mode",
+    "tokens": []
+  },
+  {
+    "hash": "opMOtZHX5x6Q8S2Xt1yhJg==",
+    "desc": "Theme toggle — switch to light mode",
+    "text": "Switch to light mode",
+    "tokens": []
+  },
+  {
+    "hash": "dzWfxYthNPFZDviMiRrnsQ==",
+    "desc": "Playground demo component label",
+    "text": "Text",
+    "tokens": []
+  },
+  {
+    "hash": "UXaEHIonqGALoY7vQUgAxw==",
+    "desc": "Docs content — The Arvia compiler integration is the same for e…",
+    "text": "The Arvia compiler integration is the same for every framework — only the JSX plugin in your Vite config differs.",
+    "tokens": []
+  },
+  {
+    "hash": "PW52Fu8vkLx/3G3rw7mgmA==",
+    "desc": "Docs content — The component function returns one class per slo…",
+    "text": "The component function returns one class per slot, with variant and compound classes already merged in. The generated types know every slot name, so styles.icno is a compile error.",
+    "tokens": []
+  },
+  {
+    "hash": "cxxRFibJsueIgKkvXzzTYw==",
+    "desc": "Docs content — The first mode follows the OS color scheme via p…",
+    "text": "The first mode follows the OS color scheme via prefers-color-scheme. Set data-arvia-theme on <html> to override it.",
+    "tokens": []
+  },
+  {
+    "hash": "G2KIylUqX49CA99SQRPU8w==",
+    "desc": "Docs content — The generator reads variants, defaults, and slot…",
+    "text": "The generator reads variants, defaults, and slots to produce CSF stories. Run pnpm demo:storybook in the monorepo to see it in action.",
+    "tokens": []
+  },
+  {
+    "hash": "Xed/MRoryGN+LI1ClIP+qQ==",
+    "desc": "Playground preview placeholder text",
+    "text": "The quick brown fox jumps over the lazy dog",
+    "tokens": []
+  },
+  {
+    "hash": "+0VO5KzEf9XWo+ymC+sLiQ==",
+    "desc": "Docs content — The slots block declares a component's named par…",
+    "text": "The slots block declares a component's named parts. Declarations inside a slot are its base styles. Every component has a root slot — bare declarations at the top level or in base style it, so components without a slots block still export root.",
+    "tokens": []
+  },
+  {
+    "hash": "aGao45S+hLzH8hFX/CDLkA==",
+    "desc": "Hero headline second line",
+    "text": "their own language.",
+    "tokens": []
+  },
+  {
+    "hash": "xcWOOC9z4l3ateabS2DRmA==",
+    "desc": "Docs page title — Theme & tokens",
+    "text": "Theme & tokens",
+    "tokens": []
+  },
+  {
+    "hash": "nhNEGqAueLmPDfvDMeWW3A==",
+    "desc": "Docs nav item",
+    "text": "Theme & tokens",
+    "tokens": []
+  },
+  {
+    "hash": "+bDeay1DlV4gq+j5Ej2BYA==",
+    "desc": "Docs list item — Theme edits trigger full reload; style-only edit…",
+    "text": "Theme edits trigger full reload; style-only edits hot-swap CSS",
+    "tokens": []
+  },
+  {
+    "hash": "TqMMQzhaUk9Z9Itr/7V4bw==",
+    "desc": "Docs page title — Theme modes",
+    "text": "Theme modes",
+    "tokens": []
+  },
+  {
+    "hash": "TqMMQzhaUk9Z9Itr/7V4bw==",
+    "desc": "Docs page title — Theme modes",
+    "text": "Theme modes",
+    "tokens": []
+  },
+  {
+    "hash": "np8NiJCbahHwe+8rTgCMPg==",
+    "desc": "Docs nav item",
+    "text": "Theme modes",
+    "tokens": []
+  },
+  {
+    "hash": "eOzdEhg9icdXE+tvRV/3Rw==",
+    "desc": "Playground recipe title",
+    "text": "Theme tokens",
+    "tokens": []
+  },
+  {
+    "hash": "Uw+Hn+D8zivSK3BVn+K1VQ==",
+    "desc": "Docs page title — Theme tokens",
+    "text": "Theme tokens",
+    "tokens": []
+  },
+  {
+    "hash": "5lnPg7bZICKOt+uWUj/Sgg==",
+    "desc": "Feature card body — token system",
+    "text": "Themes, modes, breakpoints, and container tokens — all first-class.",
+    "tokens": []
+  },
+  {
+    "hash": "2iV1pVNhOQs0D8elCsTo7Q==",
+    "desc": "Docs page title — Token docs",
+    "text": "Token docs",
+    "tokens": []
+  },
+  {
+    "hash": "2iV1pVNhOQs0D8elCsTo7Q==",
+    "desc": "Docs page title — Token docs",
+    "text": "Token docs",
+    "tokens": []
+  },
+  {
+    "hash": "B+MDa5l6VpoTxbFbaNx1lw==",
+    "desc": "Docs nav item",
+    "text": "Token docs",
+    "tokens": []
+  },
+  {
+    "hash": "iT4v828hKYEZNeWNRC7nsg==",
+    "desc": "Docs content — Tokens compile to CSS custom properties (--arvia…",
+    "text": "Tokens compile to CSS custom properties (--arvia-color-primary, etc.) when modes are enabled, or inline values in single-theme projects.",
+    "tokens": []
+  },
+  {
+    "hash": "syFZyID841btA2pHHfrXBw==",
+    "desc": "Docs sidebar section title",
+    "text": "Tooling",
+    "tokens": []
+  },
+  {
+    "hash": "fX6PBUna39OIcFNPOIDicA==",
+    "desc": "Docs page description — Top-level declarations become root styles.",
+    "text": "Top-level declarations become root styles.",
+    "tokens": []
+  },
+  {
+    "hash": "BbulGb6lKl2r4N5HNuU+7w==",
+    "desc": "Secondary hero call to action",
+    "text": "Try playground",
+    "tokens": []
+  },
+  {
+    "hash": "EirulVjg8Ny7LN3nrr2cUg==",
+    "desc": "Docs search idle hint",
+    "text": "Type to search docs",
+    "tokens": []
+  },
+  {
+    "hash": "IytGUrSrtI1/vyoLed3Wkg==",
+    "desc": "Feature card title — typed variants",
+    "text": "Typed variants",
+    "tokens": []
+  },
+  {
+    "hash": "1erOTs+MLvYZmGiSZZHAjQ==",
+    "desc": "Playground output tab label",
+    "text": "types",
+    "tokens": []
+  },
+  {
+    "hash": "TjDi/EfYNdQugX95spaXgg==",
+    "desc": "Docs content — TypeScript",
+    "text": "TypeScript",
+    "tokens": []
+  },
+  {
+    "hash": "NmIqRXzytmCjiIUlIWgKeg==",
+    "desc": "Docs content — TypeScript variant props are provided by @arviah…",
+    "text": "TypeScript variant props are provided by @arviahq/typescript-plugin as virtual module declarations — no .d.ts files on disk required during development.",
+    "tokens": []
+  },
+  {
+    "hash": "hd8TyAgLYYq82H43nF4eqg==",
+    "desc": "Docs content — Unlike CSS-in-JS, styles are resolved at build t…",
+    "text": "Unlike CSS-in-JS, styles are resolved at build time. Unlike CSS Modules, you get first-class variants, slots, compound rules, and design tokens with full type safety.",
+    "tokens": []
+  },
+  {
+    "hash": "SRtx31+ssRJK/vRi0IeYNg==",
+    "desc": "Playground recipe title",
+    "text": "use recipe",
+    "tokens": []
+  },
+  {
+    "hash": "qkgMo/02m66T4XbaaSqeZA==",
+    "desc": "Docs content — Using slots in JSX",
+    "text": "Using slots in JSX",
+    "tokens": []
+  },
+  {
+    "hash": "CC+TQZ3dW7cnuYneOM1OUA==",
+    "desc": "Playground starter template label",
+    "text": "Variants",
+    "tokens": []
+  },
+  {
+    "hash": "S6sDqwsKqic+9N/rHnCVdw==",
+    "desc": "Docs page title — Variants",
+    "text": "Variants",
+    "tokens": []
+  },
+  {
+    "hash": "QdQpgUpeS8QkZ6B0vfGZGQ==",
+    "desc": "Playground recipe title",
+    "text": "Variants & defaults",
+    "tokens": []
+  },
+  {
+    "hash": "10eD/vGnbnhfLVzJ4BLhfg==",
+    "desc": "Docs page title — Variants & defaults",
+    "text": "Variants & defaults",
+    "tokens": []
+  },
+  {
+    "hash": "q151J9msbRdq6bf4ez3usQ==",
+    "desc": "Docs nav item",
+    "text": "Variants & defaults",
+    "tokens": []
+  },
+  {
+    "hash": "fy+nQrAuvDfEZmvRQPG7GA==",
+    "desc": "Docs page title — Vite plugin",
+    "text": "Vite plugin",
+    "tokens": []
+  },
+  {
+    "hash": "/V0gx8sF9vIwgY4xVePm6Q==",
+    "desc": "Docs nav item",
+    "text": "Vite plugin",
+    "tokens": []
+  },
+  {
+    "hash": "WrSWrVO8y70HXDeRfQ1ZSw==",
+    "desc": "Feature card body — developer tools",
+    "text": "Vite plugin, LSP, Storybook generator, and token documentation.",
+    "tokens": []
+  },
+  {
+    "hash": "GDA9emr1YpUgGUZZQD0baw==",
+    "desc": "Docs list item — VS Code extension starts the server automaticall…",
+    "text": "VS Code extension starts the server automatically",
+    "tokens": []
+  },
+  {
+    "hash": "NlNXMhBo0bEBzg1ofNCp3A==",
+    "desc": "Docs page description — What Arvia is and how it fits in your stack.",
+    "text": "What Arvia is and how it fits in your stack.",
+    "tokens": []
+  },
+  {
+    "hash": "e+8t+Y8N3CsgWREV9c7l1A==",
+    "desc": "Hero badge highlighting product traits",
+    "text": "zero runtime · fully typed",
+    "tokens": []
+  },
+  {
+    "hash": "5cuco9631eft8J5Lg1WP2Q==",
+    "desc": "Feature card title — zero runtime CSS",
+    "text": "Zero runtime CSS",
+    "tokens": []
+  }
+]
