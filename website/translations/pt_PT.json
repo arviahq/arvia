@@ -12984,6 +12984,54 @@
         }
       ],
       "types": []
+    },
+    "Oy0rAsDVNs2UUWPPJIkGVg==": {
+      "description": "Docs page title — FAQ &amp;amp; troubleshooting",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "FAQ & troubleshooting",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "QW/A3axUlDj0hqaMPUeq5g==": {
+      "description": "Docs page title — Recipes &amp;amp; use",
+      "status": "new",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Recipes & use",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "xYJQopAdzJ3NDSb3vhP8uQ==": {
+      "description": "Docs page title — Theme &amp;amp; tokens",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Tema e tokens",
+          "variations": {}
+        }
+      ],
+      "types": []
+    },
+    "s2RYwfIKwrqFQyDw51Xftg==": {
+      "description": "Docs page title — Variants &amp;amp; defaults",
+      "status": "translated",
+      "tokens": [],
+      "translations": [
+        {
+          "translation": "Variantes e predefinições",
+          "variations": {}
+        }
+      ],
+      "types": []
     }
   }
 }

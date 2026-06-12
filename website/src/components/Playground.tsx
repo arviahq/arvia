@@ -1,6 +1,15 @@
-import { lazy, Suspense, useEffect, useMemo, useRef, useState, type ElementType } from "react";
-import { fbt } from "fbtee";
+import {
+  lazy,
+  Suspense,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ElementType,
+  type ReactNode,
+} from "react";
 import { compile, LineIndex, type CompileResult, type ThemeEnv } from "@arviahq/compiler";
+import { headingText } from "../lib/render-prose";
 import { CodeBlock } from "./code-block.arv";
 import { Playground as PlaygroundStyles } from "./playground.arv";
 import { tokens } from "../theme.arv";
@@ -57,12 +66,12 @@ type EditorFile = "arv" | "tsx";
 
 export interface PlaygroundTemplate {
   id: string;
-  label: string;
+  label: ReactNode;
   source: string;
 }
 
 export interface PlaygroundTemplateGroup {
-  label: string;
+  label: ReactNode;
   items: PlaygroundTemplate[];
 }
 
@@ -91,22 +100,19 @@ export function Playground(
   const outputBlock = CodeBlock();
   const siteTheme = useSiteTheme();
   const height = props.height ?? 300;
-  const previewLabel = fbt("preview", "Playground output tab label");
-  const cssLabel = fbt("css", "Playground output tab label");
-  const typesLabel = fbt("types", "Playground output tab label");
   const outputTabs = [
-    { id: "preview" as const, label: previewLabel },
-    { id: "css" as const, label: cssLabel },
-    { id: "types" as const, label: typesLabel },
+    { id: "preview" as const, label: <fbt desc="Playground output tab label">{"preview"}</fbt> },
+    { id: "css" as const, label: <fbt desc="Playground output tab label">{"css"}</fbt> },
+    { id: "types" as const, label: <fbt desc="Playground output tab label">{"types"}</fbt> },
   ];
-  const clickMe = fbt("Click me", "Playground preview button label");
-  const sampleText = fbt(
-    "The quick brown fox jumps over the lazy dog",
-    "Playground preview placeholder text",
+  const clickMe = headingText(<fbt desc="Playground preview button label">{"Click me"}</fbt>);
+  const sampleText = headingText(
+    <fbt desc="Playground preview placeholder text">
+      {"The quick brown fox jumps over the lazy dog"}
+    </fbt>,
   );
-  const emptyPreviewHint = fbt(
-    "define a component or style to preview it",
-    "Playground empty preview hint",
+  const emptyPreviewHint = headingText(
+    <fbt desc="Playground empty preview hint">{"define a component or style to preview it"}</fbt>,
   );
 
   const firstTemplate = props.templates?.[0]?.items[0];
@@ -232,11 +238,13 @@ export function Playground(
             >
               {props.initialSource ? (
                 <option value="">
-                  {fbt("shared snippet", "Playground template select — snippet loaded from URL")}
+                  <fbt desc="Playground template select — snippet loaded from URL">
+                    {"shared snippet"}
+                  </fbt>
                 </option>
               ) : null}
               {props.templates.map((group) => (
-                <optgroup key={group.label} label={group.label}>
+                <optgroup key={headingText(group.label)} label={headingText(group.label)}>
                   {group.items.map((t) => (
                     <option key={t.id} value={t.id}>
                       {t.label}
@@ -247,7 +255,7 @@ export function Playground(
             </select>
           ) : (
             <span style={{ marginLeft: "auto", fontWeight: 500 }}>
-              {fbt("editable", "Playground editor header label")}
+              <fbt desc="Playground editor header label">{"editable"}</fbt>
             </span>
           )}
         </div>
@@ -287,7 +295,7 @@ export function Playground(
       <div className={outputBlock.root} style={{ margin: 0 }}>
         <div className={outputBlock.header}>
           {dotsOf(outputBlock)}
-          {fbt("output", "Playground output pane header")}
+          <fbt desc="Playground output pane header">{"output"}</fbt>
           <span className={pg.tabs}>
             {outputTabs.map(({ id, label }) => (
               <button
@@ -356,10 +364,7 @@ function usageSnippet(
   if (!component) {
     const style = meta.styles[0];
     if (!style) {
-      return fbt(
-        "// define a component or style to see its usage",
-        "Playground generated App.tsx placeholder comment",
-      );
+      return "// define a component or style to see its usage";
     }
     return `import { ${style.name} } from "./playground.arv";
 

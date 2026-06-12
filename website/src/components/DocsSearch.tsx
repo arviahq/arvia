@@ -1,4 +1,5 @@
 import {
+  Activity,
   createContext,
   useCallback,
   useContext,
@@ -9,8 +10,8 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from "react";
-import { fbt } from "fbtee";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
+import { headingText } from "../lib/render-prose";
 import { Button } from "./button.arv";
 import { DocsSearch as DocsSearchStyles } from "./docs-search.arv";
 import { searchDocs } from "../docs/search-index";
@@ -74,10 +75,12 @@ export function DocsSearchTrigger(props: { variant: "nav" | "sidebar" }) {
       type="button"
       className={`${btn.root} ${styles.trigger}`}
       onClick={openSearch}
-      aria-label={fbt("Search documentation", "Open docs search dialog")}
+      aria-label={headingText(<fbt desc="Open docs search dialog">{"Search documentation"}</fbt>)}
     >
       <SearchIcon />
-      <span>{fbt("Search", "Docs search trigger label")}</span>
+      <span>
+        <fbt desc="Docs search trigger label">{"Search"}</fbt>
+      </span>
       <kbd className={styles.kbd}>{shortcutLabel()}</kbd>
     </button>
   );
@@ -96,7 +99,7 @@ function DocsSearchDialog() {
   const goTo = useCallback(
     (slug: string) => {
       closeSearch();
-      navigate(`/docs/${slug}`);
+      navigate({ to: "/docs/$slug", params: { slug } });
     },
     [closeSearch, navigate],
   );
@@ -113,8 +116,6 @@ function DocsSearchDialog() {
   useEffect(() => {
     setActiveIndex(0);
   }, [query]);
-
-  if (!open) return null;
 
   function onInputKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Escape") {
@@ -149,7 +150,9 @@ function DocsSearchDialog() {
         className={styles.dialog}
         role="dialog"
         aria-modal="true"
-        aria-label={fbt("Search documentation", "Docs search dialog aria label")}
+        aria-label={headingText(
+          <fbt desc="Docs search dialog aria label">{"Search documentation"}</fbt>,
+        )}
       >
         <div className={styles.field}>
           <span className={styles.icon}>
@@ -161,7 +164,9 @@ function DocsSearchDialog() {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={onInputKeyDown}
-            placeholder={fbt("Search documentation…", "Docs search input placeholder")}
+            placeholder={headingText(
+              <fbt desc="Docs search input placeholder">{"Search documentation…"}</fbt>,
+            )}
             aria-autocomplete="list"
             aria-controls="docs-search-results"
           />
@@ -194,7 +199,9 @@ function DocsSearchDialog() {
             </p>
           )
         ) : (
-          <p className={styles.empty}>{fbt("Type to search docs", "Docs search idle hint")}</p>
+          <p className={styles.empty}>
+            <fbt desc="Docs search idle hint">{"Type to search docs"}</fbt>
+          </p>
         )}
       </div>
     </div>
@@ -228,7 +235,11 @@ export function DocsSearchProvider(props: { children: ReactNode }) {
   return (
     <DocsSearchContext.Provider value={value}>
       {props.children}
-      {!useAlgolia ? <DocsSearchDialog /> : null}
+      {!useAlgolia ? (
+        <Activity mode={open ? "visible" : "hidden"}>
+          <DocsSearchDialog />
+        </Activity>
+      ) : null}
     </DocsSearchContext.Provider>
   );
 }

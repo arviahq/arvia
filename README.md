@@ -114,17 +114,17 @@ See **Docs → Quick start** in the site for the full setup.
 
 ## Packages
 
-| Package                                                  | Install? | Purpose                                                    |
-| -------------------------------------------------------- | -------- | ---------------------------------------------------------- |
-| `@arviahq/vite-plugin-react`                             | **yes**  | React + Vite entrypoint (plugin, CLI, TypeScript)          |
-| `@arviahq/vite-plugin-preact`                            | **yes**  | Preact + Vite entrypoint (plugin, CLI, TypeScript)         |
-| `@arviahq/vite-plugin-vue`                               | **yes**  | Vue + Vite entrypoint (plugin, CLI, Vue-aware `arvia-tsc`) |
-| `@arviahq/vite-plugin`                                   | agnostic | Framework-agnostic Vite plugin + `arvia` CLI               |
-| `@arviahq/typescript-plugin`                             |          | tsserver plugin + `arvia-tsc` for typed `.arv` props       |
-| `@arviahq/compiler`                                      |          | Core compiler                                              |
-| `@arviahq/language-server`                               |          | LSP for `.arv` files                                       |
-| `@arviahq/storybook`                                     |          | Storybook story generator                                  |
-| `@arviahq/docs`                                          |          | Token catalog generator                                    |
+| Package                                                                                      | Install?    | Purpose                                                    |
+| -------------------------------------------------------------------------------------------- | ----------- | ---------------------------------------------------------- |
+| `@arviahq/vite-plugin-react`                                                                 | **yes**     | React + Vite entrypoint (plugin, CLI, TypeScript)          |
+| `@arviahq/vite-plugin-preact`                                                                | **yes**     | Preact + Vite entrypoint (plugin, CLI, TypeScript)         |
+| `@arviahq/vite-plugin-vue`                                                                   | **yes**     | Vue + Vite entrypoint (plugin, CLI, Vue-aware `arvia-tsc`) |
+| `@arviahq/vite-plugin`                                                                       | agnostic    | Framework-agnostic Vite plugin + `arvia` CLI               |
+| `@arviahq/typescript-plugin`                                                                 |             | tsserver plugin + `arvia-tsc` for typed `.arv` props       |
+| `@arviahq/compiler`                                                                          |             | Core compiler                                              |
+| `@arviahq/language-server`                                                                   |             | LSP for `.arv` files                                       |
+| `@arviahq/storybook`                                                                         |             | Storybook story generator                                  |
+| `@arviahq/docs`                                                                              |             | Token catalog generator                                    |
 | [Arvia VS Code extension](https://marketplace.visualstudio.com/items?itemName=arviahq.arvia) | marketplace | Syntax highlighting, diagnostics, completion, hover        |
 
 ## Development

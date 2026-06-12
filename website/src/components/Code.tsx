@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { fbt } from "fbtee";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import { Button } from "./button.arv";
 import { CodeBlock } from "./code-block.arv";
 import { highlightCode, langFromLabel } from "./highlight";
 import { isCompleteArvFile, playgroundHref } from "../playground/share";
+import { headingText } from "../lib/render-prose";
 import { useSiteTheme } from "../site-theme";
 
 export function Code(props: {
@@ -67,9 +67,11 @@ export function Code(props: {
               <Link
                 className={Button({ tone: "ghost", size: "sm" }).root}
                 to={playgroundHref(props.children)}
-                aria-label={fbt("Open in playground", "Code block playground link label")}
+                aria-label={headingText(
+                  <fbt desc="Code block playground link label">{"Open in playground"}</fbt>,
+                )}
               >
-                <fbt desc="Code block playground link">Playground</fbt>
+                <fbt desc="Code block playground link">{"Playground"}</fbt>
               </Link>
             ) : null}
             <button
@@ -77,16 +79,16 @@ export function Code(props: {
               className={Button({ tone: "ghost", size: "sm" }).root}
               aria-label={
                 copied
-                  ? fbt("Copied", "Copy button success state")
-                  : fbt("Copy code", "Copy button label")
+                  ? headingText(<fbt desc="Copy button success state">{"Copied"}</fbt>)
+                  : headingText(<fbt desc="Copy button label">{"Copy code"}</fbt>)
               }
               aria-live="polite"
               onClick={copyCode}
             >
               {copied ? (
-                <fbt desc="Copy button success label">Copied</fbt>
+                <fbt desc="Copy button success label">{"Copied"}</fbt>
               ) : (
-                <fbt desc="Copy button label">Copy</fbt>
+                <fbt desc="Copy button label">{"Copy"}</fbt>
               )}
             </button>
           </div>

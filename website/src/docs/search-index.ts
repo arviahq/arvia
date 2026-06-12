@@ -1,22 +1,6 @@
 import MiniSearch from "minisearch";
-import { getDocs, type DocBlock } from "./content";
-
-function blockText(block: DocBlock): string {
-  switch (block.type) {
-    case "p":
-    case "h2":
-    case "h3":
-      return block.text;
-    case "ul":
-      return block.items.join(" ");
-    case "code":
-      return [block.label, block.code].filter(Boolean).join(" ");
-    case "note":
-      return block.text;
-    case "table":
-      return [...block.headers, ...block.rows.flat()].join(" ");
-  }
-}
+import { headingText } from "../lib/render-prose";
+import { docPages } from "./registry";
 
 function buildIndex() {
   const index = new MiniSearch({
@@ -26,12 +10,12 @@ function buildIndex() {
   });
 
   index.addAll(
-    Object.values(getDocs()).map((doc) => ({
-      id: doc.slug,
-      slug: doc.slug,
-      title: doc.title,
-      description: doc.description,
-      body: doc.blocks.map(blockText).join(" "),
+    docPages.map((entry) => ({
+      id: entry.meta.slug,
+      slug: entry.meta.slug,
+      title: headingText(entry.meta.title),
+      description: headingText(entry.meta.description),
+      body: entry.meta.searchText,
     })),
   );
 
