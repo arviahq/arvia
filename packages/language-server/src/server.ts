@@ -17,6 +17,7 @@ import { DocumentStore, fileForUri } from "./documents.js";
 import { getFoldingRanges } from "./folding.js";
 import { getHover } from "./hover.js";
 import { getSelectionRanges } from "./selection-ranges.js";
+import { getSemanticTokens, semanticTokensLegend } from "./semantic-tokens.js";
 import { getWorkspaceSymbols } from "./workspace-symbols.js";
 import { getInlayHints } from "./inlay-hints.js";
 import { getReferences } from "./references.js";
@@ -94,6 +95,11 @@ connection.onInitialize((_params: InitializeParams): InitializeResult => {
       foldingRangeProvider: true,
       selectionRangeProvider: true,
       workspaceSymbolProvider: true,
+      semanticTokensProvider: {
+        legend: semanticTokensLegend,
+        full: true,
+        range: true,
+      },
     },
   };
 });
@@ -202,6 +208,21 @@ connection.onSelectionRanges((params) => {
 
 connection.onWorkspaceSymbol((params) => {
   return getWorkspaceSymbols(params.query, workspaces.values(), contentFor);
+});
+
+connection.languages.semanticTokens.on((params) => {
+  const doc = documents.get(params.textDocument.uri);
+  if (!doc) return { data: [] };
+  return getSemanticTokens(store.analysisFor(doc));
+});
+
+connection.languages.semanticTokens.onRange((params) => {
+  const doc = documents.get(params.textDocument.uri);
+  if (!doc) return { data: [] };
+  return getSemanticTokens(store.analysisFor(doc), {
+    start: doc.offsetAt(params.range.start),
+    end: doc.offsetAt(params.range.end),
+  });
 });
 
 connection.onCodeAction((params) => {
