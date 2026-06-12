@@ -221,6 +221,10 @@ export function SiteHero() {
           <RouterLinkBase to="/docs/installation" className={Link({ tone: "accent" }).root}>
             Preact
           </RouterLinkBase>
+          {" · "}
+          <RouterLinkBase to="/docs/installation" className={Link({ tone: "accent" }).root}>
+            Vue
+          </RouterLinkBase>
         </p>
       </section>
     </div>
