@@ -149,7 +149,9 @@ export function buildIR(ast: ArviaFile, env: ThemeEnv, options: BuildOptions): F
         name: top.name,
         nameSpan: top.nameSpan,
         hash,
-        className: options.minify ? hashClass(hash, "style") : `${top.name}_${hash}`,
+        className: options.minify
+          ? hashClass(`${rel}:${top.name}`, "style")
+          : `${top.name}_${hash}`,
         style,
       });
       continue;
@@ -260,6 +262,7 @@ export function buildIR(ast: ArviaFile, env: ThemeEnv, options: BuildOptions): F
       name: top.name,
       nameSpan: top.nameSpan,
       hash: hashName(rel, top.name),
+      rel,
       minify: options.minify ?? false,
       slotNames,
       base,

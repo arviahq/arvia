@@ -318,7 +318,7 @@ class Checker {
       const rel = this.options.filename.replace(/\\/g, "/");
       const hash = hashName(rel, item.name);
       this.env.keyframes[item.name] = this.options.minify
-        ? hashClass(hash, "kf")
+        ? hashClass(`${rel}:${item.name}`, "kf")
         : `${item.name}_${hash}`;
     }
   }
