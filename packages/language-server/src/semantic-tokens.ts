@@ -126,14 +126,10 @@ function collect(ast: ArviaFile): Tok[] {
               settings(item.entries);
               break;
             case "responsive":
-              for (const entry of item.entries) {
-                push(entry.breakpointSpan, VARIABLE, READONLY);
-                settings(entry.variants);
-              }
-              break;
             case "container":
               for (const entry of item.entries) {
-                push(entry.containerSpan, VARIABLE, READONLY);
+                if (entry.lowerSpan) push(entry.lowerSpan, VARIABLE, READONLY);
+                if (entry.upperSpan) push(entry.upperSpan, VARIABLE, READONLY);
                 settings(entry.variants);
               }
               break;
