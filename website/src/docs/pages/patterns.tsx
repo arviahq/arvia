@@ -6,70 +6,59 @@ import { DocCode } from "../../components/docs/DocCode";
 import { DocPlayground } from "../../components/docs/DocPlayground";
 import type { DocPageMeta } from "../registry";
 
-// Self-contained version of the adaptive FeatureCard so the playground compiles
-// on its own (theme + Surface recipe + the component).
-const ADAPTIVE_CARD_SOURCE = `theme {
+// A polished, interactive button for the live playground: it layers a recipe
+// (Interactive), styles icon + label slots, and slides the arrow on a
+// cross-slot hover — several patterns from this page in one component that
+// renders beautifully on its own.
+const PATTERN_DEMO_SOURCE = `theme {
   color {
-    surface = #ffffff;
-    surfaceRaised = #f4f4f5;
-    border = #e5e7eb;
     accent = #635bff;
-    muted = #6b7280;
+    accentHover = #5249e6;
+    text = #1a1a2e;
   }
-  space { 2 = 8px; 4 = 16px; }
-  radius { lg = 12px; }
-  font { sm = 13px; lg = 18px; }
-  container { wide = 480px; }
+  space { 2 = 8px; 3 = 12px; 5 = 24px; }
+  radius { md = 10px; }
+  font { md = 15px; }
 }
 
-recipe Surface {
-  background: color.surface;
-  border: 1px solid color.border;
-  border-radius: radius.lg;
+recipe Interactive {
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  transition: background 150ms ease, transform 80ms ease, box-shadow 150ms ease;
+
+  &:focus-visible {
+    outline: 2px solid color.text;
+    outline-offset: 2px;
+  }
+  &:active { transform: translateY(1px); }
 }
 
-component FeatureCard {
-  slots { root {} media {} body {} title {} meta {} }
+component Button {
+  slots { root {} icon {} label {} }
 
   base {
-    use Surface;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    use Interactive;
+    display: inline-flex;
+    align-items: center;
+    gap: space.2;
+    padding: space.3 space.5;
+    border: none;
+    border-radius: radius.md;
+    background: color.accent;
+    color: white;
+    font-size: font.md;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(99, 91, 255, 0.35);
 
-    media { aspect-ratio: 16 / 9; background: color.surfaceRaised; }
-    body { display: flex; flex-direction: column; gap: space.2; padding: space.4; }
-    title { font-size: font.lg; font-weight: 600; }
-    meta { color: color.muted; font-size: font.sm; }
-  }
+    icon { transition: transform 150ms ease; }
+    label { white-space: nowrap; }
 
-  variants {
-    emphasis {
-      normal {}
-      featured {
-        border-color: color.accent;
-        title { color: color.accent; }
-      }
+    &:hover {
+      background: color.accentHover;
+      box-shadow: 0 4px 14px rgba(99, 91, 255, 0.45);
+      icon { transform: translateX(4px); }
     }
-    layout {
-      stacked {}
-      split {
-        flex-direction: row;
-        media { aspect-ratio: auto; width: 240px; }
-      }
-    }
-  }
-
-  defaults { emphasis: normal; layout: stacked; }
-
-  container {
-    wide { layout: split; }
-  }
-
-  compound {
-    emphasis: featured;
-    layout: split;
-    media { width: 320px; }
   }
 }`;
 
@@ -197,6 +186,14 @@ recipe Surface {
           }
         </fbt>
       </DocCallout>
+      <DocP>
+        <fbt desc="Docs content — patterns: cross-slot playground lead">
+          {
+            "The same cross-slot trick, live — this button layers the `Interactive` recipe and slides its `icon` slot when the root is hovered. Hover it, and tweak the source:"
+          }
+        </fbt>
+      </DocP>
+      <DocPlayground source={PATTERN_DEMO_SOURCE} height={280} />
       <DocH2>
         <fbt desc="Docs content — heading: pattern data state">
           {"Data-attribute state machines"}
@@ -315,12 +312,6 @@ recipe Surface {
           }
         </fbt>
       </DocP>
-      <DocP>
-        <fbt desc="Docs content — patterns: adaptive card playground lead">
-          {"Edit the card below — flip the `defaults`, add a slot, or change the `compound` rule:"}
-        </fbt>
-      </DocP>
-      <DocPlayground source={ADAPTIVE_CARD_SOURCE} height={300} />
       <DocH2>
         <fbt desc="Docs content — heading: pattern page level">{"Page-level composition"}</fbt>
       </DocH2>
