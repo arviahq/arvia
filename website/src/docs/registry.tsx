@@ -23,6 +23,8 @@ export type DocPageEntry = {
   Page: ComponentType;
 };
 
+import { ApiCompilerPage, api_compilerMeta } from "./pages/api-compiler";
+import { ApiRuntimePage, api_runtimeMeta } from "./pages/api-runtime";
 import { CliPage, cliMeta } from "./pages/cli";
 import { CompilationPage, compilationMeta } from "./pages/compilation";
 import { ComponentsPage, componentsMeta } from "./pages/components";
@@ -77,6 +79,8 @@ const SECTION_LABELS: Record<DocNavSection, ReactNode> = {
 };
 
 export const docPages: DocPageEntry[] = [
+  { meta: api_compilerMeta, Page: ApiCompilerPage },
+  { meta: api_runtimeMeta, Page: ApiRuntimePage },
   { meta: cliMeta, Page: CliPage },
   { meta: compilationMeta, Page: CompilationPage },
   { meta: componentsMeta, Page: ComponentsPage },
