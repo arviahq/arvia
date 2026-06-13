@@ -12,6 +12,20 @@ import { buildCssSourceMap, type CssMapping, type CssSourceMap } from "./sourcem
 
 export type { CssSourceMap } from "./sourcemap.js";
 
+// Half-open [lower, upper) ranges. The `>=`-only form keeps emitting `min-width`
+// (byte-identical to pre-range output); bounded forms use modern range syntax,
+// which needs no exclusive-upper epsilon.
+const mediaQuery = (lower: string | null, upper: string | null): string => {
+  if (lower && !upper) return `@media (min-width: ${lower})`;
+  if (!lower && upper) return `@media (width < ${upper})`;
+  return `@media (${lower} <= width < ${upper})`;
+};
+const containerQuery = (lower: string | null, upper: string | null): string => {
+  if (lower && !upper) return `@container (min-width: ${lower})`;
+  if (!lower && upper) return `@container (inline-size < ${upper})`;
+  return `@container (${lower} <= inline-size < ${upper})`;
+};
+
 /** Emits static, minification-ready CSS. */
 export function emitCss(ir: FileIR): string {
   return emitCssWithMap(ir).css;
@@ -64,8 +78,12 @@ export function emitCssWithMap(
   };
 
   const emitConditionalRules = (
-    entries: { key: string; variants: Record<string, string> }[],
-    sizes: Record<string, string>,
+    entries: {
+      key: string;
+      lower: string | null;
+      upper: string | null;
+      variants: Record<string, string>;
+    }[],
     classFn: (
       c: FileIR["components"][number],
       variant: string,
@@ -73,14 +91,23 @@ export function emitCssWithMap(
       key: string,
       slot: string,
     ) => string,
-    wrap: (size: string, rules: string[]) => string,
+    wrap: (lower: string | null, upper: string | null, rules: string[]) => string,
     component: FileIR["components"][number],
   ) => {
-    const grouped = new Map<string, string[]>();
+    const grouped = new Map<
+      string,
+      { lower: string | null; upper: string | null; rules: string[] }
+    >();
     for (const entry of entries) {
-      const size = sizes[entry.key];
-      if (!size) continue;
-      const rules: string[] = grouped.get(entry.key) ?? [];
+      // A fully-unresolved head (unknown bare breakpoint) emits nothing — the
+      // checker has already reported it.
+      if (!entry.lower && !entry.upper) continue;
+      const group = grouped.get(entry.key) ?? {
+        lower: entry.lower,
+        upper: entry.upper,
+        rules: [],
+      };
+      const rules = group.rules;
       for (const [variantName, valueName] of Object.entries(entry.variants)) {
         const variant = component.variants.find((v) => v.name === variantName);
         const value = variant?.values.find((v) => v.name === valueName);
@@ -112,11 +139,10 @@ export function emitCssWithMap(
           rules.push(...chunk);
         }
       }
-      grouped.set(entry.key, rules);
+      grouped.set(entry.key, group);
     }
-    for (const [key, rules] of grouped) {
-      const size = sizes[key];
-      if (rules.length > 0 && size) out.push(wrap(size, rules));
+    for (const { lower, upper, rules } of grouped.values()) {
+      if (rules.length > 0) out.push(wrap(lower, upper, rules));
     }
   };
 
@@ -192,18 +218,26 @@ export function emitCssWithMap(
     }
 
     emitConditionalRules(
-      c.responsive.map((r) => ({ key: r.breakpoint, variants: r.variants })),
-      ir.breakpoints,
+      c.responsive.map((r) => ({
+        key: r.breakpoint,
+        lower: r.lower,
+        upper: r.upper,
+        variants: r.variants,
+      })),
       responsiveVariantClass,
-      (size, rules) => `@media (min-width: ${size}) {\n${rules.join("\n\n")}\n}`,
+      (lower, upper, rules) => `${mediaQuery(lower, upper)} {\n${rules.join("\n\n")}\n}`,
       c,
     );
 
     emitConditionalRules(
-      c.containers.map((r) => ({ key: r.container, variants: r.variants })),
-      ir.containerSizes,
+      c.containers.map((r) => ({
+        key: r.container,
+        lower: r.lower,
+        upper: r.upper,
+        variants: r.variants,
+      })),
       containerVariantClass,
-      (size, rules) => `@container (min-width: ${size}) {\n${rules.join("\n\n")}\n}`,
+      (lower, upper, rules) => `${containerQuery(lower, upper)} {\n${rules.join("\n\n")}\n}`,
       c,
     );
 

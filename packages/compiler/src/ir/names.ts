@@ -30,6 +30,26 @@ export function compoundClass(c: ComponentIR, match: [string, string][], slot: s
   return `${c.name}_${path}_${slot}_${c.hash}`;
 }
 
+/** Canonical key for a range head, used as the IR/DTS/runtime string key.
+ *  `md`/`md..` → `"md"` (backward compatible); `..lg` → `"..lg"`; `sm..lg` →
+ *  `"sm..lg"`. The parser guarantees at least one endpoint. */
+export function rangeKey(lower: string | null, upper: string | null): string {
+  if (lower && upper) return `${lower}..${upper}`;
+  if (upper) return `..${upper}`;
+  return lower ?? "";
+}
+
+/** CSS-class-safe segment for a canonical range key. Bare `md` stays `md`
+ *  (backward compatible); `..lg` → `to_lg`; `sm..lg` → `sm_to_lg`. The minified
+ *  path hashes the canonical key directly, so `..` need only be sanitized here. */
+function rangeSegment(key: string): string {
+  const idx = key.indexOf("..");
+  if (idx === -1) return key;
+  const lower = key.slice(0, idx);
+  const upper = key.slice(idx + 2);
+  return lower ? `${lower}_to_${upper}` : `to_${upper}`;
+}
+
 export function responsiveVariantClass(
   c: ComponentIR,
   variant: string,
@@ -38,7 +58,7 @@ export function responsiveVariantClass(
   slot: string,
 ): string {
   if (c.minify) return hashClass(seed(c), `${variant}:${value}:bp:${breakpoint}:${slot}`);
-  return `${c.name}_${variant}_${value}_bp_${breakpoint}_${slot}_${c.hash}`;
+  return `${c.name}_${variant}_${value}_bp_${rangeSegment(breakpoint)}_${slot}_${c.hash}`;
 }
 
 export function containerVariantClass(
@@ -49,5 +69,5 @@ export function containerVariantClass(
   slot: string,
 ): string {
   if (c.minify) return hashClass(seed(c), `${variant}:${value}:cq:${container}:${slot}`);
-  return `${c.name}_${variant}_${value}_cq_${container}_${slot}_${c.hash}`;
+  return `${c.name}_${variant}_${value}_cq_${rangeSegment(container)}_${slot}_${c.hash}`;
 }

@@ -105,12 +105,20 @@ export interface CompoundIR {
 }
 
 export interface ResponsiveIR {
+  /** Canonical range key — also the DTS/runtime prop key (e.g. `md`, `..lg`,
+   *  `sm..lg`). */
   breakpoint: string;
+  /** Resolved lower-bound size (e.g. `"768px"`), or null for an open lower end. */
+  lower: string | null;
+  /** Resolved upper-bound size, or null for an open upper end (`>=` form). */
+  upper: string | null;
   variants: Record<string, string>;
 }
 
 export interface ContainerIR {
   container: string;
+  lower: string | null;
+  upper: string | null;
   variants: Record<string, string>;
 }
 

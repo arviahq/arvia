@@ -51,6 +51,13 @@ export function ContainerQueriesPage() {
           }
         </fbt>
       </DocCallout>
+      <DocP>
+        <fbt desc="Docs content — container: ranges">
+          {
+            "The `..` range operator works here too, measured against the container's `inline-size`: `..wide` caps a change below a size and `narrow..wide` scopes it to a half-open band — same syntax as [responsive](/docs/responsive)."
+          }
+        </fbt>
+      </DocP>
       <DocH2>
         <fbt desc="Docs content — heading: related">{"Related"}</fbt>
       </DocH2>

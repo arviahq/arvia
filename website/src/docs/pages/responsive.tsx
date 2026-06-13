@@ -15,7 +15,7 @@ export const responsiveMeta: DocPageMeta = {
   ),
   nav: { section: "language", order: 11 },
   searchText:
-    'First define breakpoint tokens in the theme: breakpoint { md = 768px; }. Then a responsive block switches a variant value at a breakpoint. component Button { variants { size { sm {} lg {} } } defaults { size: sm; } responsive { md { size: lg; } } } The button is sm by default and becomes lg once the viewport passes the md breakpoint. You can also switch from the call site with the object form: Button({ size: { initial: "sm", md: "lg" } }). Related: Variants, Container queries.',
+    'First define breakpoint tokens in the theme: breakpoint { md = 768px; }. Then a responsive block switches a variant value at a breakpoint. component Button { variants { size { sm {} lg {} } } defaults { size: sm; } responsive { md { size: lg; } } } The button is sm by default and becomes lg once the viewport passes the md breakpoint. You can also switch from the call site with the object form: Button({ size: { initial: "sm", md: "lg" } }). Use the .. range operator to cap or band a change: ..lg means below lg (max-width), md..xl is a half-open band md <= width < xl. Range bands are first-class prop keys too. Related: Variants, Container queries.',
 };
 
 export function ResponsivePage() {
@@ -55,6 +55,31 @@ export function ResponsivePage() {
           }
         </fbt>
       </DocCallout>
+      <DocH2>
+        <fbt desc="Docs content — heading: ranges">{"Ranges and caps"}</fbt>
+      </DocH2>
+      <DocP>
+        <fbt desc="Docs content — responsive: ranges">
+          {
+            "A bare breakpoint means *from that width up*. Use the `..` range operator to cap a change or scope it to a band. Ranges are half-open `[lower, upper)`, so adjacent bands never overlap:"
+          }
+        </fbt>
+      </DocP>
+      <DocCode
+        label={"button.arv"}
+        code={`responsive {
+  md        { size: lg; }   // >= md          @media (min-width: 768px)
+  ..lg      { size: sm; }   // < lg           @media (width < 1024px)
+  md..xl    { size: lg; }   // md <= w < xl   @media (768px <= width < 1280px)
+}`}
+      />
+      <DocP>
+        <fbt desc="Docs content — responsive: ranges prop">
+          {
+            'Range bands are first-class prop keys too: `Button({ size: { initial: "sm", "md..xl": "lg" } })`.'
+          }
+        </fbt>
+      </DocP>
       <DocH2>
         <fbt desc="Docs content — heading: related">{"Related"}</fbt>
       </DocH2>

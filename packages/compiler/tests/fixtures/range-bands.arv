@@ -1,0 +1,45 @@
+theme {
+  breakpoint {
+    sm = 480px;
+    md = 768px;
+    lg = 1024px;
+  }
+  container {
+    narrow = 320px;
+    wide = 560px;
+  }
+}
+
+component Panel {
+  base {
+    display: block;
+  }
+
+  variants {
+    size {
+      sm { padding: 4px; }
+      md { padding: 8px; }
+      lg { padding: 16px; }
+    }
+    layout {
+      stacked { flex-direction: column; }
+      row { flex-direction: row; }
+    }
+  }
+
+  defaults {
+    size: sm;
+    layout: stacked;
+  }
+
+  responsive {
+    md.. { size: md; }
+    ..lg { size: sm; }
+    sm..lg { size: md; }
+  }
+
+  container {
+    wide { layout: row; }
+    narrow..wide { layout: row; }
+  }
+}

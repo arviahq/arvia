@@ -26,6 +26,9 @@ component RecipeContainerCard {
   }
 
   container {
-    wide { layout: row; }
+    // `..` ranges work here too, measured against the container's inline-size
+    ..narrow { layout: stacked; }   // inline-size < narrow
+    narrow..wide { layout: row; }   // narrow <= inline-size < wide
+    wide { layout: row; }           // wide and up
   }
 }
