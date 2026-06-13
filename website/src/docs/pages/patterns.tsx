@@ -3,7 +3,75 @@ import { DocH2 } from "../../components/docs/DocH2";
 import { DocP } from "../../components/docs/DocP";
 import { DocCallout } from "../../components/docs/DocCallout";
 import { DocCode } from "../../components/docs/DocCode";
+import { DocPlayground } from "../../components/docs/DocPlayground";
 import type { DocPageMeta } from "../registry";
+
+// Self-contained version of the adaptive FeatureCard so the playground compiles
+// on its own (theme + Surface recipe + the component).
+const ADAPTIVE_CARD_SOURCE = `theme {
+  color {
+    surface = #ffffff;
+    surfaceRaised = #f4f4f5;
+    border = #e5e7eb;
+    accent = #635bff;
+    muted = #6b7280;
+  }
+  space { 2 = 8px; 4 = 16px; }
+  radius { lg = 12px; }
+  font { sm = 13px; lg = 18px; }
+  container { wide = 480px; }
+}
+
+recipe Surface {
+  background: color.surface;
+  border: 1px solid color.border;
+  border-radius: radius.lg;
+}
+
+component FeatureCard {
+  slots { root {} media {} body {} title {} meta {} }
+
+  base {
+    use Surface;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    media { aspect-ratio: 16 / 9; background: color.surfaceRaised; }
+    body { display: flex; flex-direction: column; gap: space.2; padding: space.4; }
+    title { font-size: font.lg; font-weight: 600; }
+    meta { color: color.muted; font-size: font.sm; }
+  }
+
+  variants {
+    emphasis {
+      normal {}
+      featured {
+        border-color: color.accent;
+        title { color: color.accent; }
+      }
+    }
+    layout {
+      stacked {}
+      split {
+        flex-direction: row;
+        media { aspect-ratio: auto; width: 240px; }
+      }
+    }
+  }
+
+  defaults { emphasis: normal; layout: stacked; }
+
+  container {
+    wide { layout: split; }
+  }
+
+  compound {
+    emphasis: featured;
+    layout: split;
+    media { width: 320px; }
+  }
+}`;
 
 export const patternsMeta: DocPageMeta = {
   slug: "patterns",
@@ -247,6 +315,12 @@ recipe Surface {
           }
         </fbt>
       </DocP>
+      <DocP>
+        <fbt desc="Docs content — patterns: adaptive card playground lead">
+          {"Edit the card below — flip the `defaults`, add a slot, or change the `compound` rule:"}
+        </fbt>
+      </DocP>
+      <DocPlayground source={ADAPTIVE_CARD_SOURCE} height={300} />
       <DocH2>
         <fbt desc="Docs content — heading: pattern page level">{"Page-level composition"}</fbt>
       </DocH2>
