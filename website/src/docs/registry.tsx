@@ -63,6 +63,7 @@ import { TutorialSlotsPage, tutorial_slotsMeta } from "./pages/tutorial-slots";
 import { TutorialStatesPage, tutorial_statesMeta } from "./pages/tutorial-states";
 import { TutorialThemePage, tutorial_themeMeta } from "./pages/tutorial-theme";
 import { TutorialVariantsPage, tutorial_variantsMeta } from "./pages/tutorial-variants";
+import { TypecheckPage, typecheckMeta } from "./pages/typecheck";
 import { VariantsPage, variantsMeta } from "./pages/variants";
 import { VitePluginPage, vite_pluginMeta } from "./pages/vite-plugin";
 import { VuePage, vueMeta } from "./pages/vue";
@@ -119,6 +120,7 @@ export const docPages: DocPageEntry[] = [
   { meta: tutorial_statesMeta, Page: TutorialStatesPage },
   { meta: tutorial_themeMeta, Page: TutorialThemePage },
   { meta: tutorial_variantsMeta, Page: TutorialVariantsPage },
+  { meta: typecheckMeta, Page: TypecheckPage },
   { meta: variantsMeta, Page: VariantsPage },
   { meta: vite_pluginMeta, Page: VitePluginPage },
   { meta: vueMeta, Page: VuePage },
