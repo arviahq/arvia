@@ -697,9 +697,76 @@ class Parser {
     return { kind: "responsive", entries, span: { ...start, end: close.span.end } };
   }
 
+  /** Parses a range head: `IDENT`, `IDENT ..`, `IDENT .. IDENT`, or `.. IDENT`.
+   *  A bare `..` (no endpoint) is rejected. `noun` names the expected ident
+   *  (e.g. "breakpoint name") for error messages. */
+  private parseRangeHead(noun: string): {
+    lower: string | null;
+    lowerSpan: Span | null;
+    upper: string | null;
+    upperSpan: Span | null;
+    span: Span;
+  } {
+    const startMark = this.lx.mark();
+    const first = this.lx.next();
+
+    if (first.kind === "ident") {
+      const dotMark = this.lx.mark();
+      const dots = this.lx.next();
+      if (dots.kind !== "dotdot") {
+        this.lx.reset(dotMark);
+        return {
+          lower: first.text,
+          lowerSpan: first.span,
+          upper: null,
+          upperSpan: null,
+          span: first.span,
+        };
+      }
+      const upMark = this.lx.mark();
+      const up = this.lx.next();
+      if (up.kind === "ident") {
+        return {
+          lower: first.text,
+          lowerSpan: first.span,
+          upper: up.text,
+          upperSpan: up.span,
+          span: { ...first.span, end: up.span.end },
+        };
+      }
+      this.lx.reset(upMark);
+      return {
+        lower: first.text,
+        lowerSpan: first.span,
+        upper: null,
+        upperSpan: null,
+        span: { ...first.span, end: dots.span.end },
+      };
+    }
+
+    if (first.kind === "dotdot") {
+      const upMark = this.lx.mark();
+      const up = this.lx.next();
+      if (up.kind === "ident") {
+        return {
+          lower: null,
+          lowerSpan: null,
+          upper: up.text,
+          upperSpan: up.span,
+          span: { ...first.span, end: up.span.end },
+        };
+      }
+      this.lx.reset(upMark);
+      this.fail(`expected ${noun} after '..' but found ${this.describe(up)}`, up.span);
+    }
+
+    this.lx.reset(startMark);
+    this.fail(`expected ${noun} but found ${this.describe(first)}`, first.span);
+  }
+
   private parseResponsiveEntry(): ResponsiveEntry {
-    const breakpoint = this.expectIdent("a breakpoint name");
-    this.expect("lbrace", `'{' after breakpoint '${breakpoint.text}'`);
+    const head = this.parseRangeHead("a breakpoint name");
+    this.expect("lbrace", "'{' after breakpoint range");
     const variants: DefaultEntry[] = [];
     while (!this.atBlockEnd()) {
       const entry = this.recoverable(
@@ -710,10 +777,12 @@ class Parser {
     }
     const close = this.expect("rbrace", "'}'");
     return {
-      breakpoint: breakpoint.text,
-      breakpointSpan: breakpoint.span,
+      lower: head.lower,
+      lowerSpan: head.lowerSpan,
+      upper: head.upper,
+      upperSpan: head.upperSpan,
       variants,
-      span: { ...breakpoint.span, end: close.span.end },
+      span: { ...head.span, end: close.span.end },
     };
   }
 
@@ -731,8 +800,8 @@ class Parser {
   }
 
   private parseContainerEntry(): ContainerEntry {
-    const container = this.expectIdent("a container size name");
-    this.expect("lbrace", `'{' after container '${container.text}'`);
+    const head = this.parseRangeHead("a container size name");
+    this.expect("lbrace", "'{' after container range");
     const variants: DefaultEntry[] = [];
     while (!this.atBlockEnd()) {
       const entry = this.recoverable(
@@ -743,10 +812,12 @@ class Parser {
     }
     const close = this.expect("rbrace", "'}'");
     return {
-      container: container.text,
-      containerSpan: container.span,
+      lower: head.lower,
+      lowerSpan: head.lowerSpan,
+      upper: head.upper,
+      upperSpan: head.upperSpan,
       variants,
-      span: { ...container.span, end: close.span.end },
+      span: { ...head.span, end: close.span.end },
     };
   }
 

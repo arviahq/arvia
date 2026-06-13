@@ -21,6 +21,9 @@ component RecipeResponsiveButton {
   }
 
   responsive {
-    md { size: lg; }
+    // bare = from this width up; `..` makes a cap or a half-open band
+    ..md { size: sm; }      // below md (max-width)
+    md..xl { size: lg; }    // md <= width < xl
+    xl { size: lg; }        // xl and up
   }
 }

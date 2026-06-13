@@ -18,12 +18,39 @@ import type {
 import { isKnownProperty, knownPropertyNames, matchValueSyntax } from "./css-validate.js";
 import { emptyEnv, type RecipeIR, type ThemeEnv, type TokenModes } from "../ir/ir.js";
 import { hashClass, hashName } from "../ir/hash.js";
+import { rangeKey } from "../ir/names.js";
 import {
   substituteRefs,
   substituteRefsForMode,
   type LocalTokens,
   type RefWord,
 } from "../values.js";
+
+/** Parses a CSS length into a numeric value + unit, or null if not a simple
+ *  `<number><unit>` literal we can compare. */
+function parseSize(s: string): { value: number; unit: string } | null {
+  const m = /^(-?\d*\.?\d+)([a-z%]*)$/i.exec(s.trim());
+  if (!m) return null;
+  return { value: Number.parseFloat(m[1]!), unit: m[2]!.toLowerCase() };
+}
+
+/** True only when both endpoints resolve to same-unit literals and the lower
+ *  bound is not strictly smaller than the upper. Returns false for open ranges
+ *  or incomparable units (mixed units are trusted, not flagged). */
+function invertedRange(
+  lower: string | null,
+  upper: string | null,
+  sizes: Record<string, string>,
+): boolean {
+  if (!lower || !upper) return false;
+  const lo = sizes[lower];
+  const hi = sizes[upper];
+  if (!lo || !hi) return false;
+  const a = parseSize(lo);
+  const b = parseSize(hi);
+  if (!a || !b || a.unit !== b.unit) return false;
+  return a.value >= b.value;
+}
 
 export interface CheckOptions {
   filename: string;
@@ -138,6 +165,28 @@ class Checker {
   ) {
     this.diagnostics.push(
       makeDiagnostic(code, severity, message, this.options.filename, span, hint, fix),
+    );
+  }
+
+  /** Validates one endpoint of a responsive/container range against the declared
+   *  sizes. No-ops for an absent (open) endpoint. */
+  private checkRangeEndpoint(
+    name: string | null,
+    span: Span | null,
+    sizes: Record<string, string>,
+    code: string,
+    noun: string,
+    declHint: string,
+  ) {
+    if (!name || !span || sizes[name]) return;
+    const hint = didYouMean(name, Object.keys(sizes));
+    this.report(
+      code,
+      `unknown ${noun} '${name}'`,
+      span,
+      hint ? `did you mean '${hint}'?` : declHint,
+      "error",
+      hint ? replaceFix(span, hint) : undefined,
     );
   }
 
@@ -868,26 +917,33 @@ class Checker {
         case "responsive": {
           const seenBreakpoints = new Set<string>();
           for (const entry of item.entries) {
-            if (seenBreakpoints.has(entry.breakpoint)) {
-              this.report(
-                "ARV140",
-                `duplicate responsive breakpoint '${entry.breakpoint}'`,
-                entry.breakpointSpan,
-              );
+            const key = rangeKey(entry.lower, entry.upper);
+            if (seenBreakpoints.has(key)) {
+              this.report("ARV140", `duplicate responsive breakpoint '${key}'`, entry.span);
               continue;
             }
-            seenBreakpoints.add(entry.breakpoint);
-            if (!this.env.breakpoints[entry.breakpoint]) {
-              const hint = didYouMean(entry.breakpoint, Object.keys(this.env.breakpoints));
+            seenBreakpoints.add(key);
+            this.checkRangeEndpoint(
+              entry.lower,
+              entry.lowerSpan,
+              this.env.breakpoints,
+              "ARV141",
+              "breakpoint",
+              "declare breakpoints in theme { breakpoint { ... } }",
+            );
+            this.checkRangeEndpoint(
+              entry.upper,
+              entry.upperSpan,
+              this.env.breakpoints,
+              "ARV141",
+              "breakpoint",
+              "declare breakpoints in theme { breakpoint { ... } }",
+            );
+            if (invertedRange(entry.lower, entry.upper, this.env.breakpoints)) {
               this.report(
-                "ARV141",
-                `unknown breakpoint '${entry.breakpoint}'`,
-                entry.breakpointSpan,
-                hint
-                  ? `did you mean '${hint}'?`
-                  : "declare breakpoints in theme { breakpoint { ... } }",
-                "error",
-                hint ? replaceFix(entry.breakpointSpan, hint) : undefined,
+                "ARV145",
+                `inverted responsive range '${key}': lower bound is not smaller than upper bound`,
+                entry.span,
               );
             }
             const seenVariants = new Set<string>();
@@ -895,7 +951,7 @@ class Checker {
               if (seenVariants.has(variant.variant)) {
                 this.report(
                   "ARV142",
-                  `duplicate responsive override for variant '${variant.variant}' at breakpoint '${entry.breakpoint}'`,
+                  `duplicate responsive override for variant '${variant.variant}' at breakpoint '${key}'`,
                   variant.variantSpan,
                 );
                 continue;
@@ -930,24 +986,33 @@ class Checker {
         case "container": {
           const seenContainers = new Set<string>();
           for (const entry of item.entries) {
-            if (seenContainers.has(entry.container)) {
-              this.report(
-                "ARV160",
-                `duplicate container query '${entry.container}'`,
-                entry.containerSpan,
-              );
+            const key = rangeKey(entry.lower, entry.upper);
+            if (seenContainers.has(key)) {
+              this.report("ARV160", `duplicate container query '${key}'`, entry.span);
               continue;
             }
-            seenContainers.add(entry.container);
-            if (!this.env.containers[entry.container]) {
-              const hint = didYouMean(entry.container, Object.keys(this.env.containers));
+            seenContainers.add(key);
+            this.checkRangeEndpoint(
+              entry.lower,
+              entry.lowerSpan,
+              this.env.containers,
+              "ARV161",
+              "container size",
+              "declare sizes in theme { container { ... } }",
+            );
+            this.checkRangeEndpoint(
+              entry.upper,
+              entry.upperSpan,
+              this.env.containers,
+              "ARV161",
+              "container size",
+              "declare sizes in theme { container { ... } }",
+            );
+            if (invertedRange(entry.lower, entry.upper, this.env.containers)) {
               this.report(
-                "ARV161",
-                `unknown container size '${entry.container}'`,
-                entry.containerSpan,
-                hint ? `did you mean '${hint}'?` : "declare sizes in theme { container { ... } }",
-                "error",
-                hint ? replaceFix(entry.containerSpan, hint) : undefined,
+                "ARV165",
+                `inverted container range '${key}': lower bound is not smaller than upper bound`,
+                entry.span,
               );
             }
             const seenVariants = new Set<string>();
@@ -955,7 +1020,7 @@ class Checker {
               if (seenVariants.has(variant.variant)) {
                 this.report(
                   "ARV162",
-                  `duplicate container override for variant '${variant.variant}' at '${entry.container}'`,
+                  `duplicate container override for variant '${variant.variant}' at '${key}'`,
                   variant.variantSpan,
                 );
                 continue;

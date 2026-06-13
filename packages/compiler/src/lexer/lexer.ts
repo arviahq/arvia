@@ -130,6 +130,17 @@ export class Lexer {
       span.end = this.pos;
       return { kind: punct[c], text: c, span };
     }
+    // `..` range operator (responsive/container heads); a lone `.` is invalid.
+    if (c === ".") {
+      this.bump();
+      if (this.src[this.pos] === ".") {
+        this.bump();
+        span.end = this.pos;
+        return { kind: "dotdot", text: "..", span };
+      }
+      span.end = this.pos;
+      this.fail("ARV001", "unexpected character '.' (did you mean '..'?)", span);
+    }
     // `-` may start an ident for vendor prefixes (-webkit-…) and custom properties (--x).
     const dashIdent = c === "-" && /[A-Za-z_-]/.test(this.src[this.pos + 1] ?? "");
     if (isIdentStart(c) || isDigit(c) || dashIdent) {

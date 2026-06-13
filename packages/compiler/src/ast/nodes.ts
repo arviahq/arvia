@@ -179,9 +179,14 @@ export interface ResponsiveBlock {
   span: Span;
 }
 
+/** A `responsive`/`container` head is a half-open range over named breakpoints:
+ *  `md`/`md..` → [md, ∞); `..lg` → (∞, lg); `sm..lg` → [sm, lg). At least one
+ *  endpoint is always present (the parser rejects a bare `..`). */
 export interface ResponsiveEntry {
-  breakpoint: string;
-  breakpointSpan: Span;
+  lower: string | null;
+  lowerSpan: Span | null;
+  upper: string | null;
+  upperSpan: Span | null;
   variants: DefaultEntry[];
   span: Span;
 }
@@ -193,8 +198,10 @@ export interface ContainerBlock {
 }
 
 export interface ContainerEntry {
-  container: string;
-  containerSpan: Span;
+  lower: string | null;
+  lowerSpan: Span | null;
+  upper: string | null;
+  upperSpan: Span | null;
   variants: DefaultEntry[];
   span: Span;
 }

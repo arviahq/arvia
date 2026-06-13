@@ -15,6 +15,7 @@ import {
   type VariantIR,
 } from "./ir.js";
 import { hashClass, hashName, relativeName } from "./hash.js";
+import { rangeKey } from "./names.js";
 import { substituteRefs, substituteRefsForMode, type LocalTokens } from "../values.js";
 
 export interface BuildOptions {
@@ -222,7 +223,9 @@ export function buildIR(ast: ArviaFile, env: ThemeEnv, options: BuildOptions): F
         case "responsive":
           for (const entry of item.entries) {
             responsive.push({
-              breakpoint: entry.breakpoint,
+              breakpoint: rangeKey(entry.lower, entry.upper),
+              lower: entry.lower ? (env.breakpoints[entry.lower] ?? null) : null,
+              upper: entry.upper ? (env.breakpoints[entry.upper] ?? null) : null,
               variants: Object.fromEntries(entry.variants.map((v) => [v.variant, v.value])),
             });
           }
@@ -230,7 +233,9 @@ export function buildIR(ast: ArviaFile, env: ThemeEnv, options: BuildOptions): F
         case "container":
           for (const entry of item.entries) {
             containers.push({
-              container: entry.container,
+              container: rangeKey(entry.lower, entry.upper),
+              lower: entry.lower ? (env.containers[entry.lower] ?? null) : null,
+              upper: entry.upper ? (env.containers[entry.upper] ?? null) : null,
               variants: Object.fromEntries(entry.variants.map((v) => [v.variant, v.value])),
             });
           }

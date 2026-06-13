@@ -165,14 +165,20 @@ function componentTarget(component: ComponentDecl, offset: number): AstTarget | 
       }
       case "responsive": {
         for (const entry of item.entries) {
-          if (onSpan(offset, entry.breakpointSpan)) {
-            return {
-              kind: "conditional-key",
-              component,
-              key: entry.breakpoint,
-              span: entry.breakpointSpan,
-              context: "responsive",
-            };
+          // A range head has up to two endpoints; resolve whichever the cursor is on.
+          for (const end of [
+            { name: entry.lower, span: entry.lowerSpan },
+            { name: entry.upper, span: entry.upperSpan },
+          ]) {
+            if (end.name && end.span && onSpan(offset, end.span)) {
+              return {
+                kind: "conditional-key",
+                component,
+                key: end.name,
+                span: end.span,
+                context: "responsive",
+              };
+            }
           }
           const hit = settingsTarget(entry.variants, offset, component, "responsive");
           if (hit) return hit;
@@ -181,14 +187,19 @@ function componentTarget(component: ComponentDecl, offset: number): AstTarget | 
       }
       case "container": {
         for (const entry of item.entries) {
-          if (onSpan(offset, entry.containerSpan)) {
-            return {
-              kind: "conditional-key",
-              component,
-              key: entry.container,
-              span: entry.containerSpan,
-              context: "container",
-            };
+          for (const end of [
+            { name: entry.lower, span: entry.lowerSpan },
+            { name: entry.upper, span: entry.upperSpan },
+          ]) {
+            if (end.name && end.span && onSpan(offset, end.span)) {
+              return {
+                kind: "conditional-key",
+                component,
+                key: end.name,
+                span: end.span,
+                context: "container",
+              };
+            }
           }
           const hit = settingsTarget(entry.variants, offset, component, "container");
           if (hit) return hit;
