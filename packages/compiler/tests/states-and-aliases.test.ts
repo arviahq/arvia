@@ -156,9 +156,10 @@ describe("token aliases in theme values", () => {
          }
        }`,
     );
-    // The alias's CSS var must carry both mode values resolved from `base`.
-    expect(css).toContain("--arvia-color-text: #111;");
-    expect(css).toMatch(/data-arvia-theme="dark"[^}]*--arvia-color-text: #eee/s);
+    // The alias's CSS var must carry both mode values resolved from `base`,
+    // collapsed into a single light-dark() under the color-scheme path.
+    expect(css).toContain("--arvia-color-text: light-dark(#111, #eee);");
+    expect(css).toContain("--arvia-color-base: light-dark(#111, #eee);");
   });
 
   it("leaves non-theme dots and keyframes refs alone in theme values", () => {

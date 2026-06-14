@@ -15,7 +15,7 @@ export const theme_modesMeta: DocPageMeta = {
   ),
   nav: { section: "language", order: 1 },
   searchText:
-    'Declare modes at the top of the theme, then give any token a per-mode value with @mode. theme { modes: light | dark; color { text = #18181b; surface = #ffffff; @dark { text = #f4f4f5; surface = #18181b; } } } Tokens that change between modes compile to CSS variables (--arvia-color-text) that flip automatically: :root holds the light values and [data-arvia-theme="dark"] holds the dark ones, and the page follows the OS color scheme by default. Tokens without a @mode override stay inlined. Switch manually by setting data-arvia-theme="dark" on <html>. No JavaScript runs to restyle — it is plain CSS variables. Related: Theme, Token docs.',
+    "Declare modes at the top of the theme, then give any token a per-mode value with @mode. theme { modes: light | dark; color { text = #18181b; surface = #ffffff; @dark { text = #f4f4f5; surface = #18181b; } } } Color tokens that change between modes compile to a single light-dark() value on :root, driven by the color-scheme property — so the page follows the OS color scheme by default and native form controls and scrollbars follow the mode too. Setting data-arvia-theme on <html> flips color-scheme, which flips every light-dark() color. Tokens without a @mode override stay inlined; mode-varying values that are not colors (like box-shadow) keep per-mode [data-arvia-theme] override blocks. No JavaScript runs to restyle — it is plain CSS variables. Requires a Baseline 2024 browser (Chrome 123+, Safari 17.5+, Firefox 120+) for light-dark(). Related: Theme, Token docs.",
 };
 
 export function ThemeModesPage() {
@@ -47,20 +47,25 @@ export function ThemeModesPage() {
       <DocP>
         <fbt desc="Docs content — modes: generates">
           {
-            'Tokens that change between modes compile to CSS variables that flip automatically — `:root` holds the light values, `[data-arvia-theme="dark"]` the dark ones. Tokens without a `@mode` override stay inlined.'
+            "Color tokens that change between modes compile to a single `light-dark()` value on `:root`, driven by the `color-scheme` property. Tokens without a `@mode` override stay inlined; mode-varying values that aren't colors (like `box-shadow`) keep per-mode `[data-arvia-theme]` blocks."
           }
         </fbt>
       </DocP>
       <DocCode
         label={"generated CSS"}
         lang={"css"}
-        code={`:root { --arvia-color-text: #18181b; }
-[data-arvia-theme="dark"] { --arvia-color-text: #f4f4f5; }`}
+        code={`:root {
+  color-scheme: light dark;
+  --arvia-color-text: light-dark(#18181b, #f4f4f5);
+  --arvia-color-surface: light-dark(#ffffff, #18181b);
+}
+[data-arvia-theme="light"] { color-scheme: light; }
+[data-arvia-theme="dark"] { color-scheme: dark; }`}
       />
       <DocCallout tone="tip">
         <fbt desc="Docs note — modes: switching">
           {
-            'By default the page follows the OS color scheme. To switch manually, set `data-arvia-theme="dark"` on `<html>` — no JavaScript runs to restyle, it\'s just CSS variables.'
+            "By default the page follows the OS color scheme via `color-scheme: light dark`. To switch manually, set `data-arvia-theme` on `<html>` — it flips `color-scheme`, which flips every `light-dark()` color (and themes native form controls and scrollbars too). No JavaScript runs to restyle."
           }
         </fbt>
       </DocCallout>
