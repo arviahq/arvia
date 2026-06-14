@@ -98,8 +98,6 @@ export function arvia(options: ArviaOptions = {}): Plugin {
   let logger: Logger | undefined;
   let hintedRootDirs = false;
   let wroteGitignore = false;
-  /** Files outside `sourceRoot` we've already warned fall back to sibling mode. */
-  const warnedOutsideRoot = new Set<string>();
   let themePath: string | null = null;
   let explicitThemePath: string | null = null;
   let conventionalThemePath = "";
@@ -187,18 +185,11 @@ export function arvia(options: ArviaOptions = {}): Plugin {
       sourceRoot: dts.sourceRoot,
       centralDir: dts.centralDir,
     });
-    // Files outside the source root have no sensible mirror: fall back to a
-    // sibling so their types still resolve, and say so once.
-    if (mirror === null) {
-      if (!warnedOutsideRoot.has(id)) {
-        warnedOutsideRoot.add(id);
-        logger?.warn(
-          `[arvia] ${path.relative(root, id)} is outside the dts sourceRoot ` +
-            `(${path.relative(root, dts.sourceRoot)}); writing a sibling .d.ts instead.`,
-        );
-      }
-      return `${id}.d.ts`;
-    }
+    // Files outside the source root have no sensible mirror (typically a
+    // workspace/published lib whose `.arv` is consumed across a package
+    // boundary): fall back to a sibling so their types still resolve. We stay
+    // quiet — the dependency owns those declarations, not this build.
+    if (mirror === null) return `${id}.d.ts`;
     return mirror;
   };
 
@@ -254,7 +245,6 @@ export function arvia(options: ArviaOptions = {}): Plugin {
       componentOwners.clear();
       fileComponents.clear();
       warnedCollisions.clear();
-      warnedOutsideRoot.clear();
       wroteGitignore = false;
     },
 
