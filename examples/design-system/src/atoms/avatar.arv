@@ -28,9 +28,9 @@ component Avatar {
   }
 
   slots {
-    root {}
-    image {}
-    fallback {}
+    root;
+    image;
+    fallback;
   }
 
   variants {

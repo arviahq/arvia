@@ -18,9 +18,9 @@ component Stat {
   }
 
   slots {
-    root {}
-    value {}
-    label {}
+    root;
+    value;
+    label;
   }
 
   variants {

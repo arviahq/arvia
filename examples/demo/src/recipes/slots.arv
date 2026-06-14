@@ -1,4 +1,9 @@
 component RecipeSlotsButton {
+  slots {
+    icon { flex-shrink: 0; }
+    label { font-weight: 500; }
+  }
+
   base {
     display: inline-flex;
     align-items: center;
@@ -9,12 +14,5 @@ component RecipeSlotsButton {
     color: white;
     border: none;
     font: inherit;
-    icon { flex-shrink: 0; }
-  }
-
-  slots {
-    root {}
-    icon {}
-    label { font-weight: 500; }
   }
 }

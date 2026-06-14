@@ -51,9 +51,9 @@ component FormField {
   }
 
   slots {
-    root {}
-    label {}
-    input {}
-    hint {}
+    root;
+    label;
+    input;
+    hint;
   }
 }

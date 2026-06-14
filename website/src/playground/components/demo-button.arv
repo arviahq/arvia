@@ -28,9 +28,9 @@ component DemoButton {
   }
 
   slots {
-    root {}
-    icon {}
-    label {}
+    root;
+    icon;
+    label;
   }
 
   variants {

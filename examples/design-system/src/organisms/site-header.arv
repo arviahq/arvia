@@ -30,10 +30,10 @@ component SiteHeader {
   }
 
   slots {
-    root {}
-    brand {}
-    nav {}
-    actions {}
+    root;
+    brand;
+    nav;
+    actions;
   }
 
   variants {

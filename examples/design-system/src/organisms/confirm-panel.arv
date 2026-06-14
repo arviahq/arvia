@@ -31,9 +31,9 @@ component ConfirmPanel {
   }
 
   slots {
-    root {}
-    header {}
-    body {}
-    footer {}
+    root;
+    header;
+    body;
+    footer;
   }
 }

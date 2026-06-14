@@ -75,7 +75,7 @@ component Card { use Surface; }`;
   });
 
   it("summarizes components", () => {
-    const source = `component Button { slots { root {} icon {} } variants { tone { a {} b {} } } }`;
+    const source = `component Button { slots { root; icon; } variants { tone { a {} b {} } } }`;
     const analysis = analysisOf(source);
     const text = markdown(getHover(analysis, at(source, "Button"), ws));
     expect(text).toContain("component Button");

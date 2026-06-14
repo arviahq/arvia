@@ -33,9 +33,9 @@ component PageShell {
   }
 
   slots {
-    root {}
-    header {}
-    main {}
-    footer {}
+    root;
+    header;
+    main;
+    footer;
   }
 }

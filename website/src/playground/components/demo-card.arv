@@ -23,10 +23,10 @@ component DemoCard {
   }
 
   slots {
-    root {}
-    header {}
-    body {}
-    footer {}
+    root;
+    header;
+    body;
+    footer;
   }
 
   variants {

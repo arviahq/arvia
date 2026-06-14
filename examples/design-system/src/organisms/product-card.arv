@@ -49,13 +49,13 @@ component ProductCard {
   }
 
   slots {
-    root {}
-    media {}
-    content {}
-    title {}
-    price {}
-    meta {}
-    actions {}
+    root;
+    media;
+    content;
+    title;
+    price;
+    meta;
+    actions;
   }
 
   variants {

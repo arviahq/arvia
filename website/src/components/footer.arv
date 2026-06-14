@@ -87,18 +87,18 @@ component Footer {
   }
 
   slots {
-    root {}
-    inner {}
-    grid {}
-    brand {}
-    brandRow {}
-    tagline {}
-    col {}
-    colTitle {}
-    link {}
-    bottom {}
-    note {}
-    noteAccent {}
+    root;
+    inner;
+    grid;
+    brand;
+    brandRow;
+    tagline;
+    col;
+    colTitle;
+    link;
+    bottom;
+    note;
+    noteAccent;
   }
 
   variants {

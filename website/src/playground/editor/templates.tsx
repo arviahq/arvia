@@ -96,6 +96,11 @@ export function getEditorTemplates(): EditorTemplate[] {
       id: "slots",
       label: <fbt desc="Playground starter template label">{"Slots"}</fbt>,
       source: `component IconButton {
+  slots {
+    icon { flex-shrink: 0; }
+    label { font-weight: 500; }
+  }
+
   base {
     display: inline-flex;
     align-items: center;
@@ -106,13 +111,6 @@ export function getEditorTemplates(): EditorTemplate[] {
     color: white;
     border: none;
     font: inherit;
-    icon { flex-shrink: 0; }
-  }
-
-  slots {
-    root {}
-    icon {}
-    label { font-weight: 500; }
   }
 }
 `,

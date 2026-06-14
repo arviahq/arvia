@@ -9,7 +9,7 @@ component Nav {
   }
 
   slots {
-    root {}
+    root;
     inner {
       display: flex;
       align-items: center;

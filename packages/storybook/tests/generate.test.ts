@@ -47,7 +47,7 @@ describe("generateStorybook", () => {
     fs.writeFileSync(
       path.join(atoms, "button.arv"),
       `component Button {
-  slots { root {} icon {} label {} }
+  slots { root; icon; label; }
   variants { size { sm { padding: 4px; } lg { padding: 8px; } } }
   defaults { size: sm; }
 }`,

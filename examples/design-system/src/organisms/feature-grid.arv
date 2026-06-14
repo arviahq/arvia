@@ -30,11 +30,11 @@ component FeatureGrid {
   }
 
   slots {
-    root {}
-    item {}
-    icon {}
-    title {}
-    description {}
+    root;
+    item;
+    icon;
+    title;
+    description;
   }
 
   variants {

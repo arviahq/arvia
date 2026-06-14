@@ -63,7 +63,7 @@ describe("group hover (cross-slot states)", () => {
   it("targets the slot's base class from the root state", () => {
     const { css } = compileOk(
       `component Button {
-         slots { root {} icon {} }
+         slots { icon; }
          base {
            &:hover {
              opacity: 0.9;
@@ -82,7 +82,7 @@ describe("group hover (cross-slot states)", () => {
   it("works from variant bodies, targeting the base slot class", () => {
     const { css } = compileOk(
       `component Button {
-         slots { root {} icon {} }
+         slots { icon; }
          variants { tone { danger { &:hover { icon { color: red; } } } } }
        }`,
     );
@@ -93,7 +93,7 @@ describe("group hover (cross-slot states)", () => {
   it("expands selector lists across slot targets", () => {
     const { css } = compileOk(
       `component X {
-         slots { root {} icon {} }
+         slots { icon; }
          base { &:hover, &:focus { icon { color: red; } } }
        }`,
     );
@@ -103,7 +103,7 @@ describe("group hover (cross-slot states)", () => {
 
   it("ARV120 on unknown slot targets", () => {
     const result = compile(
-      "component X { slots { icon {} } base { &:hover { icno { color: red; } } } }",
+      "component X { slots { icon; } base { &:hover { icno { color: red; } } } }",
       { filename: "test.arv" },
     );
     expect(result.diagnostics[0]).toMatchObject({ code: "ARV120" });

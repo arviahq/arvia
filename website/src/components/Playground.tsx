@@ -22,7 +22,9 @@ export const DEFAULT_SOURCE = `theme {
 }
 
 component Button {
-  slots { root {} icon {} }
+  slots {
+    icon { flex-shrink: 0; transition: transform 150ms ease; }
+  }
 
   base {
     display: inline-flex;

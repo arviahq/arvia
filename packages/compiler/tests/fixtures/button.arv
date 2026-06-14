@@ -40,8 +40,8 @@ component Button {
   }
 
   slots {
-    root {}
-    icon {}
+    root;
+    icon;
     label {
       font-weight: 500;
     }

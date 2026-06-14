@@ -1,5 +1,7 @@
 component DocsSearch {
   slots {
+    trigger;
+
     overlay {
       position: fixed;
       inset: 0;
@@ -102,7 +104,6 @@ component DocsSearch {
       font-size: 11px;
       line-height: 1;
     }
-    trigger {}
   }
 
   variants {

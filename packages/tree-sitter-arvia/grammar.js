@@ -84,7 +84,11 @@ module.exports = grammar({
     base_block: ($) => seq("base", "{", repeat($._body_item), "}"),
 
     slots_block: ($) => seq("slots", "{", repeat($.slot_decl), "}"),
-    slot_decl: ($) => seq(field("name", $.identifier), "{", repeat($._style_item), "}"),
+    slot_decl: ($) =>
+      choice(
+        seq(field("name", $.identifier), ";"),
+        seq(field("name", $.identifier), "{", repeat1($._style_item), "}"),
+      ),
 
     variants_block: ($) => seq("variants", "{", repeat($.variant_decl), "}"),
     variant_decl: ($) => seq(field("name", $.identifier), "{", repeat($.variant_value), "}"),

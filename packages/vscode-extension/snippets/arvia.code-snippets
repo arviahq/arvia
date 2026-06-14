@@ -51,8 +51,8 @@
   },
   "Slots": {
     "prefix": "slots",
-    "body": ["slots {", "  ${1:icon} { $0 }", "}"],
-    "description": "Slot declarations",
+    "body": ["slots {", "  ${1:icon};", "  ${2:label} { $0 }", "}"],
+    "description": "Slot declarations with optional styles",
   },
   "Variants": {
     "prefix": "variants",

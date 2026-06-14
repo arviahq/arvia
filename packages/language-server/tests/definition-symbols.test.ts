@@ -82,7 +82,7 @@ describe("document symbols", () => {
 recipe Surface { background: white; }
 style truncate { overflow: hidden; }
 component Button {
-  slots { root {} icon {} }
+  slots { root; icon; }
   variants { tone { a {} b {} } }
 }`;
     const symbols = getDocumentSymbols(analysisOf(source));

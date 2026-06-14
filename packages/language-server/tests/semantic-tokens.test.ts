@@ -41,7 +41,7 @@ keyframes spin { from { opacity: 0; } }
 
 component Button {
   use Surface;
-  slots { icon {} }
+  slots { icon; }
   base {
     color: color.primary;
     animation: keyframes.spin 1s;

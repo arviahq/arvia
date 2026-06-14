@@ -102,7 +102,7 @@ describe("checker diagnostics", () => {
   });
 
   it("unused slots are deliberately not a compiler warning (TSX hooks)", () => {
-    expect(codes("component X { slots { ghost {} } }")).toEqual([]);
+    expect(codes("component X { slots { ghost; } }")).toEqual([]);
   });
 
   it("ARV171: unused component token", () => {
@@ -149,7 +149,7 @@ describe("checker diagnostics", () => {
   });
 
   it("ARV113: duplicate slot", () => {
-    expect(codes("component X { slots { icon {} icon {} } }")).toEqual(["ARV113"]);
+    expect(codes("component X { slots { icon; icon; } }")).toEqual(["ARV113"]);
   });
 
   it("ARV114: duplicate variant and value", () => {
@@ -167,7 +167,7 @@ describe("checker diagnostics", () => {
   });
 
   it("ARV120: unknown slot in sub-block", () => {
-    const d = firstDiag("component X { slots { icon {} } base { icno { color: red; } } }");
+    const d = firstDiag("component X { slots { icon; } base { icno { color: red; } } }");
     expect(d).toMatchObject({ code: "ARV120" });
     expect(d!.hint).toContain("icon");
   });

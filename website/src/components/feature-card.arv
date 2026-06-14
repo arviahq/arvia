@@ -23,7 +23,7 @@ component FeatureCard {
   }
 
   slots {
-    root {}
+    root;
     icon {
       display: inline-flex;
       align-items: center;

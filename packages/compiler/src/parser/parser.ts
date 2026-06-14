@@ -600,15 +600,39 @@ class Parser {
 
   private parseSlotDecl(): SlotDecl {
     const name = this.expectIdent("a slot name");
-    this.expect("lbrace", `'{' after slot '${name.text}'`);
-    const items = this.parseStyleItems("slot");
-    const close = this.expect("rbrace", "'}'");
-    return {
-      name: name.text,
-      nameSpan: name.span,
-      items,
-      span: { ...name.span, end: close.span.end },
-    };
+    const mark = this.lx.mark();
+    const after = this.lx.next();
+    if (after.kind === "semicolon") {
+      return {
+        name: name.text,
+        nameSpan: name.span,
+        items: [],
+        span: { ...name.span, end: after.span.end },
+      };
+    }
+    if (after.kind === "lbrace") {
+      const items = this.parseStyleItems("slot");
+      const close = this.expect("rbrace", "'}'");
+      if (items.length === 0) {
+        this.fail(
+          `empty slot block for '${name.text}'`,
+          { ...name.span, end: close.span.end },
+          `use '${name.text};' for name-only registration, or add styles inside the block`,
+        );
+      }
+      return {
+        name: name.text,
+        nameSpan: name.span,
+        items,
+        span: { ...name.span, end: close.span.end },
+      };
+    }
+    this.lx.reset(mark);
+    this.fail(
+      `expected ';' or '{' after slot '${name.text}'`,
+      after.span,
+      `use '${name.text};' for name-only registration`,
+    );
   }
 
   private parseVariants(start: Span): ComponentItem {

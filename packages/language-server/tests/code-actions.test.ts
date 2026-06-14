@@ -97,7 +97,7 @@ describe("lints: unused slot", () => {
     const source = `component X {
   slots {
     icon { color: red; }
-    ghost {}
+    ghost;
   }
 }`;
     const analysis = analysisOf(source);
@@ -118,17 +118,17 @@ describe("lints: unused slot", () => {
     expect(lintDiagnostics(styled)).toHaveLength(0);
 
     const referenced = analysisOf(`component X {
-  slots { icon {} }
+  slots { icon; }
   base { &:hover { icon { color: red; } } }
 }`);
     expect(lintDiagnostics(referenced)).toHaveLength(0);
 
-    const root = analysisOf("component X { slots { root {} } }");
+    const root = analysisOf("component X { slots { root; } }");
     expect(lintDiagnostics(root)).toHaveLength(0);
   });
 
   it("removes the whole slots block when removing the only slot", () => {
-    const source = "component X {\n  slots { ghost {} }\n  base { color: red; }\n}";
+    const source = "component X {\n  slots { ghost; }\n  base { color: red; }\n}";
     const analysis = analysisOf(source);
     const unused = lintDiagnostics(analysis).filter((l) => l.code === "unused-slot");
     expect(unused).toHaveLength(1);

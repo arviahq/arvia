@@ -45,7 +45,7 @@ component Button {
     }
     icon { display: flex; }
   }
-  slots { icon {} }
+  slots { icon; }
   variants {
     tone {
       primary { background: blue; }
@@ -78,6 +78,28 @@ component Button {
           name: (token_name)
           (declaration property: (property_name) (raw_value)))))
     (defaults_block (setting variant: (identifier) value: (token_name)))))
+
+================================================================================
+Slot declaration with inline rules
+================================================================================
+
+component X {
+  slots {
+    icon;
+    label { font-weight: 500; }
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (component_decl
+    name: (identifier)
+    (slots_block
+      (slot_decl name: (identifier))
+      (slot_decl
+        name: (identifier)
+        (declaration property: (property_name) (raw_value))))))
 
 ================================================================================
 Globals, keyframes, recipes, styles and use

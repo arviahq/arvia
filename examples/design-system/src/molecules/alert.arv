@@ -28,10 +28,10 @@ component Alert {
   }
 
   slots {
-    root {}
-    icon {}
-    title {}
-    message {}
+    root;
+    icon;
+    title;
+    message;
   }
 
   variants {

@@ -25,10 +25,10 @@ component Card {
   }
 
   slots {
-    root {}
-    header {}
-    body {}
-    footer {}
+    root;
+    header;
+    body;
+    footer;
   }
 
   variants {

@@ -4,7 +4,7 @@ import { nullThemeHost } from "../src/theme-host.js";
 import { analysisOf, at } from "./helpers.js";
 
 const SOURCE = `component Button {
-  slots { icon {} }
+  slots { icon; }
   base {
     color: red;
     icon { display: flex; }

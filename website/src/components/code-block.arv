@@ -17,7 +17,7 @@ component CodeBlock {
   }
 
   slots {
-    root {}
+    root;
     header {
       display: flex;
       align-items: center;

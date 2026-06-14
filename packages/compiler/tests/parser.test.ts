@@ -46,8 +46,8 @@ component Button {
   }
 
   slots {
-    root {}
-    icon {}
+    root;
+    icon;
     label {
       font-weight: 500;
     }
@@ -106,6 +106,25 @@ describe("parser", () => {
       "defaults",
       "compound",
     ]);
+  });
+
+  it("parses name-only slot declarations with a semicolon", () => {
+    const { ast: file } = parse(
+      "component X { slots { icon; label { color: red; } } }",
+      "test.arv",
+    );
+    const component = file.items[0] as ComponentDecl;
+    const slots = component.items.find((i) => i.kind === "slots")!;
+    if (slots.kind !== "slots") throw new Error("expected slots");
+    expect(slots.slots.map((s) => [s.name, s.items.length])).toEqual([
+      ["icon", 0],
+      ["label", 1],
+    ]);
+  });
+
+  it("rejects empty slot blocks", () => {
+    const { diagnostics } = parse("component X { slots { icon {} } }", "test.arv");
+    expect(diagnostics.some((d) => d.message.includes("empty slot block"))).toBe(true);
   });
 
   it("parses global rules with raw selectors", () => {

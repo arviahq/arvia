@@ -7,7 +7,7 @@ component DocsLayout {
   }
 
   slots {
-    root {}
+    root;
     sidebar {
       border-right: 1px solid color.border;
       padding: space.5 space.4;
@@ -93,10 +93,10 @@ component TocRail {
   }
 
   slots {
-    root {}
-    title {}
-    link {}
-    sub {}
+    root;
+    title;
+    link;
+    sub;
   }
 }
 
@@ -134,10 +134,10 @@ component Pager {
   }
 
   slots {
-    root {}
-    item {}
-    label {}
-    title {}
+    root;
+    item;
+    label;
+    title;
   }
 }
 
@@ -181,10 +181,10 @@ component DocsMobileNav {
   }
 
   slots {
-    root {}
-    trigger {}
-    chevron {}
-    panel {}
+    root;
+    trigger;
+    chevron;
+    panel;
   }
 
   variants {
@@ -274,7 +274,7 @@ component SidebarSection {
   }
 
   slots {
-    root {}
+    root;
     title {
       font-size: font.xs;
       font-weight: 600;
@@ -299,7 +299,7 @@ component HeroShell {
   }
 
   slots {
-    root {}
+    root;
     backdrop {
       position: absolute;
       inset: 0;
@@ -322,7 +322,7 @@ component Hero {
   }
 
   slots {
-    root {}
+    root;
     badge { margin-bottom: space.4; }
     title { margin-bottom: space.4; }
     subtitle {
@@ -385,9 +385,9 @@ component Callout {
   }
 
   slots {
-    root {}
-    label {}
-    body {}
+    root;
+    label;
+    body;
   }
 
   variants {
@@ -449,10 +449,10 @@ component DocTable {
   }
 
   slots {
-    root {}
-    table {}
-    th {}
-    td {}
+    root;
+    table;
+    th;
+    td;
   }
 }
 
@@ -463,7 +463,7 @@ component Prose {
   }
 
   slots {
-    root {}
+    root;
 
     p {
       margin: 0 0 space.4;

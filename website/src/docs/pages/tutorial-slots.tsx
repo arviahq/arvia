@@ -17,7 +17,7 @@ export const tutorial_slotsMeta: DocPageMeta = {
   ),
   nav: { section: "tutorial", order: 4 },
   searchText:
-    "Some components have several parts. Slots let one component style each part. Declare them in a slots block, then style each by name inside base. component Card { slots { root {} avatar {} name {} role {} } base { display: flex; align-items: center; gap: space.4; padding: space.4; background: color.surface; border: 1px solid color.border; border-radius: radius.md; avatar { width: 48px; height: 48px; border-radius: radius.full; background: color.primary; } name { font-size: font.lg; color: color.text; } role { font-size: font.sm; color: color.muted; } } } The function returns one class name per slot. const s = Card(); <div className={s.root}><div className={s.avatar} /><div><div className={s.name}>Ada</div><div className={s.role}>Engineer</div></div></div> root is always present; you put each slot class on the matching element. Next: states and responsive.",
+    "Some components have several parts. Slots let one component style each part. Register with name; or attach styles in the slots block. component Card { slots { avatar { width: 48px; } name { font-size: font.lg; } role { font-size: font.sm; } } base { display: flex; padding: space.4; } } const s = Card(); root is always present. Next: states and responsive.",
 };
 
 export function TutorialSlotsPage() {
@@ -26,14 +26,23 @@ export function TutorialSlotsPage() {
       <DocP>
         <fbt desc="Docs content — tut-slots: intro">
           {
-            "Our card has several parts — an avatar, a name, a role. `slots` let one component style each part. Declare them, then style each by name inside `base`:"
+            "Our card has several parts — an avatar, a name, a role. `slots` let one component style each part. Register a name with `name;`, or put the part's styles directly in the slots block — layout stays in `base`:"
           }
         </fbt>
       </DocP>
       <DocCode
         label={"src/card.arv"}
         code={`component Card {
-  slots { root {} avatar {} name {} role {} }
+  slots {
+    avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: radius.full;
+      background: color.primary;
+    }
+    name { font-size: font.lg; color: color.text; }
+    role { font-size: font.sm; color: color.muted; }
+  }
 
   base {
     display: flex;
@@ -43,15 +52,6 @@ export function TutorialSlotsPage() {
     background: color.surface;
     border: 1px solid color.border;
     border-radius: radius.md;
-
-    avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: radius.full;
-      background: color.primary;
-    }
-    name { font-size: font.lg; color: color.text; }
-    role { font-size: font.sm; color: color.muted; }
   }
 }`}
       />

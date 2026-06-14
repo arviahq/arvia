@@ -77,7 +77,16 @@ component Button {
 export const CARD_SLOTS_SOURCE = `${TUTORIAL_THEME}
 
 component Card {
-  slots { root {} avatar {} name {} role {} }
+  slots {
+    avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: radius.full;
+      background: color.primary;
+    }
+    name { font-size: font.lg; color: color.text; }
+    role { font-size: font.sm; color: color.muted; }
+  }
 
   base {
     display: flex;
@@ -87,15 +96,6 @@ component Card {
     background: color.surface;
     border: 1px solid color.border;
     border-radius: radius.md;
-
-    avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: radius.full;
-      background: color.primary;
-    }
-    name { font-size: font.lg; color: color.text; }
-    role { font-size: font.sm; color: color.muted; }
   }
 }`;
 
@@ -150,7 +150,12 @@ component Button {
 export const PROFILE_CARD_SOURCE = `${TUTORIAL_THEME}
 
 component Card {
-  slots { root {} avatar {} name {} role {} actions {} }
+  slots {
+    avatar;
+    name;
+    role;
+    actions;
+  }
 
   base {
     display: flex;

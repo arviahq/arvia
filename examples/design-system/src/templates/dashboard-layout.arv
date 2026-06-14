@@ -19,9 +19,9 @@ component DashboardLayout {
   }
 
   slots {
-    root {}
-    sidebar {}
-    content {}
+    root;
+    sidebar;
+    content;
   }
 
   variants {
