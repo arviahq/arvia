@@ -1,5 +1,12 @@
 # @arviahq/vite-plugin-vue
 
+## 2.0.0
+
+### Patch Changes
+
+- @arviahq/typescript-plugin@2.0.0
+- @arviahq/vite-plugin@2.0.0
+
 ## 1.0.0
 
 ### Patch Changes

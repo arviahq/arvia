@@ -1,5 +1,15 @@
 # @arviahq/vite-plugin
 
+## 2.0.0
+
+### Patch Changes
+
+- Updated dependencies [43731b8]
+- Updated dependencies [7291b82]
+  - @arviahq/compiler@2.0.0
+  - @arviahq/docs@2.0.0
+  - @arviahq/storybook@2.0.0
+
 ## 1.0.0
 
 ### Patch Changes
