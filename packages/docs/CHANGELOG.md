@@ -1,5 +1,12 @@
 # @arviahq/docs
 
+## 1.0.0
+
+### Patch Changes
+
+- Updated dependencies [71a471b]
+  - @arviahq/compiler@1.0.0
+
 ## 0.7.0
 
 ### Patch Changes
