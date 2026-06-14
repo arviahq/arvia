@@ -3,6 +3,7 @@
     "**/dist/**",
     "**/__snapshots__/**",
     "**/*.arv.d.ts",
+    "**/CHANGELOG.md",
     "**/routeTree.gen.ts",
     "packages/tree-sitter-arvia/bindings/**",
     "packages/tree-sitter-arvia/src/**",
