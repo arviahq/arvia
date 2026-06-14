@@ -87,6 +87,40 @@ describe("descriptor at-rules nested in a component emit verbatim (not class-sco
     expect(out).toContain('@font-face {\n  font-family: "X";');
     expect(out).not.toMatch(/@font-face \{\n\.A_root/);
   });
+
+  // Every name in DESCRIPTOR_AT_RULES: a sibling declaration is class-scoped,
+  // but the descriptor body stays bare even when authored inside a component.
+  // (Names contain only letters/hyphens, safe to interpolate into a RegExp.)
+  it.each([
+    ["font-face", "", "font-family"],
+    ["font-feature-values", `"X"`, "font-display"],
+    ["font-palette-values", "--x", "font-family"],
+    ["counter-style", "thumbs", "system"],
+    ["property", "--x", "syntax"],
+    ["page", "", "margin"],
+    ["position-try", "--fallback", "top"],
+    ["view-transition", "", "navigation"],
+  ])("emits @%s verbatim, not wrapped in the slot class", (name, prelude, prop) => {
+    const head = prelude ? `@${name} ${prelude}` : `@${name}`;
+    const out = css(`component A { base { ${head} { ${prop}: foo; } color: red; } }`);
+    // the sibling decl is still scoped to the slot class...
+    expect(out).toMatch(/\.A_root_[a-z0-9]+ \{\n {2}color: red;/);
+    // ...but the descriptor body emits bare — its property follows `{` directly,
+    // with no class selector spliced in.
+    expect(out).toMatch(new RegExp(`@${name}[^{]*\\{\\s*${prop}: foo;`));
+    expect(out).not.toMatch(new RegExp(`@${name}[^{]*\\{\\s*\\.A_root`));
+  });
+
+  it("keeps a descriptor at-rule verbatim even nested under a conditional group", () => {
+    const out = css(
+      `component A { base { @supports (top: 0) { @position-try --f { top: 0; } color: red; } } }`,
+    );
+    // @supports wraps its element-style sibling in the class...
+    expect(out).toMatch(/@supports \(top: 0\) \{\n\.A_root_[a-z0-9]+ \{\n {2}color: red;/);
+    // ...while the inner descriptor stays bare.
+    expect(out).toContain("@position-try --f {\n  top: 0;");
+    expect(out).not.toMatch(/@position-try[^{]*\{\n\.A_root/);
+  });
 });
 
 describe("Arvia constructs inside an at-rule (@layer base { component X {} })", () => {

@@ -11,13 +11,26 @@ const declLines = (decls: DeclIR[]): string =>
 
 /** At-rules whose body holds descriptors / page-margin boxes, not element
  *  styles — their declarations are never scoped to a class, even when written
- *  inside a component (`@font-face { font-family: … }` must emit verbatim). */
+ *  inside a component (`@font-face { font-family: … }` must emit verbatim).
+ *
+ *  This list can't be derived from syntax: `@media { color: red }` (element
+ *  style → class-wrapped) and `@font-face { font-family: x }` (descriptor →
+ *  verbatim) are syntactically identical; the distinction lives in the CSS
+ *  spec. It only matters for a descriptor at-rule *nested inside a component*
+ *  — at the top level or in `global` every at-rule emits verbatim regardless
+ *  of name (see emitFreeAtRule), so a new/unlisted at-rule always works there.
+ *  Unknown at-rules nested in a component default to class-wrapping, which
+ *  suits the more common future case (grouping rules like `@scope` /
+ *  `@starting-style`). When the spec adds descriptor at-rules, add them here. */
 const DESCRIPTOR_AT_RULES = new Set([
   "font-face",
   "font-feature-values",
+  "font-palette-values",
   "counter-style",
   "property",
   "page",
+  "position-try",
+  "view-transition",
   "viewport",
 ]);
 

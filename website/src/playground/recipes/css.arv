@@ -1,39 +1,61 @@
 // Arvia is CSS-first: any raw at-rule passes straight through. Token refs in a
 // prelude (breakpoint.lg, container-size.wide) inline to their literal value.
 
+// Statement at-rules (blockless, `;`-terminated) emit verbatim and hoist to
+// the top of the output — handy for `@layer` ordering, `@import`, `@charset`.
+@layer base, components;
+
+// Descriptor at-rules (@property, @font-face, @counter-style, …) emit verbatim.
+// Write them at the top level or in `global`.
+@property --tilt {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-component MediaCard {
-  base {
-    // Opt this element into container queries.
-    container-type: inline-size;
+// A whole component can be wrapped in an at-rule: its CSS lands inside the
+// layer, while `MediaCard` still exports as a normal component.
+@layer components {
+  component MediaCard {
+    base {
+      // Opt this element into container queries.
+      container-type: inline-size;
 
-    display: flex;
-    flex-direction: column;
-    gap: space.3;
-    padding: space.4;
-    border-radius: radius.lg;
-    border: 1px solid color.border;
-    background: color.surface;
-    animation: fadeIn duration.normal easing.out;
+      display: flex;
+      flex-direction: column;
+      gap: space.3;
+      padding: space.4;
+      border-radius: radius.lg;
+      border: 1px solid color.border;
+      background: color.surface;
+      animation: fadeIn duration.normal easing.out;
+      rotate: var(--tilt);
+      transition: rotate duration.fast easing.out;
 
-    // `breakpoint.lg` inlines to its literal (1024px). Grows padding on wider viewports.
-    @media (min-width: breakpoint.lg) {
-      padding: space.5;
-    }
+      &:hover {
+        --tilt: 1deg;
+      }
 
-    // Measured against the card's own width, not the viewport.
-    @container (min-width: container-size.wide) {
-      flex-direction: row;
-      align-items: center;
-    }
+      // `breakpoint.lg` inlines to its literal (1024px). Grows padding on wider viewports.
+      @media (min-width: breakpoint.lg) {
+        padding: space.5;
+      }
 
-    // Any other at-rule is emitted verbatim — here a feature query.
-    @supports (-webkit-line-clamp: 2) {
-      overflow: hidden;
+      // Measured against the card's own width, not the viewport.
+      @container (min-width: container-size.wide) {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      // Any other at-rule is emitted verbatim — here a feature query.
+      @supports (-webkit-line-clamp: 2) {
+        overflow: hidden;
+      }
     }
   }
 }
