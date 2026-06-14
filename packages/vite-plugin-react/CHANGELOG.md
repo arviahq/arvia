@@ -1,5 +1,13 @@
 # @arviahq/vite-plugin-react
 
+## 2.0.1
+
+### Patch Changes
+
+- Updated dependencies [8501b91]
+  - @arviahq/vite-plugin@2.0.1
+  - @arviahq/typescript-plugin@2.0.1
+
 ## 2.0.0
 
 ### Patch Changes

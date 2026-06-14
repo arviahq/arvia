@@ -1,5 +1,11 @@
 # @arviahq/docs
 
+## 2.0.1
+
+### Patch Changes
+
+- @arviahq/compiler@2.0.1
+
 ## 2.0.0
 
 ### Patch Changes
