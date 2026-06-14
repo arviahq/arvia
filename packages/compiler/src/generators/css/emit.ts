@@ -9,6 +9,18 @@ export type { CssSourceMap } from "./sourcemap.js";
 const declLines = (decls: DeclIR[]): string =>
   decls.map((d) => `  ${d.property}: ${d.value};`).join("\n");
 
+/** At-rules whose body holds descriptors / page-margin boxes, not element
+ *  styles — their declarations are never scoped to a class, even when written
+ *  inside a component (`@font-face { font-family: … }` must emit verbatim). */
+const DESCRIPTOR_AT_RULES = new Set([
+  "font-face",
+  "font-feature-values",
+  "counter-style",
+  "property",
+  "page",
+  "viewport",
+]);
+
 /** A nested `selector { … }` rule, emitted verbatim (keyframe steps, raw
  *  rules inside a passed-through at-rule). */
 function emitRawRule(r: RawRuleIR): string {
@@ -22,6 +34,7 @@ function emitRawRule(r: RawRuleIR): string {
 /** A raw at-rule emitted verbatim (top-level / global): bare declarations,
  *  nested rules and nested at-rules pass through as authored. */
 function emitFreeAtRule(at: AtRuleIR): string {
+  if (at.statement) return `${at.prelude};`;
   const inner: string[] = [];
   if (at.decls.length > 0) inner.push(declLines(at.decls));
   for (const r of at.rules) inner.push(emitRawRule(r));
@@ -31,8 +44,10 @@ function emitFreeAtRule(at: AtRuleIR): string {
 
 /** A raw at-rule attached to a component slot / style: bare declarations are
  *  wrapped in the owning class so `@media (...) { color: red }` targets the
- *  element. Nested rules/at-rules pass through verbatim. */
+ *  element. Descriptor at-rules (`@font-face`, …) and statements emit verbatim.
+ *  Nested rules/at-rules pass through. */
 function emitScopedAtRule(at: AtRuleIR, className: string): string {
+  if (at.statement || DESCRIPTOR_AT_RULES.has(at.name)) return emitFreeAtRule(at);
   const inner: string[] = [];
   if (at.decls.length > 0) inner.push(`.${className} {\n${declLines(at.decls)}\n}`);
   for (const r of at.rules) inner.push(emitRawRule(r));
@@ -91,6 +106,35 @@ export function emitCssWithMap(
     }
     for (const at of style.atRules) out.push(emitScopedAtRule(at, className));
   };
+
+  // Emits a component/style's rules; if it was declared inside at-rules, wraps
+  // its whole output in the prelude chain (outer→inner), e.g. `@layer base { … }`.
+  const emitConstruct = (anchorSpan: Span, layers: string[] | undefined, fn: () => void) => {
+    anchor = anchorSpan;
+    if (!layers || layers.length === 0) {
+      fn();
+      anchor = null;
+      return;
+    }
+    const start = chunks.length;
+    fn();
+    const produced = chunks.splice(start);
+    if (produced.length > 0) {
+      let body = produced.map((c) => c.text).join("\n\n");
+      for (let i = layers.length - 1; i >= 0; i--) body = `${layers[i]} {\n${body}\n}`;
+      chunks.push({ text: body, span: anchorSpan });
+    }
+    anchor = null;
+  };
+
+  // Statement at-rules (`@import`, `@charset`, `@layer a, b;`) must precede all
+  // other rules — hoist them to the very top of the output.
+  for (const at of ir.globalAtRules) {
+    if (!at.statement) continue;
+    anchor = at.anchor ?? null;
+    out.push(emitFreeAtRule(at));
+  }
+  anchor = null;
 
   if (ir.themeVars.length > 0 && ir.themeModes) {
     const defaultMode = ir.themeModes[0]!;
@@ -180,6 +224,7 @@ export function emitCssWithMap(
   }
 
   for (const at of ir.globalAtRules) {
+    if (at.statement) continue; // already hoisted above
     anchor = at.anchor ?? null;
     out.push(emitFreeAtRule(at));
   }
@@ -190,32 +235,30 @@ export function emitCssWithMap(
   }
 
   for (const c of ir.components) {
-    anchor = c.nameSpan;
-
-    for (const slot of c.slotNames) {
-      styleRules(baseClass(c, slot), c.base[slot]!, c);
-    }
-    for (const variant of c.variants) {
-      for (const value of variant.values) {
-        for (const slot of c.slotNames) {
-          const style = value.slots[slot];
-          if (style) styleRules(variantClass(c, variant.name, value.name, slot), style, c);
+    emitConstruct(c.nameSpan, c.layers, () => {
+      for (const slot of c.slotNames) {
+        styleRules(baseClass(c, slot), c.base[slot]!, c);
+      }
+      for (const variant of c.variants) {
+        for (const value of variant.values) {
+          for (const slot of c.slotNames) {
+            const style = value.slots[slot];
+            if (style) styleRules(variantClass(c, variant.name, value.name, slot), style, c);
+          }
         }
       }
-    }
-
-    for (const compound of c.compounds) {
-      for (const slot of c.slotNames) {
-        const style = compound.slots[slot];
-        if (style) styleRules(compoundClass(c, compound.match, slot), style, c);
+      for (const compound of c.compounds) {
+        for (const slot of c.slotNames) {
+          const style = compound.slots[slot];
+          if (style) styleRules(compoundClass(c, compound.match, slot), style, c);
+        }
       }
-    }
+    });
   }
 
   // Standalone styles last (utilities-last): composed styles win the cascade.
   for (const s of ir.styles) {
-    anchor = s.nameSpan;
-    styleRules(s.className, s.style);
+    emitConstruct(s.nameSpan, s.layers, () => styleRules(s.className, s.style));
   }
 
   if (chunks.length === 0) return { css: "", map: null };

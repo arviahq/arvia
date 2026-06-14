@@ -1,8 +1,18 @@
-import type { AtRule, ArviaFile, RawRule, RawValue, StyleBody, StyleItem } from "../ast/nodes.js";
+import type {
+  AtRule,
+  ArviaFile,
+  ComponentDecl,
+  RawRule,
+  RawValue,
+  StyleBody,
+  StyleDecl,
+  StyleItem,
+} from "../ast/nodes.js";
 import {
   emptyStyle,
   isEmptyStyle,
   type AtRuleIR,
+  type ComponentIR,
   type CompoundIR,
   type FileIR,
   type GlobalRuleIR,
@@ -62,16 +72,34 @@ export function buildIR(ast: ArviaFile, env: ThemeEnv, options: BuildOptions): F
     atRules: rule.body.atRules.map((a) => buildAtRule(a, passthrough)),
   });
 
+  // Raw CSS content of an at-rule (declarations / nested rules / nested
+  // at-rules). Arvia constructs in `body.items` are NOT raw — they're hoisted
+  // separately by `collectConstructs`, so a nested at-rule that holds only
+  // constructs (no raw content) is dropped here to avoid emitting `@media {}`.
+  const hasRawContent = (node: AtRule): boolean => {
+    if (!node.body) return true; // statement at-rule always emits
+    return (
+      node.body.decls.length > 0 ||
+      node.body.rules.length > 0 ||
+      node.body.atRules.some(hasRawContent)
+    );
+  };
+
   const buildAtRule = (node: AtRule, inheritedPassthrough: boolean): AtRuleIR => {
+    const prelude = buildPrelude(node);
+    if (!node.body) {
+      return { name: node.name, prelude, statement: true, decls: [], rules: [], atRules: [] };
+    }
     const passthrough = inheritedPassthrough || node.name === "keyframes";
     return {
-      prelude: buildPrelude(node),
+      name: node.name,
+      prelude,
       decls: node.body.decls.map((d) => ({
         property: d.property,
         value: passthrough ? d.value.text : resolveValue(d.value),
       })),
       rules: node.body.rules.map((r) => buildRawRule(r, passthrough)),
-      atRules: node.body.atRules.map((a) => buildAtRule(a, passthrough)),
+      atRules: node.body.atRules.filter(hasRawContent).map((a) => buildAtRule(a, passthrough)),
       anchor: node.nameSpan,
     };
   };
@@ -127,72 +155,21 @@ export function buildIR(ast: ArviaFile, env: ThemeEnv, options: BuildOptions): F
   const themeVars: ThemeVarIR[] = [];
   let themeModes: string[] | null = null;
 
-  for (const top of ast.items) {
-    if (top.kind === "theme") {
-      themeModes = env.modes;
-      for (const group of top.groups) {
-        const bucket = env.tokens[group.name];
-        if (!bucket) continue;
-        for (const entry of group.entries) {
-          const rawByMode: Record<string, RawValue> = env.modes
-            ? { [env.modes[0]!]: entry.value }
-            : { default: entry.value };
-          if (env.modes) {
-            for (const override of group.overrides) {
-              for (const o of override.entries) {
-                if (o.name === entry.name) rawByMode[override.mode] = o.value;
-              }
-            }
-          }
-          const byMode: Record<string, string> = {};
-          const modes = env.modes ?? ["default"];
-          for (const mode of modes) {
-            const raw = rawByMode[mode] ?? entry.value;
-            byMode[mode] = env.modes
-              ? substituteRefsForMode(raw, env.tokens, mode, env.modes)
-              : substituteRefs(raw, env);
-          }
-          themeVars.push({
-            group: group.name,
-            name: entry.name,
-            doc: env.tokenDocs[group.name]?.[entry.name] ?? entry.doc,
-            byMode,
-          });
-        }
-      }
-      continue;
-    }
-    if (top.kind === "atrule") {
-      globalAtRules.push(buildAtRule(top, false));
-      continue;
-    }
-    if (top.kind === "global") {
-      for (const rule of top.rules) {
-        globals.push({
-          selector: rule.selector,
-          decls: rule.decls.map((d) => ({ property: d.property, value: resolveValue(d.value) })),
-        });
-      }
-      for (const at of top.atRules) globalAtRules.push(buildAtRule(at, false));
-      continue;
-    }
-    if (top.kind === "styledecl") {
-      const style = emptyStyle();
-      applyItems(style, top.items);
-      const hash = hashName(rel, top.name);
-      styles.push({
-        name: top.name,
-        nameSpan: top.nameSpan,
-        hash,
-        className: options.minify
-          ? hashClass(`${rel}:${top.name}`, "style")
-          : `${top.name}_${hash}`,
-        style,
-      });
-      continue;
-    }
-    if (top.kind !== "component") continue;
+  const buildStyleDecl = (top: StyleDecl, layers: string[]): StyleDeclIR => {
+    const style = emptyStyle();
+    applyItems(style, top.items);
+    const hash = hashName(rel, top.name);
+    return {
+      name: top.name,
+      nameSpan: top.nameSpan,
+      hash,
+      className: options.minify ? hashClass(`${rel}:${top.name}`, "style") : `${top.name}_${hash}`,
+      style,
+      ...(layers.length > 0 ? { layers } : {}),
+    };
+  };
 
+  const buildComponent = (top: ComponentDecl, layers: string[]): ComponentIR => {
     const slotNames = ["root"];
     const componentTokens: LocalTokens = {};
     let hasComponentTokens = false;
@@ -267,6 +244,7 @@ export function buildIR(ast: ArviaFile, env: ThemeEnv, options: BuildOptions): F
         }
       }
     }
+    localTokens = null;
 
     const variantOrder = new Map(variants.map((v, i) => [v.name, i]));
     const compounds: CompoundIR[] = pendingCompounds.map((c) => ({
@@ -276,7 +254,7 @@ export function buildIR(ast: ArviaFile, env: ThemeEnv, options: BuildOptions): F
       slots: c.slots,
     }));
 
-    components.push({
+    return {
       name: top.name,
       nameSpan: top.nameSpan,
       hash: hashName(rel, top.name),
@@ -287,8 +265,82 @@ export function buildIR(ast: ArviaFile, env: ThemeEnv, options: BuildOptions): F
       variants,
       compounds,
       defaults,
-    });
-    localTokens = null;
+      ...(layers.length > 0 ? { layers } : {}),
+    };
+  };
+
+  // Components/styles declared inside an at-rule are hoisted to the flat IR
+  // arrays, tagged with the enclosing at-rule prelude chain (outer→inner).
+  const collectConstructs = (node: AtRule, layers: string[]) => {
+    if (!node.body) return;
+    const chain = [...layers, buildPrelude(node)];
+    for (const item of node.body.items) {
+      if (item.kind === "component") components.push(buildComponent(item, chain));
+      else styles.push(buildStyleDecl(item, chain));
+    }
+    for (const child of node.body.atRules) collectConstructs(child, chain);
+  };
+
+  for (const top of ast.items) {
+    if (top.kind === "theme") {
+      themeModes = env.modes;
+      for (const group of top.groups) {
+        const bucket = env.tokens[group.name];
+        if (!bucket) continue;
+        for (const entry of group.entries) {
+          const rawByMode: Record<string, RawValue> = env.modes
+            ? { [env.modes[0]!]: entry.value }
+            : { default: entry.value };
+          if (env.modes) {
+            for (const override of group.overrides) {
+              for (const o of override.entries) {
+                if (o.name === entry.name) rawByMode[override.mode] = o.value;
+              }
+            }
+          }
+          const byMode: Record<string, string> = {};
+          const modes = env.modes ?? ["default"];
+          for (const mode of modes) {
+            const raw = rawByMode[mode] ?? entry.value;
+            byMode[mode] = env.modes
+              ? substituteRefsForMode(raw, env.tokens, mode, env.modes)
+              : substituteRefs(raw, env);
+          }
+          themeVars.push({
+            group: group.name,
+            name: entry.name,
+            doc: env.tokenDocs[group.name]?.[entry.name] ?? entry.doc,
+            byMode,
+          });
+        }
+      }
+      continue;
+    }
+    if (top.kind === "atrule") {
+      if (hasRawContent(top)) globalAtRules.push(buildAtRule(top, false));
+      collectConstructs(top, []);
+      continue;
+    }
+    if (top.kind === "global") {
+      for (const rule of top.rules) {
+        globals.push({
+          selector: rule.selector,
+          decls: rule.decls.map((d) => ({ property: d.property, value: resolveValue(d.value) })),
+        });
+      }
+      for (const at of top.atRules) {
+        if (hasRawContent(at)) globalAtRules.push(buildAtRule(at, false));
+        collectConstructs(at, []);
+      }
+      continue;
+    }
+    if (top.kind === "styledecl") {
+      styles.push(buildStyleDecl(top, []));
+      continue;
+    }
+    if (top.kind === "component") {
+      components.push(buildComponent(top, []));
+    }
   }
 
   return {

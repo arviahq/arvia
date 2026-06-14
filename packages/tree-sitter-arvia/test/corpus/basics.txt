@@ -215,3 +215,24 @@ component X {
       (comment)
       (declaration property: (property_name) (raw_value))
       (declaration property: (property_name) (raw_value)))))
+
+================================================================================
+Statement at-rules and a layered block
+================================================================================
+
+@import "reset.css";
+@layer reset, base;
+
+@layer base {
+  body { margin: 0; }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (at_rule name: (identifier) prelude: (raw_value))
+  (at_rule name: (identifier) prelude: (raw_value))
+  (at_rule
+    name: (identifier)
+    prelude: (raw_selector)
+    (at_nested_rule (raw_selector) (declaration property: (property_name) (raw_value)))))

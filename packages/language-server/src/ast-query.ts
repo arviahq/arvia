@@ -306,7 +306,7 @@ function atRuleTarget(
   offset: number,
   component: ComponentDecl | null,
 ): AstTarget | null {
-  if (atRule.name === "keyframes") return null;
+  if (atRule.name === "keyframes" || !atRule.body) return null;
   return atRuleBodyTarget(atRule.body, offset, component);
 }
 

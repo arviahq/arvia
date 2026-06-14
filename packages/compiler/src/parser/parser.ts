@@ -439,6 +439,20 @@ class Parser {
     const name = this.expectIdent("an at-rule name after '@'");
     let prelude = "";
     let preludeSpan: Span | null = null;
+    // A `;` before any `{` is a statement at-rule (`@import "x";`, `@layer a, b;`).
+    if (this.lx.peekChar() !== "{" && this.lx.peekBlockDelimiter() === ";") {
+      const value = this.lx.rawValue();
+      const semi = this.expect("semicolon", `';' after '@${name.text}'`);
+      return {
+        kind: "atrule",
+        name: name.text,
+        nameSpan: name.span,
+        prelude: value.text,
+        preludeSpan: value.span,
+        body: null,
+        span: { ...at.span, end: semi.span.end },
+      };
+    }
     if (this.lx.peekChar() !== "{") {
       const selector = this.lx.rawSelector();
       prelude = selector.text;
@@ -464,6 +478,7 @@ class Parser {
     const decls: Declaration[] = [];
     const rules: RawRule[] = [];
     const atRules: AtRule[] = [];
+    const items: (ComponentDecl | StyleDecl)[] = [];
     while (!this.atBlockEnd()) {
       if (this.lx.peekChar() === "@") {
         const at = this.recoverable(
@@ -471,6 +486,12 @@ class Parser {
           () => this.syncItem(),
         );
         if (at) atRules.push(at);
+        continue;
+      }
+      // Arvia constructs may be wrapped in an at-rule: `@layer base { component X { … } }`.
+      const construct = this.tryParseAtRuleConstruct();
+      if (construct) {
+        items.push(construct);
         continue;
       }
       if (this.lx.peekBlockDelimiter() === "{") {
@@ -487,7 +508,32 @@ class Parser {
       );
       if (decl) decls.push(decl);
     }
-    return { decls, rules, atRules };
+    return { decls, rules, atRules, items };
+  }
+
+  /** If the next item is a `component`/`style` declaration (`component X { … }`),
+   *  parse it; otherwise leave the lexer untouched and return null. */
+  private tryParseAtRuleConstruct(): ComponentDecl | StyleDecl | null {
+    const mark = this.lx.mark();
+    const head = this.lx.next();
+    if (head.kind === "ident" && (head.text === "component" || head.text === "style")) {
+      const after = this.lx.next();
+      // `component Name {` — a construct; anything else (e.g. `component: …`) is not.
+      if (after.kind === "ident") {
+        this.lx.reset(mark);
+        return (
+          this.recoverable(
+            () =>
+              head.text === "component"
+                ? this.parseComponent(this.expectIdent("'component'").span)
+                : this.parseStyleDecl(this.expectIdent("'style'").span),
+            () => this.syncItem(),
+          ) ?? null
+        );
+      }
+    }
+    this.lx.reset(mark);
+    return null;
   }
 
   private parseRawRule(): RawRule {

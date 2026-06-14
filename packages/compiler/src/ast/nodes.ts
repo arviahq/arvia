@@ -78,7 +78,8 @@ export interface AtRule {
   /** Raw prelude text after the keyword (empty for `@layer { … }`). */
   prelude: string;
   preludeSpan: Span | null;
-  body: AtRuleBody;
+  /** null for a statement at-rule (`@import "x";`, `@layer a, b;`) — no block. */
+  body: AtRuleBody | null;
   span: Span;
 }
 
@@ -90,6 +91,9 @@ export interface AtRuleBody {
   rules: RawRule[];
   /** Nested at-rules (e.g. `@supports` inside `@media`). */
   atRules: AtRule[];
+  /** Arvia constructs declared inside the at-rule (`@layer base { component X { … } }`).
+   *  Their generated CSS is wrapped in the enclosing at-rule chain. */
+  items: (ComponentDecl | StyleDecl)[];
 }
 
 export interface RawRule {

@@ -22,10 +22,15 @@ export interface StateIR {
 /** A raw CSS at-rule, lowered for emission. `prelude` is the final CSS head
  *  (e.g. `@media (min-width: 768px)`, `@keyframes pulse`). */
 export interface AtRuleIR {
+  /** At-keyword without '@' (e.g. "media", "font-face") — drives verbatim vs
+   *  class-scoped emission for descriptor at-rules. */
+  name: string;
   prelude: string;
   decls: DeclIR[];
   rules: RawRuleIR[];
   atRules: AtRuleIR[];
+  /** A blockless statement at-rule (`@import "x";`) — emitted as `prelude;`. */
+  statement?: boolean;
   /** Source span of the at-keyword, for CSS source maps (free at-rules only). */
   anchor?: Span;
 }
@@ -137,6 +142,9 @@ export interface ComponentIR {
   variants: VariantIR[];
   compounds: CompoundIR[];
   defaults: Record<string, string>;
+  /** Enclosing at-rule preludes (outer→inner) when declared inside an at-rule,
+   *  e.g. `["@layer base"]`. The component's CSS is wrapped in this chain. */
+  layers?: string[];
 }
 
 /** Standalone exported class from a top-level `style` declaration. */
@@ -147,6 +155,8 @@ export interface StyleDeclIR {
   hash: string;
   className: string;
   style: StyleIR;
+  /** Enclosing at-rule preludes (outer→inner) when declared inside an at-rule. */
+  layers?: string[];
 }
 
 export interface GlobalRuleIR {

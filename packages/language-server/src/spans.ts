@@ -50,7 +50,7 @@ export function visitSpans(ast: ArviaFile, visit: (span: Span, foldable: boolean
   };
   const atRule = (a: AtRule) => {
     visit(a.span, true);
-    atRuleBody(a.body);
+    if (a.body) atRuleBody(a.body);
   };
   const styleItems = (items: StyleItem[]) => {
     for (const item of items) {

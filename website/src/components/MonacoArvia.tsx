@@ -61,6 +61,10 @@ monaco.languages.setMonarchTokensProvider("arvia", {
       [/&[^\s{]*/, "tag"],
       [/@[A-Za-z_][\w-]*/, "tag"],
       [/[A-Za-z_][\w-]*\.[\w-]+/, "variable.name"],
+      // Declaration heads: token-entry names (before `=`) and group / component
+      // / slot / variant names (before `{`). Kebab-case names stay whole.
+      [/[A-Za-z0-9_][\w-]*(?=\s*=)/, "type"],
+      [/[A-Za-z_][\w-]*(?=\s*\{)/, { cases: { "@keywords": "keyword", "@default": "type" } }],
       [/-?\d+(\.\d+)?[a-z%]*/, "number"],
       [
         /[A-Za-z_-][\w-]*(?=\s*:)/,
@@ -84,6 +88,7 @@ monaco.editor.defineTheme("arvia-dark", {
     { token: "keyword", foreground: "ff7b72" },
     { token: "attribute.name", foreground: "79c0ff" },
     { token: "variable.name", foreground: "d2a8ff" },
+    { token: "type", foreground: "d2a8ff" },
     { token: "identifier", foreground: "c9d1d9" },
     { token: "number", foreground: "79c0ff" },
     { token: "number.hex", foreground: "a5d6ff" },
@@ -106,6 +111,7 @@ monaco.editor.defineTheme("arvia-light", {
     { token: "keyword", foreground: "cf222e" },
     { token: "attribute.name", foreground: "0550ae" },
     { token: "variable.name", foreground: "8250df" },
+    { token: "type", foreground: "8250df" },
     { token: "identifier", foreground: "1f2328" },
     { token: "number", foreground: "0550ae" },
     { token: "number.hex", foreground: "0a3069" },

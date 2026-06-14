@@ -56,16 +56,19 @@ module.exports = grammar({
     // --- at-rules -----------------------------------------------------------
 
     // Raw CSS at-rules (@media, @keyframes, @container, @supports, …) emitted
-    // verbatim. The prelude (range sugar `md..xl`, a raw condition, or a
-    // keyframes name) is opaque, captured by the raw_selector scanner up to `{`.
+    // verbatim. The prelude (a raw condition or token ref) is opaque. Two forms:
+    // a block `@name … { … }` and a statement `@import "x.css";` (raw_value
+    // runs to `;`). A block body holds raw CSS — Arvia constructs nested in an
+    // at-rule (`@layer base { component X { … } }`) are valid and compiled, but
+    // for highlighting they parse as generic nested rules.
     at_rule: ($) =>
       seq(
         "@",
         field("name", $.identifier),
-        optional(field("prelude", $.raw_selector)),
-        "{",
-        repeat($._at_body_item),
-        "}",
+        choice(
+          seq(optional(field("prelude", $.raw_selector)), "{", repeat($._at_body_item), "}"),
+          seq(optional(field("prelude", $.raw_value)), ";"),
+        ),
       ),
     _at_body_item: ($) => choice($.declaration, $.at_rule, $.at_nested_rule),
     at_nested_rule: ($) => seq($.raw_selector, "{", repeat($._at_body_item), "}"),

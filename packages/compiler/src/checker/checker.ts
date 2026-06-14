@@ -15,6 +15,7 @@ import type {
   RawValue,
   RecipeDecl,
   StyleBody,
+  StyleDecl,
   StyleItem,
 } from "../ast/nodes.js";
 import { isKnownProperty, knownPropertyNames, matchValueSyntax } from "./css-validate.js";
@@ -291,12 +292,52 @@ class Checker {
 
   // --- styles ----------------------------------------------------------------
 
-  private collectStyleNames() {
-    const componentNames = new Set<string>();
+  /** Components/styles declared inside top-level / `global` at-rules
+   *  (`@layer base { component X { … } }`) — collected alongside top-level ones. */
+  private constructsInAtRules(): (ComponentDecl | StyleDecl)[] {
+    const out: (ComponentDecl | StyleDecl)[] = [];
+    const walk = (node: AtRule) => {
+      if (!node.body) return;
+      out.push(...node.body.items);
+      for (const child of node.body.atRules) walk(child);
+    };
     for (const item of this.ast.items) {
-      if (item.kind === "component") componentNames.add(item.name);
+      if (item.kind === "atrule") walk(item);
+      else if (item.kind === "global") for (const at of item.atRules) walk(at);
     }
-    for (const item of this.ast.items) {
+    return out;
+  }
+
+  private allComponents(): ComponentDecl[] {
+    const out = this.ast.items.filter((i): i is ComponentDecl => i.kind === "component");
+    for (const c of this.constructsInAtRules()) if (c.kind === "component") out.push(c);
+    return out;
+  }
+
+  private allStyles(): StyleDecl[] {
+    const out = this.ast.items.filter((i): i is StyleDecl => i.kind === "styledecl");
+    for (const s of this.constructsInAtRules()) if (s.kind === "styledecl") out.push(s);
+    return out;
+  }
+
+  /** Reports ARV129 for any component/style nested in an at-rule that sits in a
+   *  disallowed place (inside a component / recipe / style). */
+  private forbidNestedConstructs(node: AtRule) {
+    if (!node.body) return;
+    for (const item of node.body.items) {
+      this.report(
+        "ARV129",
+        `'${item.name}' can't be declared inside a component, recipe or style`,
+        item.nameSpan,
+        "components and styles belong at the top level or in a top-level/`global` at-rule",
+      );
+    }
+    for (const child of node.body.atRules) this.forbidNestedConstructs(child);
+  }
+
+  private collectStyleNames() {
+    const componentNames = new Set<string>(this.allComponents().map((c) => c.name));
+    for (const item of this.allStyles()) {
       if (item.kind !== "styledecl") continue;
       if (this.fileStyleNames.has(item.name)) {
         this.report("ARV117", `duplicate style '${item.name}'`, item.nameSpan);
@@ -332,8 +373,7 @@ class Checker {
 
   /** Validates style declarations (token refs, recipe uses, states). */
   private checkStyles() {
-    for (const item of this.ast.items) {
-      if (item.kind !== "styledecl") continue;
+    for (const item of this.allStyles()) {
       const ir: RecipeIR = { decls: [], states: [], atRules: [] };
       for (const styleItem of item.items) {
         this.applyStyleItem(styleItem, ir);
@@ -419,6 +459,7 @@ class Checker {
         ir.atRules.push(...inlined.atRules);
       }
     } else if (item.kind === "atrule") {
+      this.forbidNestedConstructs(item);
       ir.atRules.push(this.lowerAtRule(item, false));
     } else {
       // Slot blocks inside states are rejected by the parser outside
@@ -435,9 +476,14 @@ class Checker {
    *  rewriting. The lowered IR is only consumed for recipes/styles (build
    *  re-derives component/global at-rules from the AST). */
   private lowerAtRule(node: AtRule, inheritedPassthrough: boolean): AtRuleIR {
+    const prelude = this.atRulePrelude(node);
+    if (!node.body) {
+      return { name: node.name, prelude, statement: true, decls: [], rules: [], atRules: [] };
+    }
     const passthrough = inheritedPassthrough || node.name === "keyframes";
     return {
-      prelude: this.atRulePrelude(node),
+      name: node.name,
+      prelude,
       decls: node.body.decls.map((d) => ({
         property: d.property,
         value: passthrough ? d.value.text : this.checkDecl(d),
@@ -619,8 +665,7 @@ class Checker {
 
   private checkComponents() {
     const names = new Set<string>();
-    for (const item of this.ast.items) {
-      if (item.kind !== "component") continue;
+    for (const item of this.allComponents()) {
       if (names.has(item.name)) {
         this.report("ARV110", `duplicate component '${item.name}'`, item.nameSpan);
         continue;
@@ -791,6 +836,7 @@ class Checker {
           this.checkDecl(item);
           break;
         case "atrule":
+          this.forbidNestedConstructs(item);
           this.lowerAtRule(item, false);
           break;
         case "use":
@@ -931,6 +977,7 @@ class Checker {
     if (item.kind === "decl") {
       this.checkDecl(item);
     } else if (item.kind === "atrule") {
+      this.forbidNestedConstructs(item);
       this.lowerAtRule(item, false);
     } else if (item.kind === "use") {
       this.usedRecipes.add(item.recipe);

@@ -340,32 +340,67 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "prelude",
-              "content": {
-                "type": "SYMBOL",
-                "name": "raw_selector"
-              }
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "FIELD",
+                      "name": "prelude",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "raw_selector"
+                      }
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
+                },
+                {
+                  "type": "STRING",
+                  "value": "{"
+                },
+                {
+                  "type": "REPEAT",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "_at_body_item"
+                  }
+                },
+                {
+                  "type": "STRING",
+                  "value": "}"
+                }
+              ]
             },
             {
-              "type": "BLANK"
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "FIELD",
+                      "name": "prelude",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "raw_value"
+                      }
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
+                },
+                {
+                  "type": "STRING",
+                  "value": ";"
+                }
+              ]
             }
           ]
-        },
-        {
-          "type": "STRING",
-          "value": "{"
-        },
-        {
-          "type": "REPEAT",
-          "content": {
-            "type": "SYMBOL",
-            "name": "_at_body_item"
-          }
-        },
-        {
-          "type": "STRING",
-          "value": "}"
         }
       ]
     },

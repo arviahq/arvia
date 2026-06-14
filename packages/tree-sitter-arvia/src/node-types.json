@@ -47,6 +47,10 @@
           {
             "type": "raw_selector",
             "named": true
+          },
+          {
+            "type": "raw_value",
+            "named": true
           }
         ]
       }

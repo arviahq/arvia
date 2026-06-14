@@ -60,3 +60,56 @@ component Box {
     expect(out).toContain("padding: 16px;");
   });
 });
+
+describe("statement at-rules (blockless, ;-terminated)", () => {
+  it("emits @import / @charset verbatim, hoisted before the :root theme block", () => {
+    const out = css(`theme { modes: light | dark; color { a = #fff; @dark { a = #000; } } }
+@charset "utf-8";
+@import "reset.css";
+component A { base { color: color.a; } }`);
+    expect(out).toContain('@charset "utf-8";');
+    expect(out).toContain('@import "reset.css";');
+    // hoisted: both precede the :root block
+    expect(out.indexOf("@charset")).toBeLessThan(out.indexOf(":root"));
+    expect(out.indexOf("@import")).toBeLessThan(out.indexOf(":root"));
+  });
+
+  it("emits the @layer ordering statement verbatim", () => {
+    expect(css(`@layer reset, base, utilities;`).trim()).toBe("@layer reset, base, utilities;");
+  });
+});
+
+describe("descriptor at-rules nested in a component emit verbatim (not class-scoped)", () => {
+  it("does not wrap @font-face descriptors in the slot class", () => {
+    const out = css(
+      `component A { base { @font-face { font-family: "X"; src: url(x.woff2); } color: red; } }`,
+    );
+    expect(out).toContain('@font-face {\n  font-family: "X";');
+    expect(out).not.toMatch(/@font-face \{\n\.A_root/);
+  });
+});
+
+describe("Arvia constructs inside an at-rule (@layer base { component X {} })", () => {
+  it("wraps the component's CSS in the at-rule chain and still exports it", () => {
+    const r = compile(`@layer base { component Button { base { color: red; } } }`, {
+      filename: "at.arv",
+    });
+    expect(r.diagnostics.filter((d) => d.severity === "error")).toEqual([]);
+    expect(r.css).toMatch(/@layer base \{\n\.Button_root_[a-z0-9]+ \{\n {2}color: red;/);
+    expect(r.js).toContain("export function Button");
+  });
+
+  it("nests the wrapper chain (outer→inner) for @layer + @media", () => {
+    const out = css(`theme { breakpoint { md = 768px; } }
+@layer base { @media (min-width: breakpoint.md) { component Card { base { color: red; } } } }`);
+    expect(out).toMatch(/@layer base \{\n@media \(min-width: 768px\) \{\n\.Card_root_/);
+  });
+
+  it("ARV129: a component declared inside another component is rejected", () => {
+    const codes = compile(
+      `component Outer { base { @layer x { component Inner { base { color: red; } } } } }`,
+      { filename: "at.arv" },
+    ).diagnostics.map((d) => d.code);
+    expect(codes).toContain("ARV129");
+  });
+});

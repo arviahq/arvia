@@ -34,7 +34,7 @@ export function walkDeclarations(ast: ArviaFile): DeclVisit[] {
     for (const nested of body.atRules) visitAtRule(nested, component);
   };
   const visitAtRule = (atRule: AtRule, component: ComponentDecl | null) => {
-    if (atRule.name === "keyframes") return;
+    if (atRule.name === "keyframes" || !atRule.body) return;
     visitAtRuleBody(atRule.body, component);
   };
   const visitItems = (items: StyleItem[], component: ComponentDecl | null) => {

@@ -19,7 +19,7 @@ export const cssMeta: DocPageMeta = {
   ),
   nav: { section: "language", order: 10.5 },
   searchText:
-    "Arvia is CSS-first. A declaration value is raw CSS — token refs like color.primary are substituted, everything else passes through. Any at-rule (@keyframes, @media, @container, @supports, @layer, @font-face) can be nested anywhere a declaration goes: base, a slot, a variant value, a recipe, a style, global, or the top level. Inside a component the at-rule's bare declarations are scoped to the owning slot class; in global and at the top level it is emitted as authored. @keyframes is pure pass-through with literal (un-hashed) names. There is no range sugar — write full CSS conditions. Token refs inside a @media/@container prelude inline to their literal value, so breakpoints stay centralized: @media (min-width: breakpoint.md) compiles to @media (min-width: 768px); @container (inline-size < container-size.wide) → (inline-size < 480px). Any other media/container feature works too — max-height, orientation, aspect-ratio. Example: base { padding: 4px; @media (min-width: breakpoint.md) { padding: 16px; } }.",
+    'Arvia is CSS-first. A declaration value is raw CSS — token refs like color.primary are substituted, everything else passes through. Any at-rule (@keyframes, @media, @container, @supports, @layer, @font-face) can be nested anywhere a declaration goes: base, a slot, a variant value, a recipe, a style, global, or the top level. Inside a component the at-rule\'s bare declarations are scoped to the owning slot class; in global and at the top level it is emitted as authored. @keyframes is pure pass-through with literal (un-hashed) names. There is no range sugar — write full CSS conditions. Token refs inside a @media/@container prelude inline to their literal value, so breakpoints stay centralized: @media (min-width: breakpoint.md) compiles to @media (min-width: 768px); @container (inline-size < container-size.wide) → (inline-size < 480px). Any other media/container feature works too — max-height, orientation, aspect-ratio. Example: base { padding: 4px; @media (min-width: breakpoint.md) { padding: 16px; } }. Statement at-rules — @import "reset.css";, @charset, @namespace, @layer reset, base; — pass through verbatim and are hoisted to the top of the output, before :root. Descriptor at-rules like @font-face, @property and @page emit verbatim; write them at the top level or in global, though nesting in a component now also emits correctly. @layer (and any at-rule) can wrap whole components or styles: @layer base { component Button { … } } compiles Button and wraps its CSS in the layer, with its JS/types export unchanged. Constructs may only be nested in top-level/global at-rules, else ARV129.',
 };
 
 const MEDIA_CARD_SOURCE = `theme {
@@ -130,6 +130,48 @@ component Spinner {
           }
         </fbt>
       </DocCallout>
+
+      <DocH3>
+        <fbt desc="Docs content — css: heading statement at-rules">
+          {"Statement & descriptor at-rules"}
+        </fbt>
+      </DocH3>
+      <DocP>
+        <fbt desc="Docs content — css: statement at-rules">
+          {
+            'Blockless statement at-rules — `@import "reset.css";`, `@charset "utf-8";`, `@namespace …;`, `@layer reset, base;` — pass through verbatim and are hoisted to the very top of the output, before `:root`, where the spec requires them.'
+          }
+        </fbt>
+      </DocP>
+      <DocP>
+        <fbt desc="Docs content — css: descriptor at-rules">
+          {
+            "Document-level descriptor at-rules — `@font-face`, `@property`, `@page`, `@counter-style`, `@font-feature-values` — emit verbatim, with their descriptors left unscoped. They read cleanest at the top level or in `global`, but nesting one inside a component now also emits correctly rather than wrapping the descriptors in the slot class."
+          }
+        </fbt>
+      </DocP>
+
+      <DocH3>
+        <fbt desc="Docs content — css: heading at-rule wrapping">
+          {"At-rules can wrap components"}
+        </fbt>
+      </DocH3>
+      <DocP>
+        <fbt desc="Docs content — css: at-rule wrapping">
+          {
+            "`@layer` — and any at-rule — can wrap a whole `component` or `style`. Arvia compiles the construct and wraps its generated CSS in the at-rule chain; the JS/types export is unchanged. Constructs may only be nested in top-level or `global` at-rules (a `component`/`style` inside another component, recipe or style is ARV129)."
+          }
+        </fbt>
+      </DocP>
+      <DocCode
+        label={"button.arv"}
+        code={`@layer base {
+  component Button {           // compiled, exported as usual
+    base { padding: 8px 12px; }
+  }
+}
+// → @layer base { .Button_root_x { padding: 8px 12px; } }`}
+      />
 
       <DocH2>
         <fbt desc="Docs content — css: heading tokens">{"Token refs in conditions"}</fbt>
