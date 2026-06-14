@@ -50,7 +50,7 @@ describe("lexer", () => {
     expect(tok.span).toMatchObject({ line: 2, col: 3 });
   });
 
-  it("tokenizes @ and | for theme modes and responsive syntax", () => {
+  it("tokenizes @ and | for at-rules and theme modes", () => {
     expect(kinds("@")).toEqual(["at:@"]);
     expect(kinds("light | dark")).toEqual(["ident:light", "pipe:|", "ident:dark"]);
   });

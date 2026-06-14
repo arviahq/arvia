@@ -68,11 +68,13 @@ describe("theme tokens export", () => {
     expect(dts).toContain("export {};");
   });
 
-  it("breakpoint and container groups do not produce token exports", () => {
-    const { js } = compile("theme { breakpoint { md = 768px; } container { sm = 480px; } }", {
+  it("breakpoint and container-size are ordinary token groups (exported like any other)", () => {
+    const { js } = compile("theme { breakpoint { md = 768px; } container-size { sm = 480px; } }", {
       filename: "theme.arv",
     });
-    expect(js).toContain("export {};");
+    expect(js).toContain("export const tokens");
+    expect(js).toContain('"breakpoint"');
+    expect(js).toContain('"container-size"');
   });
 
   it("ARV125: component or style named 'tokens' conflicts with the export", () => {

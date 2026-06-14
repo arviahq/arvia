@@ -25,8 +25,8 @@ module.exports = grammar({
           $.global_block,
           $.component_decl,
           $.recipe_decl,
-          $.keyframes_decl,
           $.style_decl,
+          $.at_rule,
         ),
       ),
 
@@ -48,14 +48,30 @@ module.exports = grammar({
 
     mode_block: ($) => seq("@", field("mode", $.identifier), "{", repeat($.token_entry), "}"),
 
-    // --- global / keyframes -------------------------------------------------
+    // --- global -------------------------------------------------------------
 
-    global_block: ($) => seq("global", "{", repeat($.global_rule), "}"),
+    global_block: ($) => seq("global", "{", repeat(choice($.global_rule, $.at_rule)), "}"),
     global_rule: ($) => seq($.raw_selector, "{", repeat($.declaration), "}"),
 
-    keyframes_decl: ($) =>
-      seq("keyframes", field("name", $.identifier), "{", repeat($.keyframe_step), "}"),
-    keyframe_step: ($) => seq($.raw_selector, "{", repeat($.declaration), "}"),
+    // --- at-rules -----------------------------------------------------------
+
+    // Raw CSS at-rules (@media, @keyframes, @container, @supports, …) emitted
+    // verbatim. The prelude (a raw condition or token ref) is opaque. Two forms:
+    // a block `@name … { … }` and a statement `@import "x.css";` (raw_value
+    // runs to `;`). A block body holds raw CSS — Arvia constructs nested in an
+    // at-rule (`@layer base { component X { … } }`) are valid and compiled, but
+    // for highlighting they parse as generic nested rules.
+    at_rule: ($) =>
+      seq(
+        "@",
+        field("name", $.identifier),
+        choice(
+          seq(optional(field("prelude", $.raw_selector)), "{", repeat($._at_body_item), "}"),
+          seq(optional(field("prelude", $.raw_value)), ";"),
+        ),
+      ),
+    _at_body_item: ($) => choice($.declaration, $.at_rule, $.at_nested_rule),
+    at_nested_rule: ($) => seq($.raw_selector, "{", repeat($._at_body_item), "}"),
 
     // --- recipes / styles ----------------------------------------------------
 
@@ -73,12 +89,11 @@ module.exports = grammar({
         $.slots_block,
         $.variants_block,
         $.defaults_block,
-        $.responsive_block,
-        $.container_block,
         $.compound_block,
         $.tokens_block,
         $.use_statement,
         $.declaration,
+        $.at_rule,
       ),
 
     base_block: ($) => seq("base", "{", repeat($._body_item), "}"),
@@ -97,10 +112,6 @@ module.exports = grammar({
     defaults_block: ($) => seq("defaults", "{", repeat($.setting), "}"),
     setting: ($) => seq(field("variant", $.identifier), ":", field("value", $.token_name), ";"),
 
-    responsive_block: ($) => seq("responsive", "{", repeat($.conditional_entry), "}"),
-    container_block: ($) => seq("container", "{", repeat($.conditional_entry), "}"),
-    conditional_entry: ($) => seq(field("key", $.token_name), "{", repeat($.setting), "}"),
-
     compound_block: ($) => seq("compound", "{", repeat(choice($.setting, $.slot_block)), "}"),
 
     tokens_block: ($) => seq("tokens", "{", repeat($.token_group), "}"),
@@ -109,10 +120,11 @@ module.exports = grammar({
 
     // --- style bodies -----------------------------------------------------------
 
-    // base / variant value bodies: declarations, use, states and slot blocks.
-    _body_item: ($) => choice($.declaration, $.use_statement, $.state_block, $.slot_block),
+    // base / variant value bodies: declarations, use, states, slot blocks, at-rules.
+    _body_item: ($) =>
+      choice($.declaration, $.use_statement, $.state_block, $.slot_block, $.at_rule),
     // recipe/style/slot bodies: no nested slot blocks.
-    _style_item: ($) => choice($.declaration, $.use_statement, $.state_block),
+    _style_item: ($) => choice($.declaration, $.use_statement, $.state_block, $.at_rule),
 
     slot_block: ($) => seq(field("name", $.identifier), "{", repeat($._style_item), "}"),
 

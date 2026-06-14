@@ -1,9 +1,9 @@
 import type {
   ArviaFile,
+  AtRuleBody,
   ComponentDecl,
   Declaration,
   DefaultEntry,
-  KeyframesDecl,
   RawValue,
   RecipeDecl,
   Span,
@@ -34,7 +34,6 @@ export type AstTarget =
   | { kind: "component-name"; component: ComponentDecl }
   | { kind: "style-name"; style: StyleDecl }
   | { kind: "recipe-name"; recipe: RecipeDecl }
-  | { kind: "keyframes-name"; keyframes: KeyframesDecl }
   | { kind: "variant-name"; component: ComponentDecl; variant: VariantDecl }
   | {
       kind: "variant-value-name";
@@ -48,14 +47,7 @@ export type AstTarget =
       component: ComponentDecl;
       entry: DefaultEntry;
       part: "variant" | "value";
-      context: "defaults" | "compound" | "responsive" | "container";
-    }
-  | {
-      kind: "conditional-key";
-      component: ComponentDecl;
-      key: string;
-      span: Span;
-      context: "responsive" | "container";
+      context: "defaults" | "compound";
     }
   | { kind: "css-property"; name: string; span: Span };
 
@@ -80,14 +72,9 @@ export function nodeAtOffset(ast: ArviaFile, offset: number): AstTarget | null {
         if (hit) return hit;
         break;
       }
-      case "keyframes": {
-        if (onSpan(offset, item.nameSpan)) return { kind: "keyframes-name", keyframes: item };
-        for (const step of item.steps) {
-          for (const decl of step.decls) {
-            const hit = declTarget(decl, offset, null);
-            if (hit) return hit;
-          }
-        }
+      case "atrule": {
+        const hit = atRuleTarget(item, offset, null);
+        if (hit) return hit;
         break;
       }
       case "styledecl": {
@@ -107,6 +94,10 @@ export function nodeAtOffset(ast: ArviaFile, offset: number): AstTarget | null {
             const hit = declTarget(decl, offset, null);
             if (hit) return hit;
           }
+        }
+        for (const atRule of item.atRules) {
+          const hit = atRuleTarget(atRule, offset, null);
+          if (hit) return hit;
         }
         break;
       }
@@ -163,47 +154,9 @@ function componentTarget(component: ComponentDecl, offset: number): AstTarget | 
         if (hit) return hit;
         break;
       }
-      case "responsive": {
-        for (const entry of item.entries) {
-          // A range head has up to two endpoints; resolve whichever the cursor is on.
-          for (const end of [
-            { name: entry.lower, span: entry.lowerSpan },
-            { name: entry.upper, span: entry.upperSpan },
-          ]) {
-            if (end.name && end.span && onSpan(offset, end.span)) {
-              return {
-                kind: "conditional-key",
-                component,
-                key: end.name,
-                span: end.span,
-                context: "responsive",
-              };
-            }
-          }
-          const hit = settingsTarget(entry.variants, offset, component, "responsive");
-          if (hit) return hit;
-        }
-        break;
-      }
-      case "container": {
-        for (const entry of item.entries) {
-          for (const end of [
-            { name: entry.lower, span: entry.lowerSpan },
-            { name: entry.upper, span: entry.upperSpan },
-          ]) {
-            if (end.name && end.span && onSpan(offset, end.span)) {
-              return {
-                kind: "conditional-key",
-                component,
-                key: end.name,
-                span: end.span,
-                context: "container",
-              };
-            }
-          }
-          const hit = settingsTarget(entry.variants, offset, component, "container");
-          if (hit) return hit;
-        }
+      case "atrule": {
+        const hit = atRuleTarget(item, offset, component);
+        if (hit) return hit;
         break;
       }
       case "compound": {
@@ -290,6 +243,9 @@ function styleItemsTarget(
       if (onSpan(offset, item.recipeSpan)) {
         return { kind: "use-recipe", name: item.recipe, span: item.recipeSpan };
       }
+    } else if (item.kind === "atrule") {
+      const hit = atRuleTarget(item, offset, component);
+      if (hit) return hit;
     } else {
       for (const decl of item.items) {
         const hit = declTarget(decl, offset, component);
@@ -342,11 +298,43 @@ function valueTarget(
   return null;
 }
 
+/** Recurses into a raw at-rule body so token refs inside `@media`/`@supports`
+ *  declarations still resolve. `@keyframes` bodies are pure pass-through CSS —
+ *  their refs are not resolved. */
+function atRuleTarget(
+  atRule: import("@arviahq/compiler").AtRule,
+  offset: number,
+  component: ComponentDecl | null,
+): AstTarget | null {
+  if (atRule.name === "keyframes" || !atRule.body) return null;
+  return atRuleBodyTarget(atRule.body, offset, component);
+}
+
+function atRuleBodyTarget(
+  body: AtRuleBody,
+  offset: number,
+  component: ComponentDecl | null,
+): AstTarget | null {
+  for (const decl of body.decls) {
+    const hit = declTarget(decl, offset, component);
+    if (hit) return hit;
+  }
+  for (const rule of body.rules) {
+    const hit = atRuleBodyTarget(rule.body, offset, component);
+    if (hit) return hit;
+  }
+  for (const nested of body.atRules) {
+    const hit = atRuleTarget(nested, offset, component);
+    if (hit) return hit;
+  }
+  return null;
+}
+
 function settingsTarget(
   entries: DefaultEntry[],
   offset: number,
   component: ComponentDecl,
-  context: "defaults" | "compound" | "responsive" | "container",
+  context: "defaults" | "compound",
 ): AstTarget | null {
   for (const entry of entries) {
     if (onSpan(offset, entry.variantSpan)) {

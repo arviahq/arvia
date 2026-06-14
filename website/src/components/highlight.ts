@@ -24,7 +24,7 @@ function getHighlighter(): Promise<HighlighterCore> {
 
 export function langFromLabel(label?: string, code?: string): string {
   if (!label) {
-    if (code && /^\s*(theme|component|recipe|global|keyframes|style)\b/m.test(code)) {
+    if (code && /^\s*(@[a-z]|theme|component|recipe|global|style)\b/m.test(code)) {
       return "arv";
     }
     return "typescript";
@@ -47,6 +47,7 @@ const ARV_COLORS = {
     keyword: "#cf222e",
     token: "#953800",
     property: "#116329",
+    name: "#8250df",
     hex: "#0550ae",
     string: "#0a3069",
     comment: "#6e7781",
@@ -57,6 +58,7 @@ const ARV_COLORS = {
     keyword: "#ff7b72",
     token: "#ffa657",
     property: "#7ee787",
+    name: "#d2a8ff",
     hex: "#79c0ff",
     string: "#a5d6ff",
     comment: "#8b949e",
@@ -78,11 +80,11 @@ function highlightArv(code: string, theme: "light" | "dark"): string {
   const patterns: { re: RegExp; color: string }[] = [
     { re: /\/\/.*$/gm, color: c.comment },
     {
-      re: /\b(component|recipe|theme|global|keyframes|style|base|slots|variants|defaults|compound|responsive|container|tokens|modes|use|doc)\b|@[a-zA-Z][\w-]*|&::?[a-z-]+(?:\([^)]*\))?/g,
+      re: /\b(component|recipe|theme|global|style|base|slots|variants|defaults|compound|tokens|modes|use|doc)\b|@[a-zA-Z][\w-]*|&::?[a-z-]+(?:\([^)]*\))?/g,
       color: c.keyword,
     },
     {
-      re: /\b[a-z][a-zA-Z0-9]*\.[a-zA-Z0-9]+\b/g,
+      re: /\b[A-Za-z_][\w-]*\.[\w-]+\b/g,
       color: c.token,
     },
     { re: /#[0-9a-fA-F]{3,8}\b/g, color: c.hex },
@@ -90,6 +92,16 @@ function highlightArv(code: string, theme: "light" | "dark"): string {
     {
       re: /\b[a-zA-Z-]+(?=\s*:)/g,
       color: c.property,
+    },
+    // Declaration heads: token group / component / slot / variant names (before
+    // `{`) and token-entry names (before `=`). Kebab-case names stay whole.
+    {
+      re: /\b[A-Za-z_][\w-]*(?=\s*\{)/g,
+      color: c.name,
+    },
+    {
+      re: /\b[A-Za-z0-9_][\w-]*(?=\s*=)/g,
+      color: c.name,
     },
   ];
 

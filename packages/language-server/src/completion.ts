@@ -4,24 +4,15 @@ import type { ComponentDecl, ThemeEnv } from "@arviahq/compiler";
 import { allCssProperties, propertyDescription } from "./cssdata.js";
 import type { DocumentAnalysis } from "./documents.js";
 
-const SECTION_KEYWORDS = [
-  "base",
-  "slots",
-  "variants",
-  "defaults",
-  "responsive",
-  "container",
-  "compound",
-  "tokens",
-];
-const TOP_KEYWORDS = ["theme", "global", "recipe", "keyframes", "style", "component"];
+const SECTION_KEYWORDS = ["base", "slots", "variants", "defaults", "compound", "tokens"];
+const TOP_KEYWORDS = ["theme", "global", "recipe", "style", "component"];
 const DEFAULT_GROUPS = [
   "color",
   "space",
   "radius",
   "font",
   "breakpoint",
-  "container",
+  "container-size",
   "duration",
   "easing",
 ];
@@ -108,11 +99,6 @@ export function getCompletions(analysis: DocumentAnalysis, offset: number): Comp
         });
       }
     }
-    if (group === "keyframes") {
-      for (const name of Object.keys(env.keyframes)) {
-        items.push(item(name, CompletionItemKind.Event, "keyframes"));
-      }
-    }
     if (items.length > 0) return items;
   }
 
@@ -153,20 +139,10 @@ export function getCompletions(analysis: DocumentAnalysis, offset: number): Comp
         items.push(item(variant.name, CompletionItemKind.Enum, variant.values.join(" | ")));
       }
     }
-    if (/\bresponsive\s*\{\s*$/.test(before.slice(-20))) {
-      for (const [bp, size] of Object.entries(env.breakpoints)) {
-        items.push(item(bp, CompletionItemKind.Variable, `min-width: ${size}`));
-      }
-    }
-    if (/\bcontainer\s*\{\s*$/.test(before.slice(-20))) {
-      for (const [cq, size] of Object.entries(env.containers)) {
-        items.push(item(cq, CompletionItemKind.Variable, `min-width: ${size}`));
-      }
-    }
     if (items.length > 0) return items;
   }
 
-  // `variant: ` inside defaults/compound/responsive/container → value names.
+  // `variant: ` inside defaults/compound → value names.
   const settingMatch = linePrefix.match(/^\s*([A-Za-z_][\w$-]*)\s*:\s*$/);
   if (settingMatch && component) {
     const variant = variantsOf(component).find((v) => v.name === settingMatch[1]);
@@ -183,9 +159,6 @@ export function getCompletions(analysis: DocumentAnalysis, offset: number): Comp
     const groups = new Set([...Object.keys(env.tokens), ...locals.keys()]);
     for (const group of groups) {
       items.push(item(group, CompletionItemKind.Module, "token group"));
-    }
-    if (Object.keys(env.keyframes).length > 0) {
-      items.push(item("keyframes", CompletionItemKind.Module, "animations"));
     }
     return items;
   }

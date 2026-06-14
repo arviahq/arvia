@@ -22,8 +22,8 @@ export function getThemeEnv(): ThemeEnv {
 
 /**
  * The theme CSS from the same in-browser compile as the env. The preview must
- * inject this rather than rely on the site's global CSS: hashed names (e.g.
- * @keyframes pulse_<hash>) differ between the Vite build and this compile.
+ * inject this rather than rely on the site's global CSS: the theme's global
+ * rules, @keyframes and custom properties come from this compile.
  */
 export function getThemeCss(): string {
   return bootstrap().css;

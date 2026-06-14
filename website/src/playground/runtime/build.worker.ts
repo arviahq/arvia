@@ -7,7 +7,7 @@ import { DESIGN_URL_PLACEHOLDER } from "./srcdoc";
 /** Snippet generation stays anchored to the last successful compile so the
  *  app file doesn't flip to the empty fallback while typing through errors. */
 let lastGood: { meta: CompileResult["meta"]; css: string } = {
-  meta: { components: [], tokens: [], keyframes: [], styles: [] },
+  meta: { components: [], tokens: [], styles: [] },
   css: "",
 };
 

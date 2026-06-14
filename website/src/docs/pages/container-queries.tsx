@@ -10,12 +10,12 @@ export const container_queriesMeta: DocPageMeta = {
   title: <fbt desc="Docs page title — Container queries">{"Container queries"}</fbt>,
   description: (
     <fbt desc="Docs page description — Adapt to container width.">
-      {"Switch variants based on the component's own width."}
+      {"Nest raw @container; container-size tokens inline to their value."}
     </fbt>
   ),
   nav: { section: "language", order: 12 },
   searchText:
-    "Container queries adapt a component to its own width, not the viewport's. Define container tokens in the theme: container { wide = 480px; }. Then a container block switches a variant when the component is at least that wide. component Card { variants { layout { stacked { flex-direction: column; } row { flex-direction: row; } } } defaults { layout: stacked; } container { wide { layout: row; } } } The card stacks by default and switches to a row once its container is at least 480px — so the same card adapts in a sidebar and in a full-width region. Arvia sets container-type on the root for you. Related: Responsive, Variants.",
+    "Container queries adapt a component to its own width, not the viewport's. Write a raw @container at-rule nested in base — set container-type: inline-size on the element yourself first. Define container tokens in the theme: container-size { wide = 480px; }. component Card { base { container-type: inline-size; flex-direction: column; @container (min-width: container-size.wide) { flex-direction: row; } } } The @container prelude is plain CSS, just like @media; the only thing inlined is container-size.X references, measured in inline-size: (min-width: container-size.wide) becomes @container (min-width: 480px), (inline-size < container-size.wide) becomes (inline-size < 480px), and (container-size.narrow <= inline-size < container-size.wide) is a half-open band. A prelude with no token refs passes through verbatim. An unknown container-size ref surfaces as ARV101. Related: Responsive, At-rules.",
 };
 
 export function ContainerQueriesPage() {
@@ -24,37 +24,40 @@ export function ContainerQueriesPage() {
       <DocP>
         <fbt desc="Docs content — container: what">
           {
-            "Container queries adapt a component to its own width, not the viewport's. Define container tokens in the theme, then a `container` block switches a variant when the component is at least that wide:"
+            "Container queries adapt a component to its own width, not the viewport's. Set `container-type` on the element, then nest a raw `@container` at-rule — write a plain CSS condition, and any `container-size.X` reference inlines to its value (measured in `inline-size`):"
           }
         </fbt>
       </DocP>
       <DocCode
+        label={"src/theme.arv"}
+        code={`theme {
+  container-size { wide = 480px; }
+}`}
+      />
+      <DocCode
         label={"card.arv"}
         code={`component Card {
-  variants {
-    layout {
-      stacked { flex-direction: column; }
-      row { flex-direction: row; }
-    }
-  }
-  defaults { layout: stacked; }
+  base {
+    container-type: inline-size;
+    flex-direction: column;
 
-  container {
-    wide { layout: row; }
+    @container (min-width: container-size.wide) {
+      flex-direction: row;
+    }
   }
 }`}
       />
       <DocCallout tone="info">
         <fbt desc="Docs note — container: same component">
           {
-            "The card stacks by default and becomes a row once its container reaches the `wide` token width — so the same card adapts in a narrow sidebar and a full-width region. Arvia sets `container-type` on the root for you."
+            "The card stacks by default and becomes a row once its own width reaches the `wide` token — so the same card adapts in a narrow sidebar and a full-width region. Set `container-type` yourself; Arvia no longer injects it."
           }
         </fbt>
       </DocCallout>
       <DocP>
         <fbt desc="Docs content — container: ranges">
           {
-            "The `..` range operator works here too, measured against the container's `inline-size`: `..wide` caps a change below a size and `narrow..wide` scopes it to a half-open band — same syntax as [responsive](/docs/responsive)."
+            "Condition forms match [responsive](/docs/responsive): `(min-width: container-size.wide)` becomes `@container (min-width: 480px)`, `(inline-size < container-size.wide)` caps below a size, and `(container-size.narrow <= inline-size < container-size.wide)` is a half-open band. A prelude with no token refs like `@container (min-width: 30rem)` is emitted verbatim."
           }
         </fbt>
       </DocP>
@@ -64,7 +67,7 @@ export function ContainerQueriesPage() {
       <DocP>
         <fbt desc="Docs content — container: related">
           {
-            "[Responsive](/docs/responsive) for viewport breakpoints · [Variants & defaults](/docs/variants)."
+            "[CSS & at-rules](/docs/css) · [Responsive](/docs/responsive) for viewport breakpoints · [Keyframes](/docs/keyframes)."
           }
         </fbt>
       </DocP>

@@ -37,14 +37,14 @@ const SOURCE = `theme {
 
 recipe Surface { background: white; }
 
-keyframes spin { from { opacity: 0; } }
+@keyframes spin { from { opacity: 0; } }
 
 component Button {
   use Surface;
   slots { icon; }
   base {
     color: color.primary;
-    animation: keyframes.spin 1s;
+    animation: spin 1s;
     icon { display: flex; }
     &:hover { icon { opacity: 1; } }
   }
@@ -63,7 +63,6 @@ describe("semantic tokens", () => {
   it("classifies declarations with the declaration modifier", () => {
     expect(find("Button", "class")[0]!.mods).toContain("declaration");
     expect(find("Surface", "function")[0]!.mods).toContain("declaration");
-    expect(find("spin", "type")[0]!.mods).toContain("declaration");
     expect(find("color", "namespace")).toHaveLength(1); // theme group
     expect(find("primary", "variable")[0]!.mods).toEqual(["declaration", "readonly"]);
   });
@@ -82,7 +81,6 @@ describe("semantic tokens", () => {
 
   it("classifies refs by target kind", () => {
     expect(find("color.primary", "variable")[0]!.mods).toEqual(["readonly"]);
-    expect(find("keyframes.spin", "type")).toHaveLength(1);
     expect(find("Surface", "function")).toHaveLength(2); // decl + use
   });
 

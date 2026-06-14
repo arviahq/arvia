@@ -133,6 +133,9 @@ static bool scan_raw_selector(TSLexer *lexer) {
   skip_ws(lexer);
   if (lexer->eof(lexer)) return false;
   if (lexer->lookahead == '{' || lexer->lookahead == '}' || lexer->lookahead == ';') return false;
+  // CSS selectors never start with '@'; bailing here lets the `at_rule` rule
+  // claim raw at-rules instead of swallowing them as a selector.
+  if (lexer->lookahead == '@') return false;
   if (at_comment_start(lexer)) return false;
 
   bool any = false;
@@ -154,9 +157,72 @@ static bool scan_raw_selector(TSLexer *lexer) {
   return true;
 }
 
+/**
+ * At-rule prelude (both RAW_VALUE and RAW_SELECTOR are valid): scan to the
+ * first unnested terminator and dispatch by it — `{` → block (RAW_SELECTOR),
+ * `;` / `}` → statement (RAW_VALUE). This resolves the `@name … {` vs
+ * `@name … ;` ambiguity, which neither single scanner can decide alone.
+ */
+static bool scan_prelude(TSLexer *lexer) {
+  skip_ws(lexer);
+  if (lexer->eof(lexer)) return false;
+  if (lexer->lookahead == '{' || lexer->lookahead == ';' || lexer->lookahead == '}') return false;
+  if (lexer->lookahead == '@') return false;
+  if (at_comment_start(lexer)) return false;
+
+  int depth = 0;
+  int32_t quote = 0;
+  bool any = false;
+  lexer->mark_end(lexer);
+
+  while (!lexer->eof(lexer)) {
+    int32_t c = lexer->lookahead;
+    if (quote) {
+      if (c == '\\') {
+        lexer->advance(lexer, false);
+        if (!lexer->eof(lexer)) lexer->advance(lexer, false);
+        lexer->mark_end(lexer);
+        any = true;
+        continue;
+      }
+      if (c == quote) quote = 0;
+      lexer->advance(lexer, false);
+      lexer->mark_end(lexer);
+      any = true;
+      continue;
+    }
+    if (c == '"' || c == '\'') {
+      quote = c;
+      lexer->advance(lexer, false);
+      lexer->mark_end(lexer);
+      any = true;
+      continue;
+    }
+    if (c == '(') depth++;
+    if (c == ')' && depth > 0) depth--;
+    if (depth == 0 && c == '{') {
+      lexer->result_symbol = RAW_SELECTOR;
+      return any;
+    }
+    if (depth == 0 && (c == ';' || c == '}')) {
+      lexer->result_symbol = RAW_VALUE;
+      return any;
+    }
+    if (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
+      lexer->advance(lexer, false); // trailing/interior whitespace stays unmarked
+      continue;
+    }
+    lexer->advance(lexer, false);
+    lexer->mark_end(lexer);
+    any = true;
+  }
+  return false; // hit EOF without a terminator
+}
+
 bool tree_sitter_arvia_external_scanner_scan(void *payload, TSLexer *lexer,
                                              const bool *valid_symbols) {
   (void)payload;
+  if (valid_symbols[RAW_VALUE] && valid_symbols[RAW_SELECTOR]) return scan_prelude(lexer);
   if (valid_symbols[RAW_VALUE]) return scan_raw_value(lexer);
   if (valid_symbols[RAW_SELECTOR]) return scan_raw_selector(lexer);
   return false;

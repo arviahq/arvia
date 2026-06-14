@@ -194,7 +194,7 @@ describe("parser", () => {
   it("rejects unknown top-level constructs", () => {
     failsWith(
       "widget X {}",
-      "expected 'theme', 'global', 'recipe', 'keyframes', 'style' or 'component'",
+      "expected 'theme', 'global', 'recipe', 'style', 'component' or an at-rule",
     );
   });
 

@@ -66,13 +66,13 @@ theme {
     lg = 1024px;
   }
 
-  container {
+  container-size {
     narrow = 320px;
     wide = 560px;
   }
 }
 
-keyframes fadeIn {
+@keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(4px);

@@ -20,7 +20,7 @@ const SOURCE = `component Button {
 
 style Truncate { overflow: hidden; }
 
-keyframes spin { from { opacity: 0; } }`;
+@keyframes spin { from { opacity: 0; } }`;
 
 const hoverText = (source: string, needle: string, occurrence = 1): string => {
   const hover = getHover(analysisOf(source), at(source, needle, occurrence), nullThemeHost);
@@ -52,11 +52,21 @@ describe("compiled-CSS hover preview", () => {
     expect(text).not.toContain("color: red;");
   });
 
-  it("style and keyframes names preview their blocks", () => {
+  it("style names preview their blocks", () => {
     expect(hoverText(SOURCE, "Truncate")).toContain("overflow: hidden;");
-    const spin = hoverText(SOURCE, "spin");
-    expect(spin).toContain("@keyframes");
-    expect(spin).toContain("opacity: 0;");
+  });
+
+  it("includes at-rules scoped to the component in its preview", () => {
+    const source = `component Card {
+  base {
+    color: black;
+    @media (min-width: 768px) { color: white; }
+  }
+}`;
+    const text = hoverText(source, "Card");
+    expect(text).toContain("color: black;");
+    expect(text).toContain("@media");
+    expect(text).toContain("color: white;");
   });
 
   it("long previews are truncated", () => {

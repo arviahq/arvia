@@ -23,12 +23,6 @@ export function getDefinition(
 
   switch (target.kind) {
     case "token-ref": {
-      if (target.word.group === "keyframes") {
-        const own = findKeyframes(analysis.ast, target.word.name);
-        if (own) return local(own);
-        const themed = theme && findKeyframes(theme.ast, target.word.name);
-        return themed ? inTheme(themed) : null;
-      }
       // Component-local tokens shadow the theme.
       if (target.component) {
         const localToken = findLocalToken(target.component, target.word.group, target.word.name);
@@ -51,13 +45,6 @@ export function getDefinition(
       if (target.part === "variant") return local(variant.nameSpan);
       const value = variant.values.find((v) => v.name === target.entry.value);
       return value ? local(value.nameSpan) : local(variant.nameSpan);
-    }
-    case "conditional-key": {
-      const group = target.context === "responsive" ? "breakpoint" : "container";
-      const own = findThemeEntry(analysis.ast, group, target.key);
-      if (own) return local(own);
-      const themed = theme && findThemeEntry(theme.ast, group, target.key);
-      return themed ? inTheme(themed) : null;
     }
     default:
       return null;
@@ -91,13 +78,6 @@ function findThemeEntry(ast: ArviaFile, group: string, name: string): Span | nul
 function findRecipe(ast: ArviaFile, name: string): Span | null {
   for (const item of ast.items) {
     if (item.kind === "recipe" && item.name === name) return item.nameSpan;
-  }
-  return null;
-}
-
-function findKeyframes(ast: ArviaFile, name: string): Span | null {
-  for (const item of ast.items) {
-    if (item.kind === "keyframes" && item.name === name) return item.nameSpan;
   }
   return null;
 }

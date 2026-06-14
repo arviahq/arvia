@@ -14,6 +14,13 @@
       "port": 5175
     },
     {
+      "name": "website-preview",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["website/node_modules/vite/bin/vite.js", "website"],
+      "port": 5186,
+      "autoPort": true
+    },
+    {
       "name": "vue-demo",
       "runtimeExecutable": "node",
       "runtimeArgs": [

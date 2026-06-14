@@ -1,34 +1,21 @@
 component RecipeContainerCard {
   base {
+    // Opt this element into container queries, then nest `@container`. Token
+    // refs in the condition inline to literals — `container-size.narrow` →
+    // `320px` — measured against the element's own inline-size.
+    container-type: inline-size;
     display: flex;
+    flex-direction: column;
+    gap: space.2;
     padding: space.4;
     border-radius: radius.md;
     border: 1px solid color.border;
     background: color.surface;
-  }
 
-  variants {
-    layout {
-      stacked {
-        flex-direction: column;
-        gap: space.2;
-      }
-      row {
-        flex-direction: row;
-        gap: space.4;
-        align-items: center;
-      }
+    @container (min-width: container-size.narrow) {
+      flex-direction: row;
+      gap: space.4;
+      align-items: center;
     }
-  }
-
-  defaults {
-    layout: stacked;
-  }
-
-  container {
-    // `..` ranges work here too, measured against the container's inline-size
-    ..narrow { layout: stacked; }   // inline-size < narrow
-    narrow..wide { layout: row; }   // narrow <= inline-size < wide
-    wide { layout: row; }           // wide and up
   }
 }

@@ -5,6 +5,16 @@ component FeatureGrid {
     display: grid;
     gap: space.4;
 
+    // One column by default; widens to two then three across breakpoints.
+    grid-template-columns: 1fr;
+
+    @media (min-width: breakpoint.md) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (min-width: breakpoint.lg) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
     item {
       padding: space.4;
       border-radius: radius.lg;
@@ -37,20 +47,4 @@ component FeatureGrid {
     description;
   }
 
-  variants {
-    columns {
-      one { root { grid-template-columns: 1fr; } }
-      two { root { grid-template-columns: repeat(2, 1fr); } }
-      three { root { grid-template-columns: repeat(3, 1fr); } }
-    }
-  }
-
-  defaults {
-    columns: one;
-  }
-
-  responsive {
-    md { columns: two; }
-    lg { columns: three; }
-  }
 }

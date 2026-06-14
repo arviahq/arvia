@@ -1,30 +1,72 @@
 import type { Span } from "../../diagnostics.js";
-import type { DeclIR, FileIR, StyleIR } from "../../ir/ir.js";
+import type { AtRuleIR, DeclIR, FileIR, RawRuleIR, StyleIR } from "../../ir/ir.js";
 import { cssVarName, isColorValue } from "../../ir/ir.js";
-import {
-  baseClass,
-  compoundClass,
-  containerVariantClass,
-  responsiveVariantClass,
-  variantClass,
-} from "../../ir/names.js";
+import { baseClass, compoundClass, variantClass } from "../../ir/names.js";
 import { buildCssSourceMap, type CssMapping, type CssSourceMap } from "./sourcemap.js";
 
 export type { CssSourceMap } from "./sourcemap.js";
 
-// Half-open [lower, upper) ranges. The `>=`-only form keeps emitting `min-width`
-// (byte-identical to pre-range output); bounded forms use modern range syntax,
-// which needs no exclusive-upper epsilon.
-const mediaQuery = (lower: string | null, upper: string | null): string => {
-  if (lower && !upper) return `@media (min-width: ${lower})`;
-  if (!lower && upper) return `@media (width < ${upper})`;
-  return `@media (${lower} <= width < ${upper})`;
-};
-const containerQuery = (lower: string | null, upper: string | null): string => {
-  if (lower && !upper) return `@container (min-width: ${lower})`;
-  if (!lower && upper) return `@container (inline-size < ${upper})`;
-  return `@container (${lower} <= inline-size < ${upper})`;
-};
+const declLines = (decls: DeclIR[]): string =>
+  decls.map((d) => `  ${d.property}: ${d.value};`).join("\n");
+
+/** At-rules whose body holds descriptors / page-margin boxes, not element
+ *  styles — their declarations are never scoped to a class, even when written
+ *  inside a component (`@font-face { font-family: … }` must emit verbatim).
+ *
+ *  This list can't be derived from syntax: `@media { color: red }` (element
+ *  style → class-wrapped) and `@font-face { font-family: x }` (descriptor →
+ *  verbatim) are syntactically identical; the distinction lives in the CSS
+ *  spec. It only matters for a descriptor at-rule *nested inside a component*
+ *  — at the top level or in `global` every at-rule emits verbatim regardless
+ *  of name (see emitFreeAtRule), so a new/unlisted at-rule always works there.
+ *  Unknown at-rules nested in a component default to class-wrapping, which
+ *  suits the more common future case (grouping rules like `@scope` /
+ *  `@starting-style`). When the spec adds descriptor at-rules, add them here. */
+const DESCRIPTOR_AT_RULES = new Set([
+  "font-face",
+  "font-feature-values",
+  "font-palette-values",
+  "counter-style",
+  "property",
+  "page",
+  "position-try",
+  "view-transition",
+  "viewport",
+]);
+
+/** A nested `selector { … }` rule, emitted verbatim (keyframe steps, raw
+ *  rules inside a passed-through at-rule). */
+function emitRawRule(r: RawRuleIR): string {
+  const inner: string[] = [];
+  if (r.decls.length > 0) inner.push(declLines(r.decls));
+  for (const nested of r.rules) inner.push(emitRawRule(nested));
+  for (const at of r.atRules) inner.push(emitFreeAtRule(at));
+  return `${r.selector} {\n${inner.join("\n\n")}\n}`;
+}
+
+/** A raw at-rule emitted verbatim (top-level / global): bare declarations,
+ *  nested rules and nested at-rules pass through as authored. */
+function emitFreeAtRule(at: AtRuleIR): string {
+  if (at.statement) return `${at.prelude};`;
+  const inner: string[] = [];
+  if (at.decls.length > 0) inner.push(declLines(at.decls));
+  for (const r of at.rules) inner.push(emitRawRule(r));
+  for (const child of at.atRules) inner.push(emitFreeAtRule(child));
+  return `${at.prelude} {\n${inner.join("\n\n")}\n}`;
+}
+
+/** A raw at-rule attached to a component slot / style: bare declarations are
+ *  wrapped in the owning class so `@media (...) { color: red }` targets the
+ *  element. Descriptor at-rules (`@font-face`, …) and statements emit verbatim.
+ *  Nested rules/at-rules pass through. */
+function emitScopedAtRule(at: AtRuleIR, className: string): string {
+  if (at.statement || DESCRIPTOR_AT_RULES.has(at.name)) return emitFreeAtRule(at);
+  const inner: string[] = [];
+  if (at.decls.length > 0) inner.push(`.${className} {\n${declLines(at.decls)}\n}`);
+  for (const r of at.rules) inner.push(emitRawRule(r));
+  for (const child of at.atRules) inner.push(emitScopedAtRule(child, className));
+  return `${at.prelude} {\n${inner.join("\n\n")}\n}`;
+}
 
 /** Emits static, minification-ready CSS. */
 export function emitCss(ir: FileIR): string {
@@ -75,76 +117,37 @@ export function emitCssWithMap(
         }
       }
     }
+    for (const at of style.atRules) out.push(emitScopedAtRule(at, className));
   };
 
-  const emitConditionalRules = (
-    entries: {
-      key: string;
-      lower: string | null;
-      upper: string | null;
-      variants: Record<string, string>;
-    }[],
-    classFn: (
-      c: FileIR["components"][number],
-      variant: string,
-      value: string,
-      key: string,
-      slot: string,
-    ) => string,
-    wrap: (lower: string | null, upper: string | null, rules: string[]) => string,
-    component: FileIR["components"][number],
-  ) => {
-    const grouped = new Map<
-      string,
-      { lower: string | null; upper: string | null; rules: string[] }
-    >();
-    for (const entry of entries) {
-      // A fully-unresolved head (unknown bare breakpoint) emits nothing — the
-      // checker has already reported it.
-      if (!entry.lower && !entry.upper) continue;
-      const group = grouped.get(entry.key) ?? {
-        lower: entry.lower,
-        upper: entry.upper,
-        rules: [],
-      };
-      const rules = group.rules;
-      for (const [variantName, valueName] of Object.entries(entry.variants)) {
-        const variant = component.variants.find((v) => v.name === variantName);
-        const value = variant?.values.find((v) => v.name === valueName);
-        if (!value) continue;
-        for (const slot of component.slotNames) {
-          const style = value.slots[slot];
-          if (!style) continue;
-          const className = classFn(component, variantName, valueName, entry.key, slot);
-          const chunk: string[] = [];
-          const emit = (selector: string, decls: DeclIR[]) => {
-            if (decls.length === 0) return;
-            const body = decls.map((d) => `  ${d.property}: ${d.value};`).join("\n");
-            chunk.push(`${selector} {\n${body}\n}`);
-          };
-          emit(`.${className}`, style.decls);
-          for (const state of style.states) {
-            emit(state.selectors.map((s) => `.${className}${s}`).join(",\n"), state.decls);
-            if (state.slotDecls) {
-              for (const [target, decls] of Object.entries(state.slotDecls)) {
-                emit(
-                  state.selectors
-                    .map((s) => `.${className}${s} .${baseClass(component, target)}`)
-                    .join(",\n"),
-                  decls,
-                );
-              }
-            }
-          }
-          rules.push(...chunk);
-        }
-      }
-      grouped.set(entry.key, group);
+  // Emits a component/style's rules; if it was declared inside at-rules, wraps
+  // its whole output in the prelude chain (outer→inner), e.g. `@layer base { … }`.
+  const emitConstruct = (anchorSpan: Span, layers: string[] | undefined, fn: () => void) => {
+    anchor = anchorSpan;
+    if (!layers || layers.length === 0) {
+      fn();
+      anchor = null;
+      return;
     }
-    for (const { lower, upper, rules } of grouped.values()) {
-      if (rules.length > 0) out.push(wrap(lower, upper, rules));
+    const start = chunks.length;
+    fn();
+    const produced = chunks.splice(start);
+    if (produced.length > 0) {
+      let body = produced.map((c) => c.text).join("\n\n");
+      for (let i = layers.length - 1; i >= 0; i--) body = `${layers[i]} {\n${body}\n}`;
+      chunks.push({ text: body, span: anchorSpan });
     }
+    anchor = null;
   };
+
+  // Statement at-rules (`@import`, `@charset`, `@layer a, b;`) must precede all
+  // other rules — hoist them to the very top of the output.
+  for (const at of ir.globalAtRules) {
+    if (!at.statement) continue;
+    anchor = at.anchor ?? null;
+    out.push(emitFreeAtRule(at));
+  }
+  anchor = null;
 
   if (ir.themeVars.length > 0 && ir.themeModes) {
     const defaultMode = ir.themeModes[0]!;
@@ -233,77 +236,42 @@ export function emitCssWithMap(
     }
   }
 
-  for (const kf of ir.keyframes) {
-    anchor = kf.nameSpan;
-    const steps = kf.steps
-      .map((step) => {
-        const body = step.decls.map((d) => `  ${d.property}: ${d.value};`).join("\n");
-        return `${step.selector} {\n${body}\n}`;
-      })
-      .join("\n\n");
-    out.push(`@keyframes ${kf.cssName} {\n${steps}\n}`);
+  for (const at of ir.globalAtRules) {
+    if (at.statement) continue; // already hoisted above
+    anchor = at.anchor ?? null;
+    out.push(emitFreeAtRule(at));
   }
-
   anchor = null;
+
   for (const global of ir.globals) {
     rule(global.selector, global.decls);
   }
 
   for (const c of ir.components) {
-    anchor = c.nameSpan;
-    if (c.containers.length > 0) {
-      const root = baseClass(c, "root");
-      rule(`.${root}`, [{ property: "container-type", value: "inline-size" }]);
-    }
-
-    for (const slot of c.slotNames) {
-      styleRules(baseClass(c, slot), c.base[slot]!, c);
-    }
-    for (const variant of c.variants) {
-      for (const value of variant.values) {
-        for (const slot of c.slotNames) {
-          const style = value.slots[slot];
-          if (style) styleRules(variantClass(c, variant.name, value.name, slot), style, c);
+    emitConstruct(c.nameSpan, c.layers, () => {
+      for (const slot of c.slotNames) {
+        styleRules(baseClass(c, slot), c.base[slot]!, c);
+      }
+      for (const variant of c.variants) {
+        for (const value of variant.values) {
+          for (const slot of c.slotNames) {
+            const style = value.slots[slot];
+            if (style) styleRules(variantClass(c, variant.name, value.name, slot), style, c);
+          }
         }
       }
-    }
-
-    emitConditionalRules(
-      c.responsive.map((r) => ({
-        key: r.breakpoint,
-        lower: r.lower,
-        upper: r.upper,
-        variants: r.variants,
-      })),
-      responsiveVariantClass,
-      (lower, upper, rules) => `${mediaQuery(lower, upper)} {\n${rules.join("\n\n")}\n}`,
-      c,
-    );
-
-    emitConditionalRules(
-      c.containers.map((r) => ({
-        key: r.container,
-        lower: r.lower,
-        upper: r.upper,
-        variants: r.variants,
-      })),
-      containerVariantClass,
-      (lower, upper, rules) => `${containerQuery(lower, upper)} {\n${rules.join("\n\n")}\n}`,
-      c,
-    );
-
-    for (const compound of c.compounds) {
-      for (const slot of c.slotNames) {
-        const style = compound.slots[slot];
-        if (style) styleRules(compoundClass(c, compound.match, slot), style, c);
+      for (const compound of c.compounds) {
+        for (const slot of c.slotNames) {
+          const style = compound.slots[slot];
+          if (style) styleRules(compoundClass(c, compound.match, slot), style, c);
+        }
       }
-    }
+    });
   }
 
   // Standalone styles last (utilities-last): composed styles win the cascade.
   for (const s of ir.styles) {
-    anchor = s.nameSpan;
-    styleRules(s.className, s.style);
+    emitConstruct(s.nameSpan, s.layers, () => styleRules(s.className, s.style));
   }
 
   if (chunks.length === 0) return { css: "", map: null };

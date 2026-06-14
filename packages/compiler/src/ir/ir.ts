@@ -19,9 +19,34 @@ export interface StateIR {
   slotDecls?: Record<string, DeclIR[]>;
 }
 
+/** A raw CSS at-rule, lowered for emission. `prelude` is the final CSS head
+ *  (e.g. `@media (min-width: 768px)`, `@keyframes pulse`). */
+export interface AtRuleIR {
+  /** At-keyword without '@' (e.g. "media", "font-face") — drives verbatim vs
+   *  class-scoped emission for descriptor at-rules. */
+  name: string;
+  prelude: string;
+  decls: DeclIR[];
+  rules: RawRuleIR[];
+  atRules: AtRuleIR[];
+  /** A blockless statement at-rule (`@import "x";`) — emitted as `prelude;`. */
+  statement?: boolean;
+  /** Source span of the at-keyword, for CSS source maps (free at-rules only). */
+  anchor?: Span;
+}
+
+export interface RawRuleIR {
+  selector: string;
+  decls: DeclIR[];
+  rules: RawRuleIR[];
+  atRules: AtRuleIR[];
+}
+
 export interface StyleIR {
   decls: DeclIR[];
   states: StateIR[];
+  /** Raw at-rules attached to this slot/style, emitted scoped to its class. */
+  atRules: AtRuleIR[];
 }
 
 export type RecipeIR = StyleIR;
@@ -33,27 +58,18 @@ export type TokenModes = Record<string, string>;
 export interface ThemeEnv {
   /** null = single-mode (inline token values); non-null = CSS custom properties. */
   modes: string[] | null;
-  /** Breakpoint tokens from `breakpoint {}` — consumed by responsive variants. */
-  breakpoints: Record<string, string>;
-  /** Container size tokens from `container {}` — consumed by container queries. */
-  containers: Record<string, string>;
   tokens: Record<string, Record<string, string | TokenModes>>;
   /** Prose documentation keyed by token group and name. */
   tokenDocs: Record<string, Record<string, string>>;
   recipes: Record<string, RecipeIR>;
-  /** Keyframe animation names defined in the theme file. */
-  keyframes: Record<string, string>;
 }
 
 export function emptyEnv(): ThemeEnv {
   return {
     modes: null,
-    breakpoints: {},
-    containers: {},
     tokens: {},
     tokenDocs: {},
     recipes: {},
-    keyframes: {},
   };
 }
 
@@ -82,22 +98,12 @@ export interface ThemeVarIR {
   byMode: Record<string, string>;
 }
 
-export interface KeyframesIR {
-  name: string;
-  /** Span of the keyframes name in the .arv source (for editor navigation
-   *  and CSS source maps). */
-  nameSpan: Span;
-  /** Hashed CSS animation name emitted in @keyframes. */
-  cssName: string;
-  steps: { selector: string; decls: DeclIR[] }[];
-}
-
 export function emptyStyle(): StyleIR {
-  return { decls: [], states: [] };
+  return { decls: [], states: [], atRules: [] };
 }
 
 export function isEmptyStyle(s: StyleIR): boolean {
-  return s.decls.length === 0 && s.states.length === 0;
+  return s.decls.length === 0 && s.states.length === 0 && s.atRules.length === 0;
 }
 
 export interface VariantValueIR {
@@ -115,24 +121,6 @@ export interface CompoundIR {
   /** [variant, value] pairs in variant-declaration order. */
   match: [string, string][];
   slots: Record<string, StyleIR>;
-}
-
-export interface ResponsiveIR {
-  /** Canonical range key — also the DTS/runtime prop key (e.g. `md`, `..lg`,
-   *  `sm..lg`). */
-  breakpoint: string;
-  /** Resolved lower-bound size (e.g. `"768px"`), or null for an open lower end. */
-  lower: string | null;
-  /** Resolved upper-bound size, or null for an open upper end (`>=` form). */
-  upper: string | null;
-  variants: Record<string, string>;
-}
-
-export interface ContainerIR {
-  container: string;
-  lower: string | null;
-  upper: string | null;
-  variants: Record<string, string>;
 }
 
 export interface ComponentIR {
@@ -154,8 +142,9 @@ export interface ComponentIR {
   variants: VariantIR[];
   compounds: CompoundIR[];
   defaults: Record<string, string>;
-  responsive: ResponsiveIR[];
-  containers: ContainerIR[];
+  /** Enclosing at-rule preludes (outer→inner) when declared inside an at-rule,
+   *  e.g. `["@layer base"]`. The component's CSS is wrapped in this chain. */
+  layers?: string[];
 }
 
 /** Standalone exported class from a top-level `style` declaration. */
@@ -166,6 +155,8 @@ export interface StyleDeclIR {
   hash: string;
   className: string;
   style: StyleIR;
+  /** Enclosing at-rule preludes (outer→inner) when declared inside an at-rule. */
+  layers?: string[];
 }
 
 export interface GlobalRuleIR {
@@ -175,13 +166,12 @@ export interface GlobalRuleIR {
 
 export interface FileIR {
   globals: GlobalRuleIR[];
+  /** Raw at-rules from the top level and `global {}`, emitted verbatim. */
+  globalAtRules: AtRuleIR[];
   components: ComponentIR[];
   /** Exported single-class styles, emitted after components (utilities-last). */
   styles: StyleDeclIR[];
   /** CSS custom property definitions when the source file declares theme modes. */
   themeVars: ThemeVarIR[];
   themeModes: string[] | null;
-  breakpoints: Record<string, string>;
-  containerSizes: Record<string, string>;
-  keyframes: KeyframesIR[];
 }

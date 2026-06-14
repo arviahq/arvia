@@ -13,6 +13,9 @@
       "include": "#sectionKeywords"
     },
     {
+      "include": "#atRule"
+    },
+    {
       "include": "#useStatement"
     },
     {
@@ -40,7 +43,7 @@
       ]
     },
     "namedBlocks": {
-      "match": "\\b(recipe|component|keyframes|style)\\s+([A-Za-z_][A-Za-z0-9_-]*)",
+      "match": "\\b(recipe|component|style)\\s+([A-Za-z_][A-Za-z0-9_-]*)",
       "captures": {
         "1": {
           "name": "keyword.control.arv"
@@ -51,8 +54,12 @@
       }
     },
     "sectionKeywords": {
-      "match": "\\b(theme|global|base|slots|variants|defaults|responsive|container|compound|tokens)\\b(?=\\s*\\{)",
+      "match": "\\b(theme|global|base|slots|variants|defaults|compound|tokens)\\b(?=\\s*\\{)",
       "name": "keyword.control.arv"
+    },
+    "atRule": {
+      "match": "@[A-Za-z][A-Za-z-]*",
+      "name": "keyword.control.at-rule.arv"
     },
     "useStatement": {
       "match": "\\b(use)\\s+([A-Za-z_][A-Za-z0-9_-]*)\\s*(?=;)",

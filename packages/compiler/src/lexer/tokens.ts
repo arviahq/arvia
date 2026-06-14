@@ -11,7 +11,6 @@ export type TokenKind =
   | "amp"
   | "at"
   | "pipe"
-  | "dotdot" // `..` range operator (responsive/container heads)
   | "raw" // raw value / raw selector text
   | "eof";
 

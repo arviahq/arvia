@@ -14,6 +14,11 @@ component Footer {
       display: grid;
       gap: space.6;
       margin-bottom: space.6;
+      grid-template-columns: 1fr 1fr;
+
+      @media (min-width: breakpoint.md) {
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+      }
     }
 
     brand {
@@ -22,6 +27,11 @@ component Footer {
       gap: space.3;
       align-items: flex-start;
       max-width: 280px;
+      grid-column: 1 / -1;
+
+      @media (min-width: breakpoint.md) {
+        grid-column: auto;
+      }
     }
 
     brandRow {
@@ -101,24 +111,4 @@ component Footer {
     noteAccent;
   }
 
-  variants {
-    layout {
-      stacked {
-        grid { grid-template-columns: 1fr 1fr; }
-        brand { grid-column: 1 / -1; }
-      }
-      spread {
-        grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
-        brand { grid-column: auto; }
-      }
-    }
-  }
-
-  defaults {
-    layout: stacked;
-  }
-
-  responsive {
-    md { layout: spread; }
-  }
 }

@@ -2,20 +2,17 @@ import { ArviaError, makeDiagnostic, type Diagnostic, type Span } from "../diagn
 import { Lexer } from "../lexer/lexer.js";
 import type { Token, TokenKind } from "../lexer/tokens.js";
 import type {
+  AtRule,
+  AtRuleBody,
   ComponentDecl,
   ComponentItem,
   CompoundBlock,
   Declaration,
   DefaultEntry,
-  ResponsiveBlock,
-  ResponsiveEntry,
-  ContainerBlock,
-  ContainerEntry,
-  KeyframesDecl,
-  KeyframeStep,
   GlobalBlock,
   GlobalRule,
   ArviaFile,
+  RawRule,
   RawValue,
   RecipeDecl,
   SlotBlock,
@@ -34,17 +31,8 @@ import type {
   VariantValue,
 } from "../ast/nodes.js";
 
-const SECTION_KEYWORDS = new Set([
-  "base",
-  "slots",
-  "variants",
-  "defaults",
-  "responsive",
-  "container",
-  "compound",
-  "tokens",
-]);
-const TOP_KEYWORDS = new Set(["theme", "global", "recipe", "keyframes", "style", "component"]);
+const SECTION_KEYWORDS = new Set(["base", "slots", "variants", "defaults", "compound", "tokens"]);
+const TOP_KEYWORDS = new Set(["theme", "global", "recipe", "style", "component"]);
 const MAX_ERRORS = 100;
 
 export interface ParseResult {
@@ -223,6 +211,8 @@ class Parser {
   }
 
   private parseTopLevel(): TopLevelItem {
+    // Raw at-rules (`@keyframes`, `@media`, …) pass through at the top level.
+    if (this.lx.peekChar() === "@") return this.parseAtRule();
     const head = this.lx.next();
     if (head.kind === "ident") {
       switch (head.text) {
@@ -232,8 +222,6 @@ class Parser {
           return this.parseGlobal(head.span);
         case "recipe":
           return this.parseRecipe(head.span);
-        case "keyframes":
-          return this.parseKeyframes(head.span);
         case "style":
           return this.parseStyleDecl(head.span);
         case "component":
@@ -241,7 +229,7 @@ class Parser {
       }
     }
     this.fail(
-      `expected 'theme', 'global', 'recipe', 'keyframes', 'style' or 'component' but found ${this.describe(head)}`,
+      `expected 'theme', 'global', 'recipe', 'style', 'component' or an at-rule but found ${this.describe(head)}`,
       head.span,
     );
   }
@@ -386,7 +374,16 @@ class Parser {
   private parseGlobal(start: Span): GlobalBlock {
     this.expect("lbrace", "'{' after 'global'");
     const rules: GlobalRule[] = [];
+    const atRules: AtRule[] = [];
     while (!this.atBlockEnd()) {
+      if (this.lx.peekChar() === "@") {
+        const at = this.recoverable(
+          () => this.parseAtRule(),
+          () => this.syncItem(),
+        );
+        if (at) atRules.push(at);
+        continue;
+      }
       const rule = this.recoverable(
         () => this.parseGlobalRule(),
         () => this.syncItem(),
@@ -394,7 +391,7 @@ class Parser {
       if (rule) rules.push(rule);
     }
     const close = this.expect("rbrace", "'}'");
-    return { kind: "global", rules, span: { ...start, end: close.span.end } };
+    return { kind: "global", rules, atRules, span: { ...start, end: close.span.end } };
   }
 
   private parseGlobalRule(): GlobalRule {
@@ -432,45 +429,122 @@ class Parser {
     };
   }
 
-  // --- keyframes -----------------------------------------------------------
+  // --- at-rules ------------------------------------------------------------
 
-  private parseKeyframes(start: Span): KeyframesDecl {
-    const name = this.expectIdent("a keyframes name after 'keyframes'");
-    this.expect("lbrace", `'{' after keyframes '${name.text}'`);
-    const steps: KeyframeStep[] = [];
-    while (!this.atBlockEnd()) {
-      const step = this.recoverable(
-        () => this.parseKeyframeStep(),
-        () => this.syncItem(),
-      );
-      if (step) steps.push(step);
+  /** Parses a raw at-rule (`@media`, `@keyframes`, `@supports`, …). The prelude
+   *  is captured verbatim up to the block; token refs in it are inlined to
+   *  literals at IR time. An at-rule with no prelude (`@layer { … }`) is fine. */
+  private parseAtRule(): AtRule {
+    const at = this.expect("at", "'@'");
+    const name = this.expectIdent("an at-rule name after '@'");
+    let prelude = "";
+    let preludeSpan: Span | null = null;
+    // A `;` before any `{` is a statement at-rule (`@import "x";`, `@layer a, b;`).
+    if (this.lx.peekChar() !== "{" && this.lx.peekBlockDelimiter() === ";") {
+      const value = this.lx.rawValue();
+      const semi = this.expect("semicolon", `';' after '@${name.text}'`);
+      return {
+        kind: "atrule",
+        name: name.text,
+        nameSpan: name.span,
+        prelude: value.text,
+        preludeSpan: value.span,
+        body: null,
+        span: { ...at.span, end: semi.span.end },
+      };
     }
+    if (this.lx.peekChar() !== "{") {
+      const selector = this.lx.rawSelector();
+      prelude = selector.text;
+      preludeSpan = selector.span;
+    }
+    this.expect("lbrace", `'{' after '@${name.text}'`);
+    const body = this.parseAtRuleBody();
     const close = this.expect("rbrace", "'}'");
     return {
-      kind: "keyframes",
+      kind: "atrule",
       name: name.text,
       nameSpan: name.span,
-      steps,
-      span: { ...start, end: close.span.end },
+      prelude,
+      preludeSpan,
+      body,
+      span: { ...at.span, end: close.span.end },
     };
   }
 
-  private parseKeyframeStep(): KeyframeStep {
-    const selector = this.lx.rawSelector();
-    this.expect("lbrace", "'{' after keyframe selector");
+  /** Parses an at-rule body: declarations, nested `selector { … }` rules and
+   *  nested at-rules. `{` vs `;` lookahead disambiguates rules from decls. */
+  private parseAtRuleBody(): AtRuleBody {
     const decls: Declaration[] = [];
+    const rules: RawRule[] = [];
+    const atRules: AtRule[] = [];
+    const items: (ComponentDecl | StyleDecl)[] = [];
     while (!this.atBlockEnd()) {
+      if (this.lx.peekChar() === "@") {
+        const at = this.recoverable(
+          () => this.parseAtRule(),
+          () => this.syncItem(),
+        );
+        if (at) atRules.push(at);
+        continue;
+      }
+      // Arvia constructs may be wrapped in an at-rule: `@layer base { component X { … } }`.
+      const construct = this.tryParseAtRuleConstruct();
+      if (construct) {
+        items.push(construct);
+        continue;
+      }
+      if (this.lx.peekBlockDelimiter() === "{") {
+        const rule = this.recoverable(
+          () => this.parseRawRule(),
+          () => this.syncItem(),
+        );
+        if (rule) rules.push(rule);
+        continue;
+      }
       const decl = this.recoverable(
         () => this.parseDeclarationFrom(this.expectIdent("a CSS property name")),
         () => this.syncItem(),
       );
       if (decl) decls.push(decl);
     }
+    return { decls, rules, atRules, items };
+  }
+
+  /** If the next item is a `component`/`style` declaration (`component X { … }`),
+   *  parse it; otherwise leave the lexer untouched and return null. */
+  private tryParseAtRuleConstruct(): ComponentDecl | StyleDecl | null {
+    const mark = this.lx.mark();
+    const head = this.lx.next();
+    if (head.kind === "ident" && (head.text === "component" || head.text === "style")) {
+      const after = this.lx.next();
+      // `component Name {` — a construct; anything else (e.g. `component: …`) is not.
+      if (after.kind === "ident") {
+        this.lx.reset(mark);
+        return (
+          this.recoverable(
+            () =>
+              head.text === "component"
+                ? this.parseComponent(this.expectIdent("'component'").span)
+                : this.parseStyleDecl(this.expectIdent("'style'").span),
+            () => this.syncItem(),
+          ) ?? null
+        );
+      }
+    }
+    this.lx.reset(mark);
+    return null;
+  }
+
+  private parseRawRule(): RawRule {
+    const selector = this.lx.rawSelector();
+    this.expect("lbrace", "'{' after selector");
+    const body = this.parseAtRuleBody();
     const close = this.expect("rbrace", "'}'");
     return {
       selector: selector.text,
       selectorSpan: selector.span,
-      decls,
+      body,
       span: { ...selector.span, end: close.span.end },
     };
   }
@@ -515,6 +589,8 @@ class Parser {
   }
 
   private parseComponentItem(): ComponentItem {
+    // Raw at-rules pass through; component-level ones scope to the root slot.
+    if (this.lx.peekChar() === "@") return this.parseAtRule();
     const head = this.expectIdent("a section, declaration or 'use'");
     const mark = this.lx.mark();
     const after = this.lx.next();
@@ -544,10 +620,6 @@ class Parser {
           return this.parseVariants(head.span);
         case "defaults":
           return this.parseDefaults(head.span);
-        case "responsive":
-          return this.parseResponsive(head.span);
-        case "container":
-          return this.parseContainer(head.span);
         case "compound":
           return this.parseCompound(head.span);
         case "tokens":
@@ -565,7 +637,7 @@ class Parser {
       this.fail(
         `unexpected block '${head.text}' inside component`,
         head.span,
-        "slot styles belong inside 'base { ... }' (e.g. base { icon { ... } }); top-level component blocks are: base, slots, variants, defaults, responsive, container, compound, tokens",
+        "slot styles belong inside 'base { ... }' (e.g. base { icon { ... } }); top-level component blocks are: base, slots, variants, defaults, compound, tokens",
       );
     }
     this.lx.reset(mark);
@@ -708,143 +780,6 @@ class Parser {
     };
   }
 
-  private parseResponsive(start: Span): ResponsiveBlock {
-    const entries: ResponsiveEntry[] = [];
-    while (!this.atBlockEnd()) {
-      const entry = this.recoverable(
-        () => this.parseResponsiveEntry(),
-        () => this.syncItem(),
-      );
-      if (entry) entries.push(entry);
-    }
-    const close = this.expect("rbrace", "'}'");
-    return { kind: "responsive", entries, span: { ...start, end: close.span.end } };
-  }
-
-  /** Parses a range head: `IDENT`, `IDENT ..`, `IDENT .. IDENT`, or `.. IDENT`.
-   *  A bare `..` (no endpoint) is rejected. `noun` names the expected ident
-   *  (e.g. "breakpoint name") for error messages. */
-  private parseRangeHead(noun: string): {
-    lower: string | null;
-    lowerSpan: Span | null;
-    upper: string | null;
-    upperSpan: Span | null;
-    span: Span;
-  } {
-    const startMark = this.lx.mark();
-    const first = this.lx.next();
-
-    if (first.kind === "ident") {
-      const dotMark = this.lx.mark();
-      const dots = this.lx.next();
-      if (dots.kind !== "dotdot") {
-        this.lx.reset(dotMark);
-        return {
-          lower: first.text,
-          lowerSpan: first.span,
-          upper: null,
-          upperSpan: null,
-          span: first.span,
-        };
-      }
-      const upMark = this.lx.mark();
-      const up = this.lx.next();
-      if (up.kind === "ident") {
-        return {
-          lower: first.text,
-          lowerSpan: first.span,
-          upper: up.text,
-          upperSpan: up.span,
-          span: { ...first.span, end: up.span.end },
-        };
-      }
-      this.lx.reset(upMark);
-      return {
-        lower: first.text,
-        lowerSpan: first.span,
-        upper: null,
-        upperSpan: null,
-        span: { ...first.span, end: dots.span.end },
-      };
-    }
-
-    if (first.kind === "dotdot") {
-      const upMark = this.lx.mark();
-      const up = this.lx.next();
-      if (up.kind === "ident") {
-        return {
-          lower: null,
-          lowerSpan: null,
-          upper: up.text,
-          upperSpan: up.span,
-          span: { ...first.span, end: up.span.end },
-        };
-      }
-      this.lx.reset(upMark);
-      this.fail(`expected ${noun} after '..' but found ${this.describe(up)}`, up.span);
-    }
-
-    this.lx.reset(startMark);
-    this.fail(`expected ${noun} but found ${this.describe(first)}`, first.span);
-  }
-
-  private parseResponsiveEntry(): ResponsiveEntry {
-    const head = this.parseRangeHead("a breakpoint name");
-    this.expect("lbrace", "'{' after breakpoint range");
-    const variants: DefaultEntry[] = [];
-    while (!this.atBlockEnd()) {
-      const entry = this.recoverable(
-        () => this.parseDefaultEntry(),
-        () => this.syncItem(),
-      );
-      if (entry) variants.push(entry);
-    }
-    const close = this.expect("rbrace", "'}'");
-    return {
-      lower: head.lower,
-      lowerSpan: head.lowerSpan,
-      upper: head.upper,
-      upperSpan: head.upperSpan,
-      variants,
-      span: { ...head.span, end: close.span.end },
-    };
-  }
-
-  private parseContainer(start: Span): ContainerBlock {
-    const entries: ContainerEntry[] = [];
-    while (!this.atBlockEnd()) {
-      const entry = this.recoverable(
-        () => this.parseContainerEntry(),
-        () => this.syncItem(),
-      );
-      if (entry) entries.push(entry);
-    }
-    const close = this.expect("rbrace", "'}'");
-    return { kind: "container", entries, span: { ...start, end: close.span.end } };
-  }
-
-  private parseContainerEntry(): ContainerEntry {
-    const head = this.parseRangeHead("a container size name");
-    this.expect("lbrace", "'{' after container range");
-    const variants: DefaultEntry[] = [];
-    while (!this.atBlockEnd()) {
-      const entry = this.recoverable(
-        () => this.parseDefaultEntry(),
-        () => this.syncItem(),
-      );
-      if (entry) variants.push(entry);
-    }
-    const close = this.expect("rbrace", "'}'");
-    return {
-      lower: head.lower,
-      lowerSpan: head.lowerSpan,
-      upper: head.upper,
-      upperSpan: head.upperSpan,
-      variants,
-      span: { ...head.span, end: close.span.end },
-    };
-  }
-
   private parseCompound(start: Span): CompoundBlock {
     const matchers: DefaultEntry[] = [];
     const slots: SlotBlock[] = [];
@@ -916,6 +851,9 @@ class Parser {
     if (this.lx.peekChar() === "&") {
       return this.parseStateBlock(true);
     }
+    if (this.lx.peekChar() === "@") {
+      return this.parseAtRule();
+    }
     const head = this.expectIdent("a declaration, slot block, state or 'use'");
     const mark = this.lx.mark();
     const after = this.lx.next();
@@ -965,6 +903,9 @@ class Parser {
   private parseStyleItem(context: "slot" | "recipe" | "style"): StyleItem {
     if (this.lx.peekChar() === "&") {
       return this.parseStateBlock(false);
+    }
+    if (this.lx.peekChar() === "@") {
+      return this.parseAtRule();
     }
     const head = this.expectIdent("a declaration, state or 'use'");
     const mark = this.lx.mark();

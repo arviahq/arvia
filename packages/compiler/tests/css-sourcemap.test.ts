@@ -7,7 +7,7 @@ const SOURCE = `component Button {
 
 style Truncate { overflow: hidden; }
 
-keyframes spin { from { opacity: 0; } }
+@keyframes spin { from { opacity: 0; } }
 `;
 
 /** Decodes one base64-VLQ segment list per line: [genCol, srcIdx, line, col]. */
@@ -55,7 +55,7 @@ describe("CSS source maps", () => {
     }
 
     const find = (cssNeedle: string) => anchors.find((a) => a.cssLine.includes(cssNeedle));
-    expect(find("@keyframes")!.sourceLine).toContain("keyframes spin");
+    expect(find("@keyframes")!.sourceLine).toContain("@keyframes spin");
     expect(find(".Truncate")!.sourceLine).toContain("style Truncate");
     expect(find(".Button_root")!.sourceLine).toContain("component Button");
   });

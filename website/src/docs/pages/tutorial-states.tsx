@@ -17,7 +17,7 @@ export const tutorial_statesMeta: DocPageMeta = {
   ),
   nav: { section: "tutorial", order: 5 },
   searchText:
-    "Style interaction states with & followed by a pseudo-class, nested inside base. &:hover { background: color.primaryHover; } &:focus-visible { outline: 2px solid color.text; outline-offset: 2px; } To change a variant at a breakpoint, add a responsive block that names a breakpoint token and the variant value to use. responsive { md { size: lg; } } The button is md by default and becomes lg past the md breakpoint. Dark mode: declare modes: light | dark in the theme and give tokens an @dark value; moded tokens become CSS variables that flip with the OS color scheme — no JavaScript. Next: compose the card.",
+    "Style interaction states with & followed by a pseudo-class, nested inside base. &:hover { background: color.primaryHover; } &:focus-visible { outline: 2px solid color.text; outline-offset: 2px; } To switch styles at a breakpoint, nest a raw @media inside base: write a normal CSS condition, and a breakpoint token from the theme inlines to its value. @media (min-width: breakpoint.md) { font-size: font.lg; padding: space.4; } applies past the md breakpoint. Dark mode: declare modes: light | dark in the theme and give tokens an @dark value; moded tokens become CSS variables that flip with the OS color scheme — no JavaScript. Next: compose the card.",
 };
 
 export function TutorialStatesPage() {
@@ -45,20 +45,25 @@ export function TutorialStatesPage() {
       <DocP>
         <fbt desc="Docs content — tut-states: responsive">
           {
-            "To switch a variant at a breakpoint, add a `responsive` block naming a breakpoint token (from the theme) and the value to use there:"
+            "To switch styles at a breakpoint, nest a raw `@media` right inside `base`. The prelude is plain CSS — a breakpoint token from the theme inlines to its value, so `(min-width: breakpoint.md)` means “at the `md` breakpoint and up”:"
           }
         </fbt>
       </DocP>
       <DocCode
         label={"src/button.arv"}
-        code={`responsive {
-  md { size: lg; }
+        code={`base {
+  font-size: font.md;
+
+  @media (min-width: breakpoint.md) {
+    font-size: font.lg;
+    padding: space.4;
+  }
 }`}
       />
       <DocP>
         <fbt desc="Docs content — tut-states: responsive explain">
           {
-            "The button is `md` by default and becomes `lg` once the viewport passes the `md` breakpoint."
+            "The button uses `font.md` by default and grows to `font.lg` once the viewport passes the `md` breakpoint — plain CSS, no per-breakpoint props."
           }
         </fbt>
       </DocP>

@@ -1,6 +1,6 @@
 import type { Hover, Range } from "vscode-languageserver";
 import { MarkupKind } from "vscode-languageserver-types";
-import type { ArviaFile, ComponentDecl, Span, ThemeEnv } from "@arviahq/compiler";
+import type { ComponentDecl, Span, ThemeEnv } from "@arviahq/compiler";
 import { nodeAtOffset, type AstTarget, type RefWord } from "./ast-query.js";
 import { cssPreviewFor } from "./css-preview.js";
 import { cssPropertyHover } from "./cssdata.js";
@@ -10,11 +10,11 @@ import type { ThemeHost } from "./theme-host.js";
 export function getHover(
   analysis: DocumentAnalysis,
   offset: number,
-  workspace: ThemeHost,
+  _workspace: ThemeHost,
 ): Hover | null {
   const target = nodeAtOffset(analysis.ast, offset);
   if (!target) return null;
-  const markdown = renderHover(target, analysis, workspace);
+  const markdown = renderHover(target, analysis);
   const preview = cssPreviewFor(analysis, target);
   if (!markdown && !preview) return null;
   const value = [markdown, preview ? "```css\n" + preview + "```" : null]
@@ -32,7 +32,6 @@ function targetSpan(target: AstTarget): Span {
       return target.word.span;
     case "use-recipe":
     case "slot-name":
-    case "conditional-key":
     case "token-entry":
       return target.span;
     case "component-name":
@@ -41,8 +40,6 @@ function targetSpan(target: AstTarget): Span {
       return target.style.nameSpan;
     case "recipe-name":
       return target.recipe.nameSpan;
-    case "keyframes-name":
-      return target.keyframes.nameSpan;
     case "variant-name":
       return target.variant.nameSpan;
     case "variant-value-name":
@@ -62,17 +59,11 @@ export function rangeOf(analysis: DocumentAnalysis, span: Span): Range {
   };
 }
 
-function renderHover(
-  target: AstTarget,
-  analysis: DocumentAnalysis,
-  workspace: ThemeHost,
-): string | null {
+function renderHover(target: AstTarget, analysis: DocumentAnalysis): string | null {
   const env = analysis.env;
   switch (target.kind) {
     case "token-ref":
-      return target.word.group === "keyframes"
-        ? keyframesRefHover(target.word, analysis, workspace)
-        : tokenRefHover(target.word, target.component, env);
+      return tokenRefHover(target.word, target.component, env);
     case "use-recipe":
       return recipeHover(target.name, env);
     case "recipe-name":
@@ -89,8 +80,6 @@ function renderHover(
       return componentHover(target.component);
     case "style-name":
       return `**style ${target.style.name}** — exported class\n\n\`\`\`ts\nexport const ${target.style.name}: string;\n\`\`\``;
-    case "keyframes-name":
-      return keyframesDeclHover(target.keyframes.name, analysis.ast);
     case "variant-name": {
       const values = target.variant.values.map((v) => v.name).join(" | ");
       return `**variant ${target.variant.name}** of \`${target.component.name}\`\n\n\`\`\`ts\n${target.variant.name}?: ${values || "never"}\n\`\`\``;
@@ -107,12 +96,6 @@ function renderHover(
         return `**variant ${variant.name}** of \`${target.component.name}\`\n\n\`\`\`ts\n${variant.name}?: ${values || "never"}\n\`\`\``;
       }
       return `**${target.entry.variant}: ${target.entry.value}** (${target.context})`;
-    }
-    case "conditional-key": {
-      const size =
-        target.context === "responsive" ? env.breakpoints[target.key] : env.containers[target.key];
-      const label = target.context === "responsive" ? "breakpoint" : "container size";
-      return size ? `**${label} ${target.key}**\n\n\`\`\`css\nmin-width: ${size}\n\`\`\`` : null;
     }
     case "css-property":
       return cssPropertyHover(target.name);
@@ -187,26 +170,6 @@ function componentHover(component: ComponentDecl): string {
     ...(variants.length > 0 ? variants : ["(no variants)"]),
   ];
   return `**component ${component.name}**\n\n\`\`\`\n${lines.join("\n")}\n\`\`\``;
-}
-
-function keyframesRefHover(
-  word: RefWord,
-  analysis: DocumentAnalysis,
-  workspace: ThemeHost,
-): string | null {
-  const local = keyframesDeclHover(word.name, analysis.ast);
-  if (local) return local;
-  const theme = workspace.themeFor(analysis.file);
-  return theme ? keyframesDeclHover(word.name, theme.ast) : null;
-}
-
-function keyframesDeclHover(name: string, ast: ArviaFile): string | null {
-  for (const item of ast.items) {
-    if (item.kind !== "keyframes" || item.name !== name) continue;
-    const steps = item.steps.map((s) => s.selector).join(" → ");
-    return `**keyframes ${name}**\n\n\`\`\`\n${steps || "(no steps)"}\n\`\`\``;
-  }
-  return null;
 }
 
 function findVariant(component: ComponentDecl, name: string) {

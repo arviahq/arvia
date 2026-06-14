@@ -30,13 +30,12 @@ export type LocalTokens = Record<string, Record<string, string>>;
 /**
  * Returns the value text with theme token refs replaced by their values.
  * When `modes` is set, known token refs become `var(--arvia-<group>-<name>)`.
- * `keyframes.name` refs resolve to hashed CSS animation names.
  * `localTokens` (component-scoped) shadow theme tokens and always inline to
  * literals — they are compile-time constants, never CSS variables.
  */
 export function substituteRefs(
   value: RawValue,
-  env: Pick<ThemeEnv, "tokens" | "modes" | "keyframes">,
+  env: Pick<ThemeEnv, "tokens" | "modes">,
   onUnknownToken?: (word: RefWord) => void,
   localTokens?: LocalTokens | null,
 ): string {
@@ -47,12 +46,9 @@ export function substituteRefs(
   let text = value.text;
   for (const word of refs) {
     let resolved: string | undefined;
-    const local = word.group === "keyframes" ? undefined : localTokens?.[word.group]?.[word.name];
+    const local = localTokens?.[word.group]?.[word.name];
     if (local !== undefined) {
       resolved = local;
-    } else if (word.group === "keyframes") {
-      resolved = env.keyframes[word.name];
-      if (resolved === undefined) onUnknownToken?.(word);
     } else if (env.modes) {
       const bucket = env.tokens[word.group];
       if (bucket && bucket[word.name] !== undefined) {
@@ -92,7 +88,6 @@ export function substituteRefsForMode(
 
   let text = value.text;
   for (const word of refs) {
-    if (word.group === "keyframes") continue;
     const resolved = resolveTokenLiteral(
       word.group,
       word.name,
@@ -107,4 +102,21 @@ export function substituteRefsForMode(
     text = text.slice(0, offset) + resolved + text.slice(offset + word.text.length);
   }
   return text;
+}
+
+/**
+ * Inlines token refs inside an at-rule prelude to their LITERAL value. Media
+ * and container conditions can't use `var()`, so even in a moded theme this
+ * inlines the default-mode literal (never a `var()` reference). Non-ref text
+ * passes through unchanged.
+ */
+export function substitutePreludeRefs(
+  value: RawValue,
+  env: Pick<ThemeEnv, "tokens" | "modes">,
+  onUnknownToken?: (word: RefWord) => void,
+): string {
+  if (env.modes) {
+    return substituteRefsForMode(value, env.tokens, env.modes[0]!, env.modes, onUnknownToken);
+  }
+  return substituteRefs(value, { tokens: env.tokens, modes: null }, onUnknownToken);
 }

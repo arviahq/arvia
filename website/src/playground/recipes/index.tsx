@@ -1,5 +1,6 @@
 import compoundSource from "./compound.arv?raw";
 import containerSource from "./container.arv?raw";
+import cssSource from "./css.arv?raw";
 import implicitRootSource from "./implicit-root.arv?raw";
 import keyframesSource from "./keyframes.arv?raw";
 import localTokensSource from "./local-tokens.arv?raw";
@@ -87,6 +88,12 @@ export function getRecipes(): RecipeEntry[] {
       file: "local-tokens.arv",
       title: <fbt desc="Playground recipe title">{"Local tokens"}</fbt>,
       source: localTokensSource,
+    },
+    {
+      id: "css",
+      file: "css.arv",
+      title: <fbt desc="Playground recipe title">{"CSS & at-rules"}</fbt>,
+      source: cssSource,
     },
     {
       id: "responsive",

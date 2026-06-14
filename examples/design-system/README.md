@@ -57,21 +57,21 @@ Only atoms and language demos are auto-generated. Molecules, organisms, and temp
 
 ## Language feature map
 
-| Story                 | File                         | Arvia construct           |
-| --------------------- | ---------------------------- | ------------------------- |
-| Language/Tokens       | `language/tokens.arv`        | Token references          |
-| Language/ImplicitRoot | `language/implicit-root.arv` | Implicit root slot        |
-| Language/Slots        | `language/slots.arv`         | Named slots               |
-| Language/Variants     | `language/variants.arv`      | Variants + defaults       |
-| Language/Compound     | `language/compound.arv`      | Compound variants         |
-| Language/States       | `language/states.arv`        | `&`-blocks                |
-| Language/UseRecipe    | `language/use-recipe.arv`    | `use` recipe              |
-| Language/RecipeNested | `language/recipe-nested.arv` | Nested recipes            |
-| Language/Keyframes    | `language/keyframes.arv`     | Keyframe animations       |
-| Language/StyleDecl    | `language/style-decl.arv`    | Standalone `style` export |
-| Language/LocalTokens  | `language/local-tokens.arv`  | Component-scoped tokens   |
-| Language/Responsive   | `language/responsive.arv`    | Breakpoint overrides      |
-| Language/Container    | `language/container.arv`     | Container queries         |
+| Story                 | File                         | Arvia construct                                 |
+| --------------------- | ---------------------------- | ----------------------------------------------- |
+| Language/Tokens       | `language/tokens.arv`        | Token references                                |
+| Language/ImplicitRoot | `language/implicit-root.arv` | Implicit root slot                              |
+| Language/Slots        | `language/slots.arv`         | Named slots                                     |
+| Language/Variants     | `language/variants.arv`      | Variants + defaults                             |
+| Language/Compound     | `language/compound.arv`      | Compound variants                               |
+| Language/States       | `language/states.arv`        | `&`-blocks                                      |
+| Language/UseRecipe    | `language/use-recipe.arv`    | `use` recipe                                    |
+| Language/RecipeNested | `language/recipe-nested.arv` | Nested recipes                                  |
+| Language/Keyframes    | `language/keyframes.arv`     | `@keyframes` + literal animation refs           |
+| Language/StyleDecl    | `language/style-decl.arv`    | Standalone `style` export                       |
+| Language/LocalTokens  | `language/local-tokens.arv`  | Component-scoped tokens                         |
+| Language/Responsive   | `language/responsive.arv`    | `@media` + breakpoint range sugar (`md..`)      |
+| Language/Container    | `language/container.arv`     | `@container` + container range sugar (`wide..`) |
 
 Theme modes, global styles, and token `doc` strings are demonstrated in `src/theme.arv` and the **Theme/Overview** story.
 

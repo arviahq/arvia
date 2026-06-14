@@ -16,7 +16,7 @@ export const api_runtimeMeta: DocPageMeta = {
   ),
   nav: { section: "api", order: 0 },
   searchText:
-    'Importing a compiled .arv file gives you plain JavaScript. A component becomes a function: ComponentName(props?) returns an object with one class-name string per slot — { root, icon, ... }. props is optional; each variant is a key whose value is a string union, or an object for per-breakpoint values: Button({ size: { initial: "sm", md: "lg" } }). A style becomes a string constant: export const truncate = "truncate_x". A theme file exports tokens: an object of group.name to its value — a literal in single-mode themes, or a var() reference with modes. Exports table: component → function returning slot classes; style → string; theme tokens → tokens object; types ComponentNameProps and ComponentNameSlots are generated too. Related: Compiler API, Components.',
+    'Importing a compiled .arv file gives you plain JavaScript. A component becomes a function: ComponentName(props?) returns an object with one class-name string per slot — { root, icon, ... }. props is optional; each variant is a key whose value is a plain string from its union: Button({ size: "lg" }). Responsive behavior lives in CSS — nest @media/@container in the component rather than passing per-breakpoint props. A style becomes a string constant: export const truncate = "truncate_x". A theme file exports tokens: an object of group.name to its value — a literal in single-mode themes, or a var() reference with modes. Exports table: component → function returning slot classes; style → string; theme tokens → tokens object; types ComponentNameProps and ComponentNameSlots are generated too. Related: Compiler API, Components.',
 };
 
 export function ApiRuntimePage() {
@@ -54,14 +54,14 @@ const s = Button({ tone: "danger" });
       <DocP>
         <fbt desc="Docs content — api-runtime: props">
           {
-            "Each variant is a prop whose value is a string union. For per-breakpoint or per-container values, pass an object:"
+            "Each variant is a prop whose value is a string union. Responsive behavior lives in CSS — nest `@media`/`@container` in the component (see [Responsive](/docs/responsive)) rather than passing per-breakpoint props:"
           }
         </fbt>
       </DocP>
       <DocCode
-        label={"responsive props"}
-        code={`Button({ size: { initial: "sm", md: "lg", $wide: "lg" } });
-//                        breakpoint ↑      container ↑`}
+        label={"props"}
+        code={`Button({ size: "lg", tone: "danger" });
+// every variant value is a plain string from its union`}
       />
       <DocH2>
         <fbt desc="Docs content — heading: styles and tokens">{"Styles and tokens"}</fbt>

@@ -10,14 +10,11 @@
   "global"
   "component"
   "recipe"
-  "keyframes"
   "style"
   "base"
   "slots"
   "variants"
   "defaults"
-  "responsive"
-  "container"
   "compound"
   "tokens"
   "use"
@@ -30,8 +27,9 @@
 ["|" "=" ":" ";"] @punctuation.delimiter
 ["{" "}"] @punctuation.bracket
 
+(at_rule name: (identifier) @keyword.directive)
+
 (component_decl name: (identifier) @type)
-(keyframes_decl name: (identifier) @type)
 (recipe_decl name: (identifier) @function)
 (style_decl name: (identifier) @constant)
 (use_statement recipe: (identifier) @function)
@@ -44,7 +42,6 @@
 (variant_decl name: (identifier) @type.definition)
 (variant_value name: (token_name) @constant)
 (setting variant: (identifier) @type.definition value: (token_name) @constant)
-(conditional_entry key: (token_name) @constant)
 
 (slots_block (slot_decl name: (identifier) @variable.member))
 (slot_block name: (identifier) @variable.member)

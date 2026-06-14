@@ -42,7 +42,6 @@ interface PreviewPayload {
 const emptyMeta: CompileResult["meta"] = {
   components: [],
   tokens: [],
-  keyframes: [],
   styles: [],
 };
 

@@ -4,8 +4,9 @@ component ProductCard {
   use Surface;
 
   base {
+    container-type: inline-size;
     overflow: hidden;
-    animation: keyframes.fadeIn duration.normal easing.out;
+    animation: fadeIn duration.normal easing.out;
 
     media {
       aspect-ratio: 16 / 10;
@@ -19,8 +20,15 @@ component ProductCard {
     content {
       padding: space.4;
       display: flex;
-      flex-direction: column;
       gap: space.2;
+      // Stacked by default; switches to a row past the wide container token.
+      flex-direction: column;
+
+      @container (min-width: container-size.wide) {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
     }
 
     title {
@@ -45,6 +53,11 @@ component ProductCard {
       display: flex;
       gap: space.2;
       margin-top: space.2;
+      flex-direction: column;
+
+      @container (min-width: container-size.wide) {
+        flex-direction: row;
+      }
     }
   }
 
@@ -56,38 +69,5 @@ component ProductCard {
     price;
     meta;
     actions;
-  }
-
-  variants {
-    layout {
-      stacked {
-        content {
-          flex-direction: column;
-        }
-        actions {
-          flex-direction: column;
-        }
-      }
-      horizontal {
-        content {
-          flex-direction: row;
-          align-items: center;
-          justify-content: space-between;
-        }
-        actions {
-          flex-direction: row;
-        }
-      }
-    }
-  }
-
-  defaults {
-    layout: stacked;
-  }
-
-  container {
-    wide {
-      layout: horizontal;
-    }
   }
 }

@@ -63,11 +63,6 @@ export function getDocumentSymbols(analysis: DocumentAnalysis): DocumentSymbol[]
           symbol(item.name, SymbolKind.Function, item.span, item.nameSpan, undefined, "recipe"),
         );
         break;
-      case "keyframes":
-        out.push(
-          symbol(item.name, SymbolKind.Event, item.span, item.nameSpan, undefined, "keyframes"),
-        );
-        break;
       case "styledecl":
         out.push(
           symbol(item.name, SymbolKind.Constant, item.span, item.nameSpan, undefined, "style"),

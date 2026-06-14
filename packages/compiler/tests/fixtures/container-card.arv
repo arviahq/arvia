@@ -1,26 +1,16 @@
 theme {
-  container {
+  container-size {
     wide = 480px;
   }
 }
 
 component Card {
   base {
+    container-type: inline-size;
     display: block;
-  }
 
-  variants {
-    layout {
-      stacked { padding: 8px; }
-      row { padding: 16px; }
+    @container (inline-size < container-size.wide) {
+      display: flex;
     }
-  }
-
-  defaults {
-    layout: stacked;
-  }
-
-  container {
-    wide { layout: row; }
   }
 }

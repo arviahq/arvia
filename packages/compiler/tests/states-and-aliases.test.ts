@@ -162,7 +162,7 @@ describe("token aliases in theme values", () => {
     expect(css).toContain("--arvia-color-base: light-dark(#111, #eee);");
   });
 
-  it("leaves non-theme dots and keyframes refs alone in theme values", () => {
+  it("leaves non-theme dotted identifiers alone in theme values", () => {
     const { env } = compileOk("theme { grid { area = main.start; } }");
     expect(env.tokens["grid"]!["area"]).toBe("main.start");
   });

@@ -70,13 +70,13 @@ theme {
     lg = 1024px;
   }
 
-  container {
+  container-size {
     narrow = 320px;
     wide = 560px;
   }
 }
 
-keyframes fadeIn {
+@keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(4px);
@@ -87,7 +87,7 @@ keyframes fadeIn {
   }
 }
 
-keyframes pulse {
+@keyframes pulse {
   from { opacity: 1; }
   to { opacity: 0.45; }
 }

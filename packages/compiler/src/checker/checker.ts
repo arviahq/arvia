@@ -7,50 +7,34 @@ import {
   type Span,
 } from "../diagnostics.js";
 import type {
+  AtRule,
   ComponentDecl,
   Declaration,
   ArviaFile,
+  RawRule,
   RawValue,
   RecipeDecl,
   StyleBody,
+  StyleDecl,
   StyleItem,
 } from "../ast/nodes.js";
 import { isKnownProperty, knownPropertyNames, matchValueSyntax } from "./css-validate.js";
-import { emptyEnv, type RecipeIR, type ThemeEnv, type TokenModes } from "../ir/ir.js";
-import { hashClass, hashName } from "../ir/hash.js";
-import { rangeKey } from "../ir/names.js";
+import { splitValueWords } from "../parser/parser.js";
+import {
+  emptyEnv,
+  type AtRuleIR,
+  type RawRuleIR,
+  type RecipeIR,
+  type ThemeEnv,
+  type TokenModes,
+} from "../ir/ir.js";
 import {
   substituteRefs,
   substituteRefsForMode,
+  substitutePreludeRefs,
   type LocalTokens,
   type RefWord,
 } from "../values.js";
-
-/** Parses a CSS length into a numeric value + unit, or null if not a simple
- *  `<number><unit>` literal we can compare. */
-function parseSize(s: string): { value: number; unit: string } | null {
-  const m = /^(-?\d*\.?\d+)([a-z%]*)$/i.exec(s.trim());
-  if (!m) return null;
-  return { value: Number.parseFloat(m[1]!), unit: m[2]!.toLowerCase() };
-}
-
-/** True only when both endpoints resolve to same-unit literals and the lower
- *  bound is not strictly smaller than the upper. Returns false for open ranges
- *  or incomparable units (mixed units are trusted, not flagged). */
-function invertedRange(
-  lower: string | null,
-  upper: string | null,
-  sizes: Record<string, string>,
-): boolean {
-  if (!lower || !upper) return false;
-  const lo = sizes[lower];
-  const hi = sizes[upper];
-  if (!lo || !hi) return false;
-  const a = parseSize(lo);
-  const b = parseSize(hi);
-  if (!a || !b || a.unit !== b.unit) return false;
-  return a.value >= b.value;
-}
 
 export interface CheckOptions {
   filename: string;
@@ -139,8 +123,6 @@ class Checker {
     const base = options.env ?? emptyEnv();
     this.env = {
       modes: base.modes,
-      breakpoints: { ...base.breakpoints },
-      containers: { ...base.containers },
       tokens: Object.fromEntries(
         Object.entries(base.tokens).map(([g, t]) => [
           g,
@@ -151,7 +133,6 @@ class Checker {
       ),
       tokenDocs: Object.fromEntries(Object.entries(base.tokenDocs).map(([g, d]) => [g, { ...d }])),
       recipes: { ...base.recipes },
-      keyframes: { ...base.keyframes },
     };
   }
 
@@ -168,31 +149,8 @@ class Checker {
     );
   }
 
-  /** Validates one endpoint of a responsive/container range against the declared
-   *  sizes. No-ops for an absent (open) endpoint. */
-  private checkRangeEndpoint(
-    name: string | null,
-    span: Span | null,
-    sizes: Record<string, string>,
-    code: string,
-    noun: string,
-    declHint: string,
-  ) {
-    if (!name || !span || sizes[name]) return;
-    const hint = didYouMean(name, Object.keys(sizes));
-    this.report(
-      code,
-      `unknown ${noun} '${name}'`,
-      span,
-      hint ? `did you mean '${hint}'?` : declHint,
-      "error",
-      hint ? replaceFix(span, hint) : undefined,
-    );
-  }
-
   run(): CheckResult {
     this.collectTheme();
-    this.collectKeyframes();
     this.collectStyleNames();
     this.collectRecipes();
     this.resolveAllRecipes();
@@ -251,15 +209,6 @@ class Checker {
           this.report("ARV112", `duplicate theme group '${group.name}'`, group.nameSpan);
         }
         fileGroups.add(group.name);
-
-        if (group.name === "breakpoint") {
-          this.collectBreakpoints(group);
-          continue;
-        }
-        if (group.name === "container") {
-          this.collectContainerSizes(group);
-          continue;
-        }
 
         const target = (this.env.tokens[group.name] ??= {});
         const docs = (this.env.tokenDocs[group.name] ??= {});
@@ -334,80 +283,61 @@ class Checker {
     }
   }
 
-  private collectContainerSizes(group: import("../ast/nodes.js").TokenGroup) {
-    const seen = new Set<string>();
-    for (const entry of group.entries) {
-      if (seen.has(entry.name)) {
-        this.report("ARV112", `duplicate container size '${entry.name}'`, entry.nameSpan);
-      }
-      seen.add(entry.name);
-      this.env.containers[entry.name] = entry.value.text;
-    }
-    for (const override of group.overrides) {
-      this.report(
-        "ARV136",
-        "container size tokens do not support mode overrides",
-        override.modeSpan,
-      );
-    }
-  }
-
-  private collectKeyframes() {
-    const names = new Set<string>();
-    for (const item of this.ast.items) {
-      if (item.kind !== "keyframes") continue;
-      if (names.has(item.name)) {
-        this.report("ARV150", `duplicate keyframes '${item.name}'`, item.nameSpan);
-        continue;
-      }
-      names.add(item.name);
-      for (const step of item.steps) {
-        for (const decl of step.decls) this.checkDecl(decl);
-      }
-      const rel = this.options.filename.replace(/\\/g, "/");
-      const hash = hashName(rel, item.name);
-      this.env.keyframes[item.name] = this.options.minify
-        ? hashClass(`${rel}:${item.name}`, "kf")
-        : `${item.name}_${hash}`;
-    }
-  }
-
-  private collectBreakpoints(group: import("../ast/nodes.js").TokenGroup) {
-    if (this.env.modes) {
-      // breakpoint tokens are compile-time only — allowed alongside modes.
-    }
-    const seen = new Set<string>();
-    for (const entry of group.entries) {
-      if (seen.has(entry.name)) {
-        this.report("ARV112", `duplicate breakpoint '${entry.name}'`, entry.nameSpan);
-      }
-      seen.add(entry.name);
-      this.env.breakpoints[entry.name] = entry.value.text;
-    }
-    for (const override of group.overrides) {
-      this.report("ARV135", "breakpoint tokens do not support mode overrides", override.modeSpan);
-    }
-  }
-
   /** True when this file will emit the `tokens` export (theme token groups). */
   private fileExportsTokens(): boolean {
     return this.ast.items.some(
-      (item) =>
-        item.kind === "theme" &&
-        item.groups.some(
-          (g) => g.name !== "breakpoint" && g.name !== "container" && g.entries.length > 0,
-        ),
+      (item) => item.kind === "theme" && item.groups.some((g) => g.entries.length > 0),
     );
   }
 
   // --- styles ----------------------------------------------------------------
 
-  private collectStyleNames() {
-    const componentNames = new Set<string>();
+  /** Components/styles declared inside top-level / `global` at-rules
+   *  (`@layer base { component X { … } }`) — collected alongside top-level ones. */
+  private constructsInAtRules(): (ComponentDecl | StyleDecl)[] {
+    const out: (ComponentDecl | StyleDecl)[] = [];
+    const walk = (node: AtRule) => {
+      if (!node.body) return;
+      out.push(...node.body.items);
+      for (const child of node.body.atRules) walk(child);
+    };
     for (const item of this.ast.items) {
-      if (item.kind === "component") componentNames.add(item.name);
+      if (item.kind === "atrule") walk(item);
+      else if (item.kind === "global") for (const at of item.atRules) walk(at);
     }
-    for (const item of this.ast.items) {
+    return out;
+  }
+
+  private allComponents(): ComponentDecl[] {
+    const out = this.ast.items.filter((i): i is ComponentDecl => i.kind === "component");
+    for (const c of this.constructsInAtRules()) if (c.kind === "component") out.push(c);
+    return out;
+  }
+
+  private allStyles(): StyleDecl[] {
+    const out = this.ast.items.filter((i): i is StyleDecl => i.kind === "styledecl");
+    for (const s of this.constructsInAtRules()) if (s.kind === "styledecl") out.push(s);
+    return out;
+  }
+
+  /** Reports ARV129 for any component/style nested in an at-rule that sits in a
+   *  disallowed place (inside a component / recipe / style). */
+  private forbidNestedConstructs(node: AtRule) {
+    if (!node.body) return;
+    for (const item of node.body.items) {
+      this.report(
+        "ARV129",
+        `'${item.name}' can't be declared inside a component, recipe or style`,
+        item.nameSpan,
+        "components and styles belong at the top level or in a top-level/`global` at-rule",
+      );
+    }
+    for (const child of node.body.atRules) this.forbidNestedConstructs(child);
+  }
+
+  private collectStyleNames() {
+    const componentNames = new Set<string>(this.allComponents().map((c) => c.name));
+    for (const item of this.allStyles()) {
       if (item.kind !== "styledecl") continue;
       if (this.fileStyleNames.has(item.name)) {
         this.report("ARV117", `duplicate style '${item.name}'`, item.nameSpan);
@@ -443,9 +373,8 @@ class Checker {
 
   /** Validates style declarations (token refs, recipe uses, states). */
   private checkStyles() {
-    for (const item of this.ast.items) {
-      if (item.kind !== "styledecl") continue;
-      const ir: RecipeIR = { decls: [], states: [] };
+    for (const item of this.allStyles()) {
+      const ir: RecipeIR = { decls: [], states: [], atRules: [] };
       for (const styleItem of item.items) {
         this.applyStyleItem(styleItem, ir);
       }
@@ -508,7 +437,7 @@ class Checker {
       return null;
     }
     this.resolving.add(name);
-    const ir: RecipeIR = { decls: [], states: [] };
+    const ir: RecipeIR = { decls: [], states: [], atRules: [] };
     for (const item of decl.items) {
       this.applyStyleItem(item, ir);
     }
@@ -517,7 +446,7 @@ class Checker {
     return ir;
   }
 
-  /** Resolves one style item (decl / use / state) into a RecipeIR while validating. */
+  /** Resolves one style item (decl / use / state / at-rule) into a RecipeIR while validating. */
   private applyStyleItem(item: StyleItem, ir: RecipeIR) {
     if (item.kind === "decl") {
       ir.decls.push({ property: item.property, value: this.checkDecl(item) });
@@ -527,7 +456,11 @@ class Checker {
       if (inlined) {
         ir.decls.push(...inlined.decls);
         ir.states.push(...inlined.states);
+        ir.atRules.push(...inlined.atRules);
       }
+    } else if (item.kind === "atrule") {
+      this.forbidNestedConstructs(item);
+      ir.atRules.push(this.lowerAtRule(item, false));
     } else {
       // Slot blocks inside states are rejected by the parser outside
       // component bodies, so recipes/styles never carry them here.
@@ -536,6 +469,65 @@ class Checker {
         decls: item.items.map((d) => ({ property: d.property, value: this.checkDecl(d) })),
       });
     }
+  }
+
+  /** Validates an at-rule (sugar endpoints + nested declarations) and lowers it
+   *  to IR. `@keyframes` bodies are pure pass-through: no token validation or
+   *  rewriting. The lowered IR is only consumed for recipes/styles (build
+   *  re-derives component/global at-rules from the AST). */
+  private lowerAtRule(node: AtRule, inheritedPassthrough: boolean): AtRuleIR {
+    const prelude = this.atRulePrelude(node);
+    if (!node.body) {
+      return { name: node.name, prelude, statement: true, decls: [], rules: [], atRules: [] };
+    }
+    const passthrough = inheritedPassthrough || node.name === "keyframes";
+    return {
+      name: node.name,
+      prelude,
+      decls: node.body.decls.map((d) => ({
+        property: d.property,
+        value: passthrough ? d.value.text : this.checkDecl(d),
+      })),
+      rules: node.body.rules.map((r) => this.lowerRawRule(r, passthrough)),
+      atRules: node.body.atRules.map((a) => this.lowerAtRule(a, passthrough)),
+    };
+  }
+
+  private lowerRawRule(rule: RawRule, passthrough: boolean): RawRuleIR {
+    return {
+      selector: rule.selector,
+      decls: rule.body.decls.map((d) => ({
+        property: d.property,
+        value: passthrough ? d.value.text : this.checkDecl(d),
+      })),
+      rules: rule.body.rules.map((r) => this.lowerRawRule(r, passthrough)),
+      atRules: rule.body.atRules.map((a) => this.lowerAtRule(a, passthrough)),
+    };
+  }
+
+  /** Final CSS head for an at-rule. Token refs in the prelude are inlined to
+   *  literal values (never `var()`, which is invalid in media/container
+   *  conditions); everything else passes through verbatim. */
+  private atRulePrelude(node: AtRule): string {
+    if (!node.prelude || !node.preludeSpan) return `@${node.name}`;
+    const value: RawValue = {
+      text: node.prelude,
+      words: splitValueWords(node.prelude, node.preludeSpan),
+      span: node.preludeSpan,
+    };
+    const resolved = substitutePreludeRefs(value, this.env, (word) => {
+      const bucket = this.env.tokens[word.group];
+      const hint = bucket ? didYouMean(word.name, Object.keys(bucket)) : undefined;
+      this.report(
+        "ARV101",
+        `unknown token '${word.group}.${word.name}'`,
+        word.span,
+        hint ? `did you mean '${word.group}.${hint}'?` : undefined,
+        "error",
+        hint ? replaceFix(word.span, `${word.group}.${hint}`) : undefined,
+      );
+    });
+    return `@${node.name} ${resolved}`;
   }
 
   /**
@@ -573,7 +565,6 @@ class Checker {
     const hasUnresolvedRef = decl.value.words.some((w) => {
       if (w.kind !== "ref") return false;
       if (this.localTokens?.[w.group]?.[w.name] !== undefined) return false;
-      if (w.group === "keyframes") return this.env.keyframes[w.name] === undefined;
       return this.env.tokens[w.group]?.[w.name] === undefined;
     });
     if (hasUnresolvedRef) return resolved;
@@ -601,14 +592,12 @@ class Checker {
    * Resolves token aliases inside theme values (`b = color.a;`) against
    * tokens declared earlier in the file or the shared env. Always inlines
    * literals (theme values are the source CSS-var definitions, never `var()`).
-   * `keyframes.*` refs stay literal — keyframes are collected after the theme.
    */
   private resolveThemeValue(value: RawValue, mode: string | null, modes: string[] | null): string {
-    if (!value.words.some((w) => w.kind === "ref" && w.group !== "keyframes")) {
+    if (!value.words.some((w) => w.kind === "ref")) {
       return value.text;
     }
     const onUnknown = (word: RefWord) => {
-      if (word.group === "keyframes") return;
       const bucket = this.env.tokens[word.group];
       const hint = bucket ? didYouMean(word.name, Object.keys(bucket)) : undefined;
       this.report(
@@ -625,11 +614,7 @@ class Checker {
     if (mode !== null) {
       return substituteRefsForMode(value, this.env.tokens, mode, modes, onUnknown);
     }
-    return substituteRefs(
-      value,
-      { tokens: this.env.tokens, modes: null, keyframes: {} },
-      onUnknown,
-    );
+    return substituteRefs(value, { tokens: this.env.tokens, modes: null }, onUnknown);
   }
 
   /** Validates token refs in a value and returns the text with refs inlined. */
@@ -645,18 +630,6 @@ class Checker {
       value,
       this.env,
       (word) => {
-        if (word.group === "keyframes") {
-          const hint = didYouMean(word.name, Object.keys(this.env.keyframes));
-          this.report(
-            "ARV151",
-            `unknown keyframes '${word.name}'`,
-            word.span,
-            hint ? `did you mean 'keyframes.${hint}'?` : undefined,
-            "error",
-            hint ? replaceFix(word.span, `keyframes.${hint}`) : undefined,
-          );
-          return;
-        }
         const bucket = this.env.tokens[word.group];
         const hint = bucket ? didYouMean(word.name, Object.keys(bucket)) : undefined;
         this.report(
@@ -676,10 +649,15 @@ class Checker {
 
   private checkGlobals() {
     for (const item of this.ast.items) {
+      if (item.kind === "atrule") {
+        this.lowerAtRule(item, false);
+        continue;
+      }
       if (item.kind !== "global") continue;
       for (const rule of item.rules) {
         for (const decl of rule.decls) this.checkDecl(decl);
       }
+      for (const at of item.atRules) this.lowerAtRule(at, false);
     }
   }
 
@@ -687,8 +665,7 @@ class Checker {
 
   private checkComponents() {
     const names = new Set<string>();
-    for (const item of this.ast.items) {
-      if (item.kind !== "component") continue;
+    for (const item of this.allComponents()) {
       if (names.has(item.name)) {
         this.report("ARV110", `duplicate component '${item.name}'`, item.nameSpan);
         continue;
@@ -729,8 +706,6 @@ class Checker {
         item.kind === "slots" ||
         item.kind === "variants" ||
         item.kind === "defaults" ||
-        item.kind === "responsive" ||
-        item.kind === "container" ||
         item.kind === "tokens"
       ) {
         const spans = sectionCounts.get(item.kind) ?? [];
@@ -860,6 +835,10 @@ class Checker {
         case "decl":
           this.checkDecl(item);
           break;
+        case "atrule":
+          this.forbidNestedConstructs(item);
+          this.lowerAtRule(item, false);
+          break;
         case "use":
           this.usedRecipes.add(item.recipe);
           this.resolveRecipe(item.recipe, item.recipeSpan);
@@ -910,144 +889,6 @@ class Checker {
                 "error",
                 hint ? replaceFix(entry.valueSpan, hint) : undefined,
               );
-            }
-          }
-          break;
-        }
-        case "responsive": {
-          const seenBreakpoints = new Set<string>();
-          for (const entry of item.entries) {
-            const key = rangeKey(entry.lower, entry.upper);
-            if (seenBreakpoints.has(key)) {
-              this.report("ARV140", `duplicate responsive breakpoint '${key}'`, entry.span);
-              continue;
-            }
-            seenBreakpoints.add(key);
-            this.checkRangeEndpoint(
-              entry.lower,
-              entry.lowerSpan,
-              this.env.breakpoints,
-              "ARV141",
-              "breakpoint",
-              "declare breakpoints in theme { breakpoint { ... } }",
-            );
-            this.checkRangeEndpoint(
-              entry.upper,
-              entry.upperSpan,
-              this.env.breakpoints,
-              "ARV141",
-              "breakpoint",
-              "declare breakpoints in theme { breakpoint { ... } }",
-            );
-            if (invertedRange(entry.lower, entry.upper, this.env.breakpoints)) {
-              this.report(
-                "ARV145",
-                `inverted responsive range '${key}': lower bound is not smaller than upper bound`,
-                entry.span,
-              );
-            }
-            const seenVariants = new Set<string>();
-            for (const variant of entry.variants) {
-              if (seenVariants.has(variant.variant)) {
-                this.report(
-                  "ARV142",
-                  `duplicate responsive override for variant '${variant.variant}' at breakpoint '${key}'`,
-                  variant.variantSpan,
-                );
-                continue;
-              }
-              seenVariants.add(variant.variant);
-              const variantDecl = variants.get(variant.variant);
-              if (!variantDecl) {
-                const hint = didYouMean(variant.variant, variants.keys());
-                this.report(
-                  "ARV143",
-                  `responsive references unknown variant '${variant.variant}'`,
-                  variant.variantSpan,
-                  hint ? `did you mean '${hint}'?` : undefined,
-                  "error",
-                  hint ? replaceFix(variant.variantSpan, hint) : undefined,
-                );
-              } else if (!variantDecl.values.has(variant.value)) {
-                const hint = didYouMean(variant.value, variantDecl.values.keys());
-                this.report(
-                  "ARV144",
-                  `responsive references unknown value '${variant.value}' for variant '${variant.variant}'`,
-                  variant.valueSpan,
-                  hint ? `did you mean '${hint}'?` : undefined,
-                  "error",
-                  hint ? replaceFix(variant.valueSpan, hint) : undefined,
-                );
-              }
-            }
-          }
-          break;
-        }
-        case "container": {
-          const seenContainers = new Set<string>();
-          for (const entry of item.entries) {
-            const key = rangeKey(entry.lower, entry.upper);
-            if (seenContainers.has(key)) {
-              this.report("ARV160", `duplicate container query '${key}'`, entry.span);
-              continue;
-            }
-            seenContainers.add(key);
-            this.checkRangeEndpoint(
-              entry.lower,
-              entry.lowerSpan,
-              this.env.containers,
-              "ARV161",
-              "container size",
-              "declare sizes in theme { container { ... } }",
-            );
-            this.checkRangeEndpoint(
-              entry.upper,
-              entry.upperSpan,
-              this.env.containers,
-              "ARV161",
-              "container size",
-              "declare sizes in theme { container { ... } }",
-            );
-            if (invertedRange(entry.lower, entry.upper, this.env.containers)) {
-              this.report(
-                "ARV165",
-                `inverted container range '${key}': lower bound is not smaller than upper bound`,
-                entry.span,
-              );
-            }
-            const seenVariants = new Set<string>();
-            for (const variant of entry.variants) {
-              if (seenVariants.has(variant.variant)) {
-                this.report(
-                  "ARV162",
-                  `duplicate container override for variant '${variant.variant}' at '${key}'`,
-                  variant.variantSpan,
-                );
-                continue;
-              }
-              seenVariants.add(variant.variant);
-              const variantDecl = variants.get(variant.variant);
-              if (!variantDecl) {
-                const hint = didYouMean(variant.variant, variants.keys());
-                this.report(
-                  "ARV163",
-                  `container references unknown variant '${variant.variant}'`,
-                  variant.variantSpan,
-                  hint ? `did you mean '${hint}'?` : undefined,
-                  "error",
-                  hint ? replaceFix(variant.variantSpan, hint) : undefined,
-                );
-              } else if (!variantDecl.values.has(variant.value)) {
-                const hint = didYouMean(variant.value, variantDecl.values.keys());
-                this.report(
-                  "ARV164",
-                  `container references unknown value '${variant.value}' for variant '${variant.variant}'`,
-                  variant.valueSpan,
-                  hint ? `did you mean '${hint}'?` : undefined,
-                  "error",
-                  hint ? replaceFix(variant.valueSpan, hint) : undefined,
-                );
-              }
             }
           }
           break;
@@ -1135,6 +976,9 @@ class Checker {
   private checkStyleItem(item: StyleItem) {
     if (item.kind === "decl") {
       this.checkDecl(item);
+    } else if (item.kind === "atrule") {
+      this.forbidNestedConstructs(item);
+      this.lowerAtRule(item, false);
     } else if (item.kind === "use") {
       this.usedRecipes.add(item.recipe);
       this.resolveRecipe(item.recipe, item.recipeSpan);
