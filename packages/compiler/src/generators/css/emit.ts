@@ -1,6 +1,6 @@
 import type { Span } from "../../diagnostics.js";
 import type { DeclIR, FileIR, StyleIR } from "../../ir/ir.js";
-import { cssVarName } from "../../ir/ir.js";
+import { cssVarName, isColorValue } from "../../ir/ir.js";
 import {
   baseClass,
   compoundClass,
@@ -150,35 +150,86 @@ export function emitCssWithMap(
     const defaultMode = ir.themeModes[0]!;
     const altModes = ir.themeModes.slice(1);
 
-    const fullDecls = (mode: string): DeclIR[] =>
-      ir.themeVars.map((v) => ({
-        property: cssVarName(v.group, v.name),
-        value: v.byMode[mode]!,
-      }));
+    // Native path: when the modes are exactly the two CSS `color-scheme`
+    // keywords, drive theming with `color-scheme` + `light-dark()`. Color
+    // tokens collapse to a single declaration each (no `:root`/media/attribute
+    // duplication), native UA widgets follow the scheme, and the attribute just
+    // flips `color-scheme`. Any other mode shape falls back to the legacy
+    // four-block emission below.
+    const isLightDarkTheme =
+      ir.themeModes.length === 2 && ir.themeModes[0] === "light" && ir.themeModes[1] === "dark";
 
-    const overrideDecls = (mode: string): DeclIR[] => {
-      const decls: DeclIR[] = [];
+    if (isLightDarkTheme) {
+      const rootDecls: DeclIR[] = [{ property: "color-scheme", value: "light dark" }];
+      // Mode-varying tokens that aren't plain colors (e.g. box-shadow) can't use
+      // light-dark(); they keep OS-driven (@media) and explicit (attribute)
+      // overrides.
+      const mediaDecls: DeclIR[] = [];
+      const lightOverrides: DeclIR[] = [];
+      const darkOverrides: DeclIR[] = [];
+
       for (const v of ir.themeVars) {
-        const value = v.byMode[mode];
-        if (value !== undefined && value !== v.byMode[defaultMode]) {
-          decls.push({ property: cssVarName(v.group, v.name), value });
+        const prop = cssVarName(v.group, v.name);
+        const light = v.byMode.light!;
+        const dark = v.byMode.dark;
+        if (dark === undefined || dark === light) {
+          rootDecls.push({ property: prop, value: light }); // invariant
+        } else if (isColorValue(light) && isColorValue(dark)) {
+          rootDecls.push({ property: prop, value: `light-dark(${light}, ${dark})` });
+        } else {
+          rootDecls.push({ property: prop, value: light });
+          mediaDecls.push({ property: prop, value: dark });
+          lightOverrides.push({ property: prop, value: light });
+          darkOverrides.push({ property: prop, value: dark });
         }
       }
-      return decls;
-    };
 
-    rule(":root", fullDecls(defaultMode));
+      rule(":root", rootDecls);
+      if (mediaDecls.length > 0) {
+        const body = mediaDecls.map((d) => `  ${d.property}: ${d.value};`).join("\n");
+        out.push(`@media (prefers-color-scheme: dark) {\n  :root {\n${body}\n  }\n}`);
+      }
+      // Emitted after the media block so an explicit attribute wins at equal
+      // specificity. color-scheme alone flips every light-dark() color.
+      rule(`[data-arvia-theme="light"]`, [
+        { property: "color-scheme", value: "light" },
+        ...lightOverrides,
+      ]);
+      rule(`[data-arvia-theme="dark"]`, [
+        { property: "color-scheme", value: "dark" },
+        ...darkOverrides,
+      ]);
+    } else {
+      const fullDecls = (mode: string): DeclIR[] =>
+        ir.themeVars.map((v) => ({
+          property: cssVarName(v.group, v.name),
+          value: v.byMode[mode]!,
+        }));
 
-    const mediaDarkDecls = altModes.length > 0 ? overrideDecls(altModes[0]!) : [];
-    if (mediaDarkDecls.length > 0) {
-      const body = mediaDarkDecls.map((d) => `  ${d.property}: ${d.value};`).join("\n");
-      out.push(`@media (prefers-color-scheme: dark) {\n  :root {\n${body}\n  }\n}`);
-    }
+      const overrideDecls = (mode: string): DeclIR[] => {
+        const decls: DeclIR[] = [];
+        for (const v of ir.themeVars) {
+          const value = v.byMode[mode];
+          if (value !== undefined && value !== v.byMode[defaultMode]) {
+            decls.push({ property: cssVarName(v.group, v.name), value });
+          }
+        }
+        return decls;
+      };
 
-    rule(`[data-arvia-theme="${defaultMode}"]`, fullDecls(defaultMode));
-    for (const mode of altModes) {
-      const decls = overrideDecls(mode);
-      if (decls.length > 0) rule(`[data-arvia-theme="${mode}"]`, decls);
+      rule(":root", fullDecls(defaultMode));
+
+      const mediaDarkDecls = altModes.length > 0 ? overrideDecls(altModes[0]!) : [];
+      if (mediaDarkDecls.length > 0) {
+        const body = mediaDarkDecls.map((d) => `  ${d.property}: ${d.value};`).join("\n");
+        out.push(`@media (prefers-color-scheme: dark) {\n  :root {\n${body}\n  }\n}`);
+      }
+
+      rule(`[data-arvia-theme="${defaultMode}"]`, fullDecls(defaultMode));
+      for (const mode of altModes) {
+        const decls = overrideDecls(mode);
+        if (decls.length > 0) rule(`[data-arvia-theme="${mode}"]`, decls);
+      }
     }
   }
 

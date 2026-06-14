@@ -714,25 +714,17 @@ export const tokens = {
 
 exports[`golden fixtures > multi-theme.arv > css 1`] = `
 ":root {
-  --arvia-color-text: #111111;
-  --arvia-color-background: #ffffff;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-  --arvia-color-text: #eeeeee;
-  --arvia-color-background: #000000;
-  }
+  color-scheme: light dark;
+  --arvia-color-text: light-dark(#111111, #eeeeee);
+  --arvia-color-background: light-dark(#ffffff, #000000);
 }
 
 [data-arvia-theme="light"] {
-  --arvia-color-text: #111111;
-  --arvia-color-background: #ffffff;
+  color-scheme: light;
 }
 
 [data-arvia-theme="dark"] {
-  --arvia-color-text: #eeeeee;
-  --arvia-color-background: #000000;
+  color-scheme: dark;
 }
 
 body {

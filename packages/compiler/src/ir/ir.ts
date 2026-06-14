@@ -61,6 +61,19 @@ export function cssVarName(group: string, name: string): string {
   return `--arvia-${group}-${name}`;
 }
 
+/** True when `value` is a single CSS color (hex, functional notation, or a
+ *  color keyword) — i.e. eligible to collapse into a `light-dark()` call.
+ *  Multi-token values like `0 1px 2px rgba(...)` (box-shadow) return false and
+ *  keep their per-mode override blocks. Named colors (`red`) aren't matched;
+ *  they fall back to overrides too, which still renders correctly. */
+export function isColorValue(value: string): boolean {
+  const v = value.trim();
+  if (/^#[0-9a-fA-F]{3,8}$/.test(v)) return true;
+  if (/^(rgb|rgba|hsl|hsla|hwb|lab|lch|oklab|oklch|color)\([^()]*\)$/i.test(v)) return true;
+  if (/^(transparent|currentColor)$/i.test(v)) return true;
+  return false;
+}
+
 export interface ThemeVarIR {
   group: string;
   name: string;
