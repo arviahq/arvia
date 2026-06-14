@@ -82,13 +82,13 @@ theme {
     out = cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  container {
+  container-size {
     narrow = 320px;
     wide = 560px;
   }
 }
 
-keyframes fadeIn {
+@keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(4px);
@@ -99,7 +99,7 @@ keyframes fadeIn {
   }
 }
 
-keyframes pulse {
+@keyframes pulse {
   from { opacity: 1; }
   to { opacity: 0.45; }
 }

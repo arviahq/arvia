@@ -21,7 +21,7 @@ export function getInlayHints(analysis: DocumentAnalysis, range: Range): InlayHi
   const hints: InlayHint[] = [];
   for (const { decl, component } of walkDeclarations(analysis.ast)) {
     for (const word of decl.value.words) {
-      if (word.kind !== "ref" || word.group === "keyframes") continue;
+      if (word.kind !== "ref") continue;
       if (word.span.end < startOffset || word.span.start > endOffset) continue;
       const resolved = resolveForHint(analysis, word.group, word.name, component);
       if (!resolved || resolved === word.text) continue;

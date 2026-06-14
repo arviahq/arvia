@@ -1,10 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { compile, compileDts } from "../src/index.js";
-import { formatArv } from "../src/format/format.js";
+import { compile } from "../src/index.js";
 
 const THEME = `theme {
   breakpoint { sm = 480px; md = 768px; lg = 1024px; }
-  container { narrow = 320px; wide = 560px; }
+  container-size { narrow = 320px; wide = 560px; }
 }`;
 
 /** Compiles a component body against the shared range theme above. */
@@ -17,164 +16,55 @@ const css = (body: string) => {
 const codes = (source: string) =>
   compile(source, { filename: "range.arv" }).diagnostics.map((d) => d.code);
 
-describe("responsive/container range syntax", () => {
-  describe("CSS emission", () => {
-    it("bare breakpoint stays @media (min-width) — backward compatible", () => {
-      const out = css(`component B {
-        variants { size { sm { padding: 4px; } lg { padding: 16px; } } }
-        defaults { size: sm; }
-        responsive { md { size: lg; } }
-      }`);
-      expect(out).toContain("@media (min-width: 768px)");
-    });
-
-    it("`md..` is identical to bare `md`", () => {
-      const bare = css(`component B {
-        variants { size { sm { padding: 4px; } lg { padding: 16px; } } }
-        defaults { size: sm; }
-        responsive { md { size: lg; } }
-      }`);
-      const explicit = css(`component B {
-        variants { size { sm { padding: 4px; } lg { padding: 16px; } } }
-        defaults { size: sm; }
-        responsive { md.. { size: lg; } }
-      }`);
-      expect(explicit).toBe(bare);
-    });
-
-    it("`..lg` emits an exclusive upper bound", () => {
-      const out = css(`component B {
-        variants { size { sm { padding: 4px; } lg { padding: 16px; } } }
-        defaults { size: sm; }
-        responsive { ..lg { size: lg; } }
-      }`);
-      expect(out).toContain("@media (width < 1024px)");
-    });
-
-    it("`sm..lg` emits a half-open band", () => {
-      const out = css(`component B {
-        variants { size { sm { padding: 4px; } lg { padding: 16px; } } }
-        defaults { size: sm; }
-        responsive { sm..lg { size: lg; } }
-      }`);
-      expect(out).toContain("@media (480px <= width < 1024px)");
-    });
-
-    it("container ranges use inline-size for bounded forms, min-width for >=", () => {
-      const out = css(`component C {
-        variants { layout { stacked { padding: 8px; } row { padding: 16px; } } }
-        defaults { layout: stacked; }
-        container {
-          wide { layout: row; }
-          ..wide { layout: stacked; }
-          narrow..wide { layout: row; }
-        }
-      }`);
-      expect(out).toContain("@container (min-width: 560px)");
-      expect(out).toContain("@container (inline-size < 560px)");
-      expect(out).toContain("@container (320px <= inline-size < 560px)");
-    });
-
-    it("readable class names encode the range", () => {
-      const out = css(`component B {
-        variants { size { sm { padding: 4px; } lg { padding: 16px; } } }
-        defaults { size: sm; }
-        responsive { ..lg { size: lg; } sm..lg { size: sm; } }
-      }`);
-      expect(out).toContain("B_size_lg_bp_to_lg_root_");
-      expect(out).toContain("B_size_sm_bp_sm_to_lg_root_");
-    });
+describe("@media / @container preludes inline token refs", () => {
+  it("inlines a breakpoint ref to its literal value", () => {
+    const out = css(`component B { base { @media (min-width: breakpoint.md) { color: red; } } }`);
+    expect(out).toContain("@media (min-width: 768px)");
+    expect(out).not.toContain("breakpoint.md");
   });
 
-  describe("typed prop surface (.d.ts)", () => {
-    it("exposes range bands as quoted prop keys", () => {
-      const { dts } = compileDts(
-        `${THEME}\ncomponent B {
-          variants { size { sm {} lg {} } }
-          defaults { size: sm; }
-          responsive { md { size: lg; } sm..lg { size: lg; } }
-        }`,
-        { filename: "range.arv" },
-      );
-      // bare breakpoint stays a bare key, range becomes a quoted key
-      expect(dts).toContain('md?: "sm" | "lg"');
-      expect(dts).toContain('"sm..lg"?: "sm" | "lg"');
-    });
+  it("inlines a container-size ref (measured in inline-size)", () => {
+    const out = css(
+      `component C { base { @container (inline-size < container-size.wide) { color: red; } } }`,
+    );
+    expect(out).toContain("@container (inline-size < 560px)");
   });
 
-  describe("parsing", () => {
-    it("accepts all four head forms", () => {
-      expect(
-        codes(`${THEME}\ncomponent B {
-          variants { size { sm {} lg {} } }
-          defaults { size: sm; }
-          responsive { md {} md.. {} ..lg {} sm..lg {} }
-        }`).filter((c) => c !== "ARV140"),
-      ).toEqual([]);
-    });
-
-    it("rejects a bare `..` with no endpoint", () => {
-      expect(
-        codes(`${THEME}\ncomponent B {
-          variants { size { sm {} lg {} } }
-          defaults { size: sm; }
-          responsive { .. { size: lg; } }
-        }`),
-      ).toContain("ARV010");
-    });
+  it("inlines refs inside a multi-feature condition", () => {
+    const out = css(
+      `component B { base { @media (breakpoint.sm <= width < breakpoint.lg) { color: red; } } }`,
+    );
+    expect(out).toContain("@media (480px <= width < 1024px)");
   });
 
-  describe("checker diagnostics", () => {
-    it("flags an unknown endpoint with a did-you-mean fix", () => {
-      const d = compile(
-        `${THEME}\ncomponent B {
-          variants { size { sm {} lg {} } }
-          defaults { size: sm; }
-          responsive { sm..lgg { size: lg; } }
-        }`,
-        { filename: "range.arv" },
-      ).diagnostics.find((x) => x.code === "ARV141");
-      expect(d).toBeDefined();
-      expect(d!.hint).toContain("lg");
-    });
-
-    it("flags an inverted same-unit range", () => {
-      expect(
-        codes(`${THEME}\ncomponent B {
-          variants { size { sm {} lg {} } }
-          defaults { size: sm; }
-          responsive { lg..sm { size: lg; } }
-        }`),
-      ).toContain("ARV145");
-    });
-
-    it("treats `md` and `md..` as duplicates", () => {
-      expect(
-        codes(`${THEME}\ncomponent B {
-          variants { size { sm {} lg {} } }
-          defaults { size: sm; }
-          responsive { md { size: lg; } md.. { size: sm; } }
-        }`),
-      ).toContain("ARV140");
-    });
+  it("scopes the bare declarations under the owning slot class", () => {
+    const out = css(`component B { base { @media (min-width: breakpoint.md) { color: red; } } }`);
+    expect(out).toMatch(/@media \(min-width: 768px\) \{\n\.B_root_[a-z0-9]+ \{\n {2}color: red;/);
   });
 
-  describe("formatter", () => {
-    it("round-trips range heads unchanged", () => {
-      const source = `${THEME}\ncomponent B {
-  variants { size { sm {} lg {} } }
-  defaults { size: sm; }
-  responsive {
-    ..lg { size: lg; }
-    sm..lg { size: sm; }
-  }
-}
-`;
-      // idempotent: formatting twice equals formatting once, and `..` survives.
-      const once = formatArv(source);
-      expect(once).toContain("..lg");
-      expect(once).toContain("sm..lg");
-      expect(formatArv(once)).toBe(once);
-    });
+  it("leaves a plain (no-ref) condition verbatim", () => {
+    const out = css(`component B { base { @media (min-width: 900px) { color: red; } } }`);
+    expect(out).toContain("@media (min-width: 900px)");
+  });
+
+  it("leaves @media print / feature queries verbatim", () => {
+    const out = css(`component B { base { @media (max-height: 500px) { color: red; } } }`);
+    expect(out).toContain("@media (max-height: 500px)");
+  });
+
+  it("flags an unknown breakpoint ref with a did-you-mean fix", () => {
+    const d = compile(
+      `${THEME}\ncomponent B { base { @media (min-width: breakpoint.mdd) { color: red; } } }`,
+      { filename: "range.arv" },
+    ).diagnostics.find((x) => x.code === "ARV101");
+    expect(d).toBeDefined();
+    expect(d!.hint).toContain("breakpoint.md");
+  });
+
+  it("does not error on a non-theme dotted token in a condition (passes through)", () => {
+    // `device.foo` is not a known group → left as literal text, no diagnostic.
+    expect(
+      codes(`${THEME}\ncomponent B { base { @media (min-width: device.foo) { color: red; } } }`),
+    ).not.toContain("ARV101");
   });
 });

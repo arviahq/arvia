@@ -107,9 +107,10 @@ Globals, keyframes, recipes, styles and use
 
 global {
   html, body { margin: 0; }
+  @media (min-width: 600px) { body { margin: 1rem; } }
 }
 
-keyframes spin {
+@keyframes spin {
   from { opacity: 0; }
   100% { opacity: 1; }
 }
@@ -124,11 +125,16 @@ component Card { use Surface; }
 
 (source_file
   (global_block
-    (global_rule (raw_selector) (declaration property: (property_name) (raw_value))))
-  (keyframes_decl
+    (global_rule (raw_selector) (declaration property: (property_name) (raw_value)))
+    (at_rule
+      name: (identifier)
+      prelude: (raw_selector)
+      (at_nested_rule (raw_selector) (declaration property: (property_name) (raw_value)))))
+  (at_rule
     name: (identifier)
-    (keyframe_step (raw_selector) (declaration property: (property_name) (raw_value)))
-    (keyframe_step (raw_selector) (declaration property: (property_name) (raw_value))))
+    prelude: (raw_selector)
+    (at_nested_rule (raw_selector) (declaration property: (property_name) (raw_value)))
+    (at_nested_rule (raw_selector) (declaration property: (property_name) (raw_value))))
   (recipe_decl
     name: (identifier)
     (declaration property: (property_name) (raw_value)))
@@ -140,17 +146,15 @@ component Card { use Surface; }
     (use_statement recipe: (identifier))))
 
 ================================================================================
-Responsive, container, compound and component tokens
+At-rules, compound and component tokens
 ================================================================================
 
 component Box {
   tokens { m { pad = 4px; } }
   variants { size { sm {} lg {} } }
-  responsive {
-    md { size: lg; }
-  }
-  container {
-    sm { size: sm; }
+  base {
+    @media (min-width: breakpoint.md) { padding: 8px; }
+    @container (inline-size < container-size.sm) { padding: 4px; }
   }
   compound {
     size: lg;
@@ -170,10 +174,15 @@ component Box {
         name: (identifier)
         (variant_value name: (token_name))
         (variant_value name: (token_name))))
-    (responsive_block
-      (conditional_entry key: (token_name) (setting variant: (identifier) value: (token_name))))
-    (container_block
-      (conditional_entry key: (token_name) (setting variant: (identifier) value: (token_name))))
+    (base_block
+      (at_rule
+        name: (identifier)
+        prelude: (raw_selector)
+        (declaration property: (property_name) (raw_value)))
+      (at_rule
+        name: (identifier)
+        prelude: (raw_selector)
+        (declaration property: (property_name) (raw_value))))
     (compound_block
       (setting variant: (identifier) value: (token_name))
       (slot_block

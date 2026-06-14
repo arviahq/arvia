@@ -8,9 +8,9 @@ export type TopLevelItem =
   | ThemeBlock
   | GlobalBlock
   | RecipeDecl
-  | KeyframesDecl
   | StyleDecl
-  | ComponentDecl;
+  | ComponentDecl
+  | AtRule;
 
 // --- theme ---------------------------------------------------------------
 
@@ -52,6 +52,9 @@ export interface TokenEntry {
 export interface GlobalBlock {
   kind: "global";
   rules: GlobalRule[];
+  /** Raw at-rules written directly in the block (`global { @media { … } }`),
+   *  emitted verbatim. */
+  atRules: AtRule[];
   span: Span;
 }
 
@@ -61,20 +64,38 @@ export interface GlobalRule {
   span: Span;
 }
 
-// --- keyframes -----------------------------------------------------------
+// --- at-rules ------------------------------------------------------------
 
-export interface KeyframesDecl {
-  kind: "keyframes";
+/** A raw CSS at-rule (`@keyframes`, `@media`, `@container`, `@supports`, …)
+ *  written anywhere and emitted verbatim. `prelude` carries the raw condition
+ *  text after the keyword; token refs inside it are inlined to literals at IR
+ *  time (so `@media (min-width: breakpoint.md)` → `@media (min-width: 768px)`). */
+export interface AtRule {
+  kind: "atrule";
+  /** At-keyword without the leading '@' (e.g. "media", "keyframes"). */
   name: string;
   nameSpan: Span;
-  steps: KeyframeStep[];
+  /** Raw prelude text after the keyword (empty for `@layer { … }`). */
+  prelude: string;
+  preludeSpan: Span | null;
+  body: AtRuleBody;
   span: Span;
 }
 
-export interface KeyframeStep {
+export interface AtRuleBody {
+  /** Bare declarations directly in the at-rule (e.g. inside `@supports`, or the
+   *  sugar form scoped to the owning class). */
+  decls: Declaration[];
+  /** Nested `selector { … }` blocks: keyframe steps (`from`/`50%`), `.x { … }`. */
+  rules: RawRule[];
+  /** Nested at-rules (e.g. `@supports` inside `@media`). */
+  atRules: AtRule[];
+}
+
+export interface RawRule {
   selector: string;
   selectorSpan: Span;
-  decls: Declaration[];
+  body: AtRuleBody;
   span: Span;
 }
 
@@ -114,12 +135,11 @@ export type ComponentItem =
   | SlotsBlock
   | VariantsBlock
   | DefaultsBlock
-  | ResponsiveBlock
-  | ContainerBlock
   | CompoundBlock
   | TokensBlock
   | UseStmt
-  | Declaration;
+  | Declaration
+  | AtRule;
 
 /** Component-scoped tokens: shadow theme tokens during resolution in this component only. */
 export interface TokensBlock {
@@ -173,39 +193,6 @@ export interface DefaultsBlock {
   span: Span;
 }
 
-export interface ResponsiveBlock {
-  kind: "responsive";
-  entries: ResponsiveEntry[];
-  span: Span;
-}
-
-/** A `responsive`/`container` head is a half-open range over named breakpoints:
- *  `md`/`md..` → [md, ∞); `..lg` → (∞, lg); `sm..lg` → [sm, lg). At least one
- *  endpoint is always present (the parser rejects a bare `..`). */
-export interface ResponsiveEntry {
-  lower: string | null;
-  lowerSpan: Span | null;
-  upper: string | null;
-  upperSpan: Span | null;
-  variants: DefaultEntry[];
-  span: Span;
-}
-
-export interface ContainerBlock {
-  kind: "container";
-  entries: ContainerEntry[];
-  span: Span;
-}
-
-export interface ContainerEntry {
-  lower: string | null;
-  lowerSpan: Span | null;
-  upper: string | null;
-  upperSpan: Span | null;
-  variants: DefaultEntry[];
-  span: Span;
-}
-
 export interface DefaultEntry {
   variant: string;
   variantSpan: Span;
@@ -236,7 +223,7 @@ export interface SlotBlock {
   span: Span;
 }
 
-export type StyleItem = Declaration | UseStmt | StateBlock;
+export type StyleItem = Declaration | UseStmt | StateBlock | AtRule;
 
 export interface Declaration {
   kind: "decl";

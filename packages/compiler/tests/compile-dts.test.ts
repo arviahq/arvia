@@ -51,16 +51,17 @@ describe("compileDts", () => {
     expect(dts).toContain("export declare function X(props: XProps): XSlots;");
   });
 
-  it("requires `initial` in the responsive object form of a required variant", () => {
+  it("emits bare string-union variant props (no responsive object form)", () => {
     const source = `theme { breakpoint { md = 768px; } }
 component X {
   variants { tone { a {} b {} } size { sm {} md {} } }
   defaults { size: sm; }
-  responsive { md { tone: b; size: md; } }
+  base { @media (min-width: breakpoint.md) { color: red; } }
 }`;
     const { dts } = compileDts(source, { filename: "x.arv" });
-    expect(dts).toContain('tone: "a" | "b" | { initial: "a" | "b"; md?: "a" | "b"; };');
-    expect(dts).toContain('size?: "sm" | "md" | { initial?: "sm" | "md"; md?: "sm" | "md"; };');
+    expect(dts).toContain('tone: "a" | "b";');
+    expect(dts).toContain('size?: "sm" | "md";');
+    expect(dts).not.toContain("initial");
   });
 
   it("recovers types past parse errors", () => {

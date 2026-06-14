@@ -1,3 +1,4 @@
+// `pulse` is declared as a raw `@keyframes` in theme.arv; reference it by literal name.
 component KeyframesDemo {
   base {
     padding: space.4 space.5;
@@ -5,6 +6,6 @@ component KeyframesDemo {
     background: color.primary;
     color: white;
     font-size: font.sm;
-    animation: keyframes.pulse duration.fast;
+    animation: pulse duration.fast;
   }
 }

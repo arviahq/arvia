@@ -137,13 +137,12 @@ export function App() {
 
           <Section title="Button — responsive (resize viewport)">
             <p className={Text({ size: "sm", tone: "muted" }).root}>
-              Defaults to <code>sm</code>; the <code>responsive</code> block bumps to{" "}
-              <code>md</code> at 768px and <code>lg</code> at 1024px.
+              The default (small) button scales up via <code>@media</code> ranges in{" "}
+              <code>base</code>: bumps padding/font at 768px (<code>md..</code>) and 1024px (
+              <code>lg..</code>).
             </p>
             <div className={row.root}>
-              <DemoButton size={{ initial: "sm", md: "md", lg: "lg" } as const} tone="primary">
-                responsive
-              </DemoButton>
+              <DemoButton tone="primary">responsive</DemoButton>
             </div>
           </Section>
 
@@ -161,9 +160,7 @@ export function App() {
 }
 
 function ContainerCardDemo() {
-  const card = Card({
-    layout: { initial: "stacked", $wide: "horizontal" } as const,
-  });
+  const card = Card();
   return (
     <div
       className={card.root}

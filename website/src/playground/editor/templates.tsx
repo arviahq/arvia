@@ -118,7 +118,15 @@ export function getEditorTemplates(): EditorTemplate[] {
     {
       id: "responsive",
       label: <fbt desc="Playground starter template label">{"Responsive"}</fbt>,
-      source: `component ResponsiveButton {
+      source: `theme {
+  color { primary = #635bff; }
+  space { 1 = 4px; 3 = 12px; 5 = 24px; }
+  radius { md = 10px; }
+  font { sm = 13px; lg = 18px; }
+  breakpoint { md = 768px; }
+}
+
+component ResponsiveButton {
   base {
     display: inline-flex;
     border: none;
@@ -127,21 +135,13 @@ export function getEditorTemplates(): EditorTemplate[] {
     color: white;
     font: inherit;
     cursor: pointer;
-  }
+    padding: space.1 space.3;
+    font-size: font.sm;
 
-  variants {
-    size {
-      sm { padding: space.1 space.3; font-size: font.sm; }
-      lg { padding: space.3 space.5; font-size: font.lg; }
+    @media (min-width: breakpoint.md) {
+      padding: space.3 space.5;
+      font-size: font.lg;
     }
-  }
-
-  defaults {
-    size: sm;
-  }
-
-  responsive {
-    md { size: lg; }
   }
 }
 `,

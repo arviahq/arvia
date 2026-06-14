@@ -1,22 +1,26 @@
-import type { ArviaFile, RawValue, StyleBody, StyleItem } from "../ast/nodes.js";
+import type { AtRule, ArviaFile, RawRule, RawValue, StyleBody, StyleItem } from "../ast/nodes.js";
 import {
   emptyStyle,
   isEmptyStyle,
+  type AtRuleIR,
   type CompoundIR,
-  type ContainerIR,
   type FileIR,
   type GlobalRuleIR,
-  type KeyframesIR,
+  type RawRuleIR,
   type StyleDeclIR,
   type StyleIR,
   type ThemeEnv,
-  type ResponsiveIR,
   type ThemeVarIR,
   type VariantIR,
 } from "./ir.js";
 import { hashClass, hashName, relativeName } from "./hash.js";
-import { rangeKey } from "./names.js";
-import { substituteRefs, substituteRefsForMode, type LocalTokens } from "../values.js";
+import { splitValueWords } from "../parser/parser.js";
+import {
+  substituteRefs,
+  substituteRefsForMode,
+  substitutePreludeRefs,
+  type LocalTokens,
+} from "../values.js";
 
 export interface BuildOptions {
   filename: string;
@@ -34,15 +38,56 @@ export function buildIR(ast: ArviaFile, env: ThemeEnv, options: BuildOptions): F
   const resolveValue = (value: RawValue): string =>
     substituteRefs(value, env, undefined, localTokens);
 
+  // Final CSS head for an at-rule. Token refs in the prelude inline to literals
+  // (never var() — invalid in conditions); everything else passes through.
+  const buildPrelude = (node: AtRule): string => {
+    if (!node.prelude || !node.preludeSpan) return `@${node.name}`;
+    const value: RawValue = {
+      text: node.prelude,
+      words: splitValueWords(node.prelude, node.preludeSpan),
+      span: node.preludeSpan,
+    };
+    return `@${node.name} ${substitutePreludeRefs(value, env)}`;
+  };
+
+  // `@keyframes` bodies are pure pass-through — no token rewriting; other
+  // at-rules resolve token refs in their declarations like ordinary rules.
+  const buildRawRule = (rule: RawRule, passthrough: boolean): RawRuleIR => ({
+    selector: rule.selector,
+    decls: rule.body.decls.map((d) => ({
+      property: d.property,
+      value: passthrough ? d.value.text : resolveValue(d.value),
+    })),
+    rules: rule.body.rules.map((r) => buildRawRule(r, passthrough)),
+    atRules: rule.body.atRules.map((a) => buildAtRule(a, passthrough)),
+  });
+
+  const buildAtRule = (node: AtRule, inheritedPassthrough: boolean): AtRuleIR => {
+    const passthrough = inheritedPassthrough || node.name === "keyframes";
+    return {
+      prelude: buildPrelude(node),
+      decls: node.body.decls.map((d) => ({
+        property: d.property,
+        value: passthrough ? d.value.text : resolveValue(d.value),
+      })),
+      rules: node.body.rules.map((r) => buildRawRule(r, passthrough)),
+      atRules: node.body.atRules.map((a) => buildAtRule(a, passthrough)),
+      anchor: node.nameSpan,
+    };
+  };
+
   const applyItems = (target: StyleIR, items: StyleItem[]) => {
     for (const item of items) {
       if (item.kind === "decl") {
         target.decls.push({ property: item.property, value: resolveValue(item.value) });
+      } else if (item.kind === "atrule") {
+        target.atRules.push(buildAtRule(item, false));
       } else if (item.kind === "use") {
         const recipe = env.recipes[item.recipe];
         if (recipe) {
           target.decls.push(...recipe.decls);
           target.states.push(...recipe.states);
+          target.atRules.push(...recipe.atRules);
         }
       } else {
         const state: StyleIR["states"][number] = {
@@ -76,17 +121,16 @@ export function buildIR(ast: ArviaFile, env: ThemeEnv, options: BuildOptions): F
   };
 
   const globals: GlobalRuleIR[] = [];
+  const globalAtRules: AtRuleIR[] = [];
   const components: FileIR["components"] = [];
   const styles: StyleDeclIR[] = [];
   const themeVars: ThemeVarIR[] = [];
-  const keyframes: KeyframesIR[] = [];
   let themeModes: string[] | null = null;
 
   for (const top of ast.items) {
     if (top.kind === "theme") {
       themeModes = env.modes;
       for (const group of top.groups) {
-        if (group.name === "breakpoint" || group.name === "container") continue;
         const bucket = env.tokens[group.name];
         if (!bucket) continue;
         for (const entry of group.entries) {
@@ -118,19 +162,8 @@ export function buildIR(ast: ArviaFile, env: ThemeEnv, options: BuildOptions): F
       }
       continue;
     }
-    if (top.kind === "keyframes") {
-      keyframes.push({
-        name: top.name,
-        nameSpan: top.nameSpan,
-        cssName: env.keyframes[top.name]!,
-        steps: top.steps.map((step) => ({
-          selector: step.selector,
-          decls: step.decls.map((d) => ({
-            property: d.property,
-            value: resolveValue(d.value),
-          })),
-        })),
-      });
+    if (top.kind === "atrule") {
+      globalAtRules.push(buildAtRule(top, false));
       continue;
     }
     if (top.kind === "global") {
@@ -140,6 +173,7 @@ export function buildIR(ast: ArviaFile, env: ThemeEnv, options: BuildOptions): F
           decls: rule.decls.map((d) => ({ property: d.property, value: resolveValue(d.value) })),
         });
       }
+      for (const at of top.atRules) globalAtRules.push(buildAtRule(at, false));
       continue;
     }
     if (top.kind === "styledecl") {
@@ -188,14 +222,13 @@ export function buildIR(ast: ArviaFile, env: ThemeEnv, options: BuildOptions): F
 
     const variants: VariantIR[] = [];
     const defaults: Record<string, string> = {};
-    const responsive: ResponsiveIR[] = [];
-    const containers: ContainerIR[] = [];
     const pendingCompounds: { matchers: [string, string][]; slots: Record<string, StyleIR> }[] = [];
 
     for (const item of top.items) {
       switch (item.kind) {
         case "decl":
         case "use":
+        case "atrule":
           applyItems(ensureBase("root"), [item]);
           break;
         case "base":
@@ -219,26 +252,6 @@ export function buildIR(ast: ArviaFile, env: ThemeEnv, options: BuildOptions): F
           break;
         case "defaults":
           for (const entry of item.entries) defaults[entry.variant] = entry.value;
-          break;
-        case "responsive":
-          for (const entry of item.entries) {
-            responsive.push({
-              breakpoint: rangeKey(entry.lower, entry.upper),
-              lower: entry.lower ? (env.breakpoints[entry.lower] ?? null) : null,
-              upper: entry.upper ? (env.breakpoints[entry.upper] ?? null) : null,
-              variants: Object.fromEntries(entry.variants.map((v) => [v.variant, v.value])),
-            });
-          }
-          break;
-        case "container":
-          for (const entry of item.entries) {
-            containers.push({
-              container: rangeKey(entry.lower, entry.upper),
-              lower: entry.lower ? (env.containers[entry.lower] ?? null) : null,
-              upper: entry.upper ? (env.containers[entry.upper] ?? null) : null,
-              variants: Object.fromEntries(entry.variants.map((v) => [v.variant, v.value])),
-            });
-          }
           break;
         case "compound": {
           const slots: Record<string, StyleIR> = {};
@@ -274,21 +287,17 @@ export function buildIR(ast: ArviaFile, env: ThemeEnv, options: BuildOptions): F
       variants,
       compounds,
       defaults,
-      responsive,
-      containers,
     });
     localTokens = null;
   }
 
   return {
     globals,
+    globalAtRules,
     components,
     styles,
     themeVars,
     themeModes,
-    breakpoints: { ...env.breakpoints },
-    containerSizes: { ...env.containers },
-    keyframes,
   };
 }
 

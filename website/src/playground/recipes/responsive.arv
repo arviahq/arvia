@@ -7,23 +7,16 @@ component RecipeResponsiveButton {
     color: white;
     font: inherit;
     cursor: pointer;
-  }
 
-  variants {
-    size {
-      sm { padding: space.1 space.3; font-size: font.sm; }
-      lg { padding: space.3 space.5; font-size: font.lg; }
+    // Nested `@media` passes straight through to CSS. Token refs in the
+    // condition inline to their literal value — `breakpoint.md` → `768px` —
+    // so breakpoints stay centralized while the condition is full, raw CSS.
+    padding: space.1 space.3;
+    font-size: font.sm;
+
+    @media (min-width: breakpoint.md) {
+      padding: space.3 space.5;
+      font-size: font.lg;
     }
-  }
-
-  defaults {
-    size: sm;
-  }
-
-  responsive {
-    // bare = from this width up; `..` makes a cap or a half-open band
-    ..md { size: sm; }      // below md (max-width)
-    md..xl { size: lg; }    // md <= width < xl
-    xl { size: lg; }        // xl and up
   }
 }

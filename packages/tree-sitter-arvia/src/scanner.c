@@ -133,6 +133,9 @@ static bool scan_raw_selector(TSLexer *lexer) {
   skip_ws(lexer);
   if (lexer->eof(lexer)) return false;
   if (lexer->lookahead == '{' || lexer->lookahead == '}' || lexer->lookahead == ';') return false;
+  // CSS selectors never start with '@'; bailing here lets the `at_rule` rule
+  // claim raw at-rules instead of swallowing them as a selector.
+  if (lexer->lookahead == '@') return false;
   if (at_comment_start(lexer)) return false;
 
   bool any = false;

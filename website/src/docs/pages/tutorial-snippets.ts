@@ -130,19 +130,11 @@ component Button {
 
     &:hover { background: color.primaryHover; }
     &:focus-visible { outline: 2px solid color.text; outline-offset: 2px; }
-  }
 
-  variants {
-    size {
-      md { font-size: font.md; }
-      lg { font-size: font.lg; padding: space.4; }
+    @media (min-width: breakpoint.md) {
+      font-size: font.lg;
+      padding: space.4;
     }
-  }
-
-  defaults { size: md; }
-
-  responsive {
-    md { size: lg; }
   }
 }`;
 

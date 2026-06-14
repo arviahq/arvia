@@ -85,5 +85,5 @@ export function playgroundHref(source: string): string {
 /** Matches the doc-example heuristic: only complete .arv files open in the
  *  playground; fragments (a lone variants/compound block…) would not compile. */
 export function isCompleteArvFile(code: string): boolean {
-  return /^\s*(\/\/.*\n\s*)*(theme|component|recipe|global|keyframes|style)\b/.test(code);
+  return /^\s*(\/\/.*\n\s*)*(@[a-z]|theme|component|recipe|global|style)\b/.test(code);
 }

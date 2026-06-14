@@ -24,7 +24,7 @@ function getHighlighter(): Promise<HighlighterCore> {
 
 export function langFromLabel(label?: string, code?: string): string {
   if (!label) {
-    if (code && /^\s*(theme|component|recipe|global|keyframes|style)\b/m.test(code)) {
+    if (code && /^\s*(@[a-z]|theme|component|recipe|global|style)\b/m.test(code)) {
       return "arv";
     }
     return "typescript";
@@ -78,7 +78,7 @@ function highlightArv(code: string, theme: "light" | "dark"): string {
   const patterns: { re: RegExp; color: string }[] = [
     { re: /\/\/.*$/gm, color: c.comment },
     {
-      re: /\b(component|recipe|theme|global|keyframes|style|base|slots|variants|defaults|compound|responsive|container|tokens|modes|use|doc)\b|@[a-zA-Z][\w-]*|&::?[a-z-]+(?:\([^)]*\))?/g,
+      re: /\b(component|recipe|theme|global|style|base|slots|variants|defaults|compound|tokens|modes|use|doc)\b|@[a-zA-Z][\w-]*|&::?[a-z-]+(?:\([^)]*\))?/g,
       color: c.keyword,
     },
     {

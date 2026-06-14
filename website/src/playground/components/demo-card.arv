@@ -3,7 +3,8 @@ component DemoCard {
 
   base {
     overflow: hidden;
-    animation: keyframes.fadeIn duration.normal easing.out;
+    container-type: inline-size;
+    animation: fadeIn duration.normal easing.out;
 
     header {
       padding: space.4 space.5;
@@ -13,6 +14,17 @@ component DemoCard {
 
     body {
       padding: space.5;
+      display: flex;
+      flex-direction: column;
+      gap: space.3;
+
+      // Switch to a row layout once the card is wide enough — measured against
+      // the card's own inline-size, not the viewport.
+      @container (min-width: container-size.wide) {
+        flex-direction: row;
+        gap: space.4;
+        align-items: center;
+      }
     }
 
     footer {
@@ -51,11 +63,5 @@ component DemoCard {
 
   defaults {
     layout: stacked;
-  }
-
-  container {
-    wide {
-      layout: horizontal;
-    }
   }
 }

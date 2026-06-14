@@ -6,10 +6,22 @@ component DashboardLayout {
     min-height: 100vh;
     background: color.background;
 
+    // Sidebar is hidden by default; revealed at the lg breakpoint.
+    grid-template-columns: 1fr;
+
+    @media (min-width: breakpoint.lg) {
+      grid-template-columns: 240px 1fr;
+    }
+
     sidebar {
       border-right: 1px solid color.border;
       background: color.surface;
       padding: space.4;
+      display: none;
+
+      @media (min-width: breakpoint.lg) {
+        display: block;
+      }
     }
 
     content {
@@ -22,26 +34,5 @@ component DashboardLayout {
     root;
     sidebar;
     content;
-  }
-
-  variants {
-    sidebar {
-      show {
-        root { grid-template-columns: 240px 1fr; }
-        sidebar { display: block; }
-      }
-      hide {
-        root { grid-template-columns: 1fr; }
-        sidebar { display: none; }
-      }
-    }
-  }
-
-  defaults {
-    sidebar: hide;
-  }
-
-  responsive {
-    lg { sidebar: show; }
   }
 }

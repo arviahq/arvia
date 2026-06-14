@@ -51,8 +51,4 @@ component SiteHeader {
   defaults {
     density: comfortable;
   }
-
-  responsive {
-    md { density: comfortable; }
-  }
 }

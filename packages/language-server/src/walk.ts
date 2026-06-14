@@ -1,5 +1,7 @@
 import type {
   ArviaFile,
+  AtRule,
+  AtRuleBody,
   ComponentDecl,
   Declaration,
   RawValue,
@@ -24,9 +26,21 @@ export interface EntryVisit {
 /** Every CSS declaration in the file, with its owning component (if any). */
 export function walkDeclarations(ast: ArviaFile): DeclVisit[] {
   const out: DeclVisit[] = [];
+  // `@keyframes` bodies are pure pass-through CSS — their declarations carry no
+  // resolvable token refs, so they are not collected.
+  const visitAtRuleBody = (body: AtRuleBody, component: ComponentDecl | null) => {
+    for (const decl of body.decls) out.push({ decl, component });
+    for (const rule of body.rules) visitAtRuleBody(rule.body, component);
+    for (const nested of body.atRules) visitAtRule(nested, component);
+  };
+  const visitAtRule = (atRule: AtRule, component: ComponentDecl | null) => {
+    if (atRule.name === "keyframes") return;
+    visitAtRuleBody(atRule.body, component);
+  };
   const visitItems = (items: StyleItem[], component: ComponentDecl | null) => {
     for (const item of items) {
       if (item.kind === "decl") out.push({ decl: item, component });
+      else if (item.kind === "atrule") visitAtRule(item, component);
       else if (item.kind === "state") {
         for (const decl of item.items) out.push({ decl, component });
         for (const slot of item.slots) {
@@ -44,11 +58,10 @@ export function walkDeclarations(ast: ArviaFile): DeclVisit[] {
         for (const rule of top.rules) {
           for (const decl of rule.decls) out.push({ decl, component: null });
         }
+        for (const atRule of top.atRules) visitAtRule(atRule, null);
         break;
-      case "keyframes":
-        for (const step of top.steps) {
-          for (const decl of step.decls) out.push({ decl, component: null });
-        }
+      case "atrule":
+        visitAtRule(top, null);
         break;
       case "recipe":
       case "styledecl":
@@ -59,6 +72,9 @@ export function walkDeclarations(ast: ArviaFile): DeclVisit[] {
           switch (item.kind) {
             case "decl":
               out.push({ decl: item, component: top });
+              break;
+            case "atrule":
+              visitAtRule(item, top);
               break;
             case "base":
               for (const part of item.body.items) {

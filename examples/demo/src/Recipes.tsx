@@ -147,9 +147,7 @@ export function Recipes() {
           Drag the handle — switches to row past the <code>wide</code> container token.
         </p>
         {(() => {
-          const card = RecipeContainerCard({
-            layout: { initial: "stacked", $wide: "row" } as const,
-          });
+          const card = RecipeContainerCard();
           return (
             <div
               className={card.root}

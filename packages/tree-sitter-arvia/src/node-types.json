@@ -1,5 +1,76 @@
 [
   {
+    "type": "at_nested_rule",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "at_nested_rule",
+          "named": true
+        },
+        {
+          "type": "at_rule",
+          "named": true
+        },
+        {
+          "type": "declaration",
+          "named": true
+        },
+        {
+          "type": "raw_selector",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "at_rule",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "prelude": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "raw_selector",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "at_nested_rule",
+          "named": true
+        },
+        {
+          "type": "at_rule",
+          "named": true
+        },
+        {
+          "type": "declaration",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "base_block",
     "named": true,
     "fields": {},
@@ -7,6 +78,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "at_rule",
+          "named": true
+        },
         {
           "type": "declaration",
           "named": true
@@ -46,6 +121,10 @@
       "required": false,
       "types": [
         {
+          "type": "at_rule",
+          "named": true
+        },
+        {
           "type": "base_block",
           "named": true
         },
@@ -54,19 +133,11 @@
           "named": true
         },
         {
-          "type": "container_block",
-          "named": true
-        },
-        {
           "type": "declaration",
           "named": true
         },
         {
           "type": "defaults_block",
-          "named": true
-        },
-        {
-          "type": "responsive_block",
           "named": true
         },
         {
@@ -102,47 +173,6 @@
         },
         {
           "type": "slot_block",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "conditional_entry",
-    "named": true,
-    "fields": {
-      "key": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "token_name",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "setting",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "container_block",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "conditional_entry",
           "named": true
         }
       ]
@@ -213,6 +243,10 @@
       "required": false,
       "types": [
         {
+          "type": "at_rule",
+          "named": true
+        },
+        {
           "type": "global_rule",
           "named": true
         }
@@ -233,51 +267,6 @@
         },
         {
           "type": "raw_selector",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "keyframe_step",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "declaration",
-          "named": true
-        },
-        {
-          "type": "raw_selector",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "keyframes_decl",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "keyframe_step",
           "named": true
         }
       ]
@@ -344,6 +333,10 @@
       "required": false,
       "types": [
         {
+          "type": "at_rule",
+          "named": true
+        },
+        {
           "type": "declaration",
           "named": true
         },
@@ -353,21 +346,6 @@
         },
         {
           "type": "use_statement",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "responsive_block",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "conditional_entry",
           "named": true
         }
       ]
@@ -419,6 +397,10 @@
       "required": false,
       "types": [
         {
+          "type": "at_rule",
+          "named": true
+        },
+        {
           "type": "declaration",
           "named": true
         },
@@ -452,6 +434,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "at_rule",
+          "named": true
+        },
         {
           "type": "declaration",
           "named": true
@@ -491,15 +477,15 @@
       "required": false,
       "types": [
         {
+          "type": "at_rule",
+          "named": true
+        },
+        {
           "type": "component_decl",
           "named": true
         },
         {
           "type": "global_block",
-          "named": true
-        },
-        {
-          "type": "keyframes_decl",
           "named": true
         },
         {
@@ -559,6 +545,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "at_rule",
+          "named": true
+        },
         {
           "type": "declaration",
           "named": true
@@ -730,6 +720,10 @@
       "required": false,
       "types": [
         {
+          "type": "at_rule",
+          "named": true
+        },
+        {
           "type": "declaration",
           "named": true
         },
@@ -800,10 +794,6 @@
     "named": false
   },
   {
-    "type": "container",
-    "named": false
-  },
-  {
     "type": "defaults",
     "named": false
   },
@@ -818,10 +808,6 @@
   {
     "type": "identifier",
     "named": true
-  },
-  {
-    "type": "keyframes",
-    "named": false
   },
   {
     "type": "modes",
@@ -841,10 +827,6 @@
   },
   {
     "type": "recipe",
-    "named": false
-  },
-  {
-    "type": "responsive",
     "named": false
   },
   {

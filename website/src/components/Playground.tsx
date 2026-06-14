@@ -355,6 +355,5 @@ export function Playground(
 const emptyMeta: CompileResult["meta"] = {
   components: [],
   tokens: [],
-  keyframes: [],
   styles: [],
 };

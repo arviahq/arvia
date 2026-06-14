@@ -4,7 +4,7 @@ theme {
     md = 768px;
     lg = 1024px;
   }
-  container {
+  container-size {
     narrow = 320px;
     wide = 560px;
   }
@@ -13,33 +13,26 @@ theme {
 component Panel {
   base {
     display: block;
-  }
+    padding: 4px;
 
-  variants {
-    size {
-      sm { padding: 4px; }
-      md { padding: 8px; }
-      lg { padding: 16px; }
+    @media (min-width: breakpoint.md) {
+      padding: 8px;
     }
-    layout {
-      stacked { flex-direction: column; }
-      row { flex-direction: row; }
+    @media (width < breakpoint.lg) {
+      padding: 4px;
     }
-  }
+    @media (breakpoint.sm <= width < breakpoint.lg) {
+      padding: 8px;
+    }
+    @media (min-width: 900px) {
+      padding: 12px;
+    }
 
-  defaults {
-    size: sm;
-    layout: stacked;
-  }
-
-  responsive {
-    md.. { size: md; }
-    ..lg { size: sm; }
-    sm..lg { size: md; }
-  }
-
-  container {
-    wide { layout: row; }
-    narrow..wide { layout: row; }
+    @container (inline-size < container-size.wide) {
+      flex-direction: column;
+    }
+    @container (container-size.narrow <= inline-size < container-size.wide) {
+      flex-direction: row;
+    }
   }
 }

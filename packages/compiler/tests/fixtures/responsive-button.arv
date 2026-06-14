@@ -7,20 +7,10 @@ theme {
 component Button {
   base {
     display: inline-flex;
-  }
+    padding: 4px;
 
-  variants {
-    size {
-      sm { padding: 4px; }
-      lg { padding: 16px; }
+    @media (min-width: breakpoint.md) {
+      padding: 16px;
     }
-  }
-
-  defaults {
-    size: sm;
-  }
-
-  responsive {
-    md { size: lg; }
   }
 }

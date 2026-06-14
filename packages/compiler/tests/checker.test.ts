@@ -248,3 +248,27 @@ describe("checker diagnostics", () => {
     expect(result.css).toContain("background: red;");
   });
 });
+
+describe("breakpoint / container-size are ordinary token groups (no reservation)", () => {
+  it("does not reserve breakpoint/container-size names anywhere", () => {
+    expect(codes("component breakpoint { color: red; }")).not.toContain("ARV127");
+    expect(codes("style container-size { overflow: hidden; }")).not.toContain("ARV127");
+    expect(codes("component X { slots { container; } }")).not.toContain("ARV127");
+  });
+
+  it("does not warn on a 'container'/'breakpoints' theme group (ARV128 gone)", () => {
+    expect(codes("theme { container { wide = 480px; } }")).not.toContain("ARV128");
+    expect(codes("theme { breakpoints { md = 768px; } }")).not.toContain("ARV128");
+  });
+
+  it("treats breakpoint/container-size as normal token groups (referenceable, exported)", () => {
+    const r = compile(
+      `theme { breakpoint { md = 768px; } container-size { wide = 480px; } }
+component B { base { @media (min-width: breakpoint.md) { width: container-size.wide; } } }`,
+      { filename: "x.arv" },
+    );
+    expect(r.diagnostics.filter((d) => d.severity === "error")).toEqual([]);
+    expect(r.css).toContain("@media (min-width: 768px)");
+    expect(r.css).toContain("width: 480px;");
+  });
+});

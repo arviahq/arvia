@@ -4,6 +4,15 @@ component DocsLayout {
     max-width: 1240px;
     margin: 0 auto;
     min-height: calc(100vh - 57px);
+
+    // Single column on mobile; reveal the sidebar at lg, the TOC at xl.
+    grid-template-columns: 1fr;
+    @media (min-width: breakpoint.lg) {
+      grid-template-columns: 240px 1fr;
+    }
+    @media (min-width: breakpoint.xl) {
+      grid-template-columns: 240px 1fr 200px;
+    }
   }
 
   slots {
@@ -15,6 +24,10 @@ component DocsLayout {
       top: 57px;
       height: calc(100vh - 57px);
       overflow-y: auto;
+      display: none;
+      @media (min-width: breakpoint.lg) {
+        display: block;
+      }
     }
     content {
       padding: space.6 space.7;
@@ -27,36 +40,11 @@ component DocsLayout {
       top: 57px;
       height: calc(100vh - 57px);
       overflow-y: auto;
-    }
-  }
-
-  variants {
-    cols {
-      one {
-        root { grid-template-columns: 1fr; }
-        sidebar { display: none; }
-        toc { display: none; }
-      }
-      two {
-        root { grid-template-columns: 240px 1fr; }
-        sidebar { display: block; }
-        toc { display: none; }
-      }
-      three {
-        root { grid-template-columns: 240px 1fr 200px; }
-        sidebar { display: block; }
-        toc { display: block; }
+      display: none;
+      @media (min-width: breakpoint.xl) {
+        display: block;
       }
     }
-  }
-
-  defaults {
-    cols: one;
-  }
-
-  responsive {
-    lg { cols: two; }
-    xl { cols: three; }
   }
 }
 
@@ -145,6 +133,12 @@ component DocsMobileNav {
   base {
     margin-bottom: space.5;
 
+    // Mobile-only: the docs sidebar takes over from lg up.
+    display: block;
+    @media (min-width: breakpoint.lg) {
+      display: none;
+    }
+
     trigger {
       use FocusRing;
       display: flex;
@@ -185,21 +179,6 @@ component DocsMobileNav {
     trigger;
     chevron;
     panel;
-  }
-
-  variants {
-    visibility {
-      shown { display: block; }
-      hidden { display: none; }
-    }
-  }
-
-  defaults {
-    visibility: shown;
-  }
-
-  responsive {
-    lg { visibility: hidden; }
   }
 }
 
@@ -248,23 +227,15 @@ component Grid {
   base {
     display: grid;
     gap: space.4;
-  }
 
-  variants {
-    cols {
-      1 { grid-template-columns: 1fr; }
-      2 { grid-template-columns: repeat(2, 1fr); }
-      3 { grid-template-columns: repeat(3, 1fr); }
+    // One column on mobile, two from md, three from lg.
+    grid-template-columns: 1fr;
+    @media (min-width: breakpoint.md) {
+      grid-template-columns: repeat(2, 1fr);
     }
-  }
-
-  defaults {
-    cols: 1;
-  }
-
-  responsive {
-    md { cols: 2; }
-    lg { cols: 3; }
+    @media (min-width: breakpoint.lg) {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 }
 

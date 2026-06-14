@@ -1,5 +1,7 @@
 import type {
   ArviaFile,
+  AtRule,
+  AtRuleBody,
   ComponentItem,
   Declaration,
   Span,
@@ -38,12 +40,26 @@ export function visitSpans(ast: ArviaFile, visit: (span: Span, foldable: boolean
     visit(slot.span, true);
     styleItems(slot.items);
   };
+  const atRuleBody = (b: AtRuleBody) => {
+    for (const d of b.decls) decl(d);
+    for (const rule of b.rules) {
+      visit(rule.span, true);
+      atRuleBody(rule.body);
+    }
+    for (const nested of b.atRules) atRule(nested);
+  };
+  const atRule = (a: AtRule) => {
+    visit(a.span, true);
+    atRuleBody(a.body);
+  };
   const styleItems = (items: StyleItem[]) => {
     for (const item of items) {
       if (item.kind === "decl") {
         decl(item);
       } else if (item.kind === "use") {
         visit(item.span, false);
+      } else if (item.kind === "atrule") {
+        atRule(item);
       } else {
         visit(item.span, true);
         for (const d of item.items) decl(d);
@@ -90,13 +106,8 @@ export function visitSpans(ast: ArviaFile, visit: (span: Span, foldable: boolean
         visit(item.span, true);
         for (const entry of item.entries) visit(entry.span, false);
         break;
-      case "responsive":
-      case "container":
-        visit(item.span, true);
-        for (const entry of item.entries) {
-          visit(entry.span, true);
-          for (const setting of entry.variants) visit(setting.span, false);
-        }
+      case "atrule":
+        atRule(item);
         break;
       case "compound":
         visit(item.span, true);
@@ -122,13 +133,10 @@ export function visitSpans(ast: ArviaFile, visit: (span: Span, foldable: boolean
           visit(rule.span, true);
           for (const d of rule.decls) decl(d);
         }
+        for (const a of item.atRules) atRule(a);
         break;
-      case "keyframes":
-        visit(item.span, true);
-        for (const step of item.steps) {
-          visit(step.span, true);
-          for (const d of step.decls) decl(d);
-        }
+      case "atrule":
+        atRule(item);
         break;
       case "recipe":
       case "styledecl":

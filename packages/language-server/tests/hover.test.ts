@@ -83,22 +83,13 @@ component Card { use Surface; }`;
     expect(text).toContain("tone: a | b");
   });
 
-  it("shows keyframes steps for keyframes refs", () => {
-    const source = `keyframes pulse { from { opacity: 1; } to { opacity: 0.5; } }
-component X { base { animation: keyframes.pulse 1s; } }`;
+  it("resolves token refs inside an @media body", () => {
+    const source = `theme { color { brand = #abc; } }
+component X { base { color: red; @media (min-width: 768px) { color: color.brand; } } }`;
     const analysis = analysisOf(source);
-    const text = markdown(getHover(analysis, at(source, "keyframes.pulse"), ws));
-    expect(text).toContain("keyframes pulse");
-    expect(text).toContain("from → to");
-  });
-
-  it("shows breakpoint sizes in responsive blocks", () => {
-    const source = `theme { breakpoint { md = 768px; } }
-component X { variants { size { sm {} lg {} } } responsive { md { size: lg; } } }`;
-    const analysis = analysisOf(source);
-    const text = markdown(getHover(analysis, at(source, "md {", 1), ws));
-    expect(text).toContain("breakpoint md");
-    expect(text).toContain("768px");
+    const text = markdown(getHover(analysis, at(source, "color.brand"), ws));
+    expect(text).toContain("color.brand");
+    expect(text).toContain("#abc");
   });
 
   it("uses theme tokens from the workspace theme (cross-file)", () => {

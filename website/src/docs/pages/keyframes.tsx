@@ -9,13 +9,13 @@ export const keyframesMeta: DocPageMeta = {
   slug: "keyframes",
   title: <fbt desc="Docs page title — Keyframes">{"Keyframes"}</fbt>,
   description: (
-    <fbt desc="Docs page description — Named animations.">
-      {"Define animations and reference them by name."}
+    <fbt desc="Docs page description — Animations.">
+      {"Write @keyframes anywhere — they pass straight through to CSS."}
     </fbt>
   ),
   nav: { section: "language", order: 13 },
   searchText:
-    "Define an animation with keyframes Name at the top level, using from/to or percentage steps. keyframes pulse { from { opacity: 1; } to { opacity: 0.45; } } Reference it from a component as keyframes.name, like a token. component Badge { base { animation: keyframes.pulse duration.fast; } } The name is hashed so two files can both define pulse without clashing. Steps can use tokens too. Put keyframes in your theme file to share them. Related: Theme, Components.",
+    "Arvia does not have a keyframes construct — write a raw CSS @keyframes at-rule anywhere (top level, inside a component, or in global) and it is emitted verbatim. @keyframes pulse { from { opacity: 1; } to { opacity: 0.45; } } Reference it by its literal name in an animation declaration: component Badge { base { animation: pulse duration.fast; } } Names are NOT hashed and tokens inside a @keyframes body are not rewritten — the block passes through untouched. Related: At-rules, Theme, Components.",
 };
 
 export function KeyframesPage() {
@@ -24,34 +24,34 @@ export function KeyframesPage() {
       <DocP>
         <fbt desc="Docs content — keyframes: what">
           {
-            "Define an animation with `keyframes Name` at the top level, using `from`/`to` or percentage steps:"
+            "Arvia has no `keyframes` construct. Write a raw CSS `@keyframes` at-rule anywhere — at the top level, inside a component, or in `global` — and it passes straight through to the output:"
           }
         </fbt>
       </DocP>
       <DocCode
         label={"src/theme.arv"}
-        code={`keyframes pulse {
+        code={`@keyframes pulse {
   from { opacity: 1; }
   to { opacity: 0.45; }
 }`}
       />
       <DocP>
         <fbt desc="Docs content — keyframes: reference">
-          {"Reference it from a component as `keyframes.name`, like a token:"}
+          {"Reference it by its literal name in an `animation` declaration:"}
         </fbt>
       </DocP>
       <DocCode
         label={"badge.arv"}
         code={`component Badge {
   base {
-    animation: keyframes.pulse duration.fast;
+    animation: pulse duration.fast;
   }
 }`}
       />
       <DocCallout tone="info">
-        <fbt desc="Docs note — keyframes: hashed">
+        <fbt desc="Docs note — keyframes: passthrough">
           {
-            "The name is hashed, so two files can both define `pulse` without clashing. Steps can reference tokens too. Put shared animations in your theme file."
+            "`@keyframes` is pure pass-through: names are emitted verbatim (not hashed) and the body is copied as-is, so token-shaped text inside a step is left untouched. You own naming and collision avoidance, exactly like hand-written CSS."
           }
         </fbt>
       </DocCallout>
@@ -60,7 +60,9 @@ export function KeyframesPage() {
       </DocH2>
       <DocP>
         <fbt desc="Docs content — keyframes: related">
-          {"[Theme & tokens](/docs/theme) · [Components](/docs/components)."}
+          {
+            "[CSS & at-rules](/docs/css) · [Responsive](/docs/responsive) · [Container queries](/docs/container-queries)."
+          }
         </fbt>
       </DocP>
     </DocArticle>

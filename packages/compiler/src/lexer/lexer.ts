@@ -96,6 +96,50 @@ export class Lexer {
     return this.src[this.pos] ?? null;
   }
 
+  /**
+   * Looks ahead (without consuming) for the first structural delimiter that
+   * decides an at-rule body item's shape: `{` (a nested rule/at-rule), `;` (a
+   * declaration) or `}`/EOF (block end). Respects comments, strings and
+   * parentheses so delimiters inside values or selectors don't mislead.
+   */
+  peekBlockDelimiter(): "{" | ";" | "}" | null {
+    let i = this.pos;
+    let depth = 0;
+    let quote: string | null = null;
+    while (i < this.src.length) {
+      const c = this.src[i]!;
+      if (quote) {
+        if (c === "\\") {
+          i += 2;
+          continue;
+        }
+        if (c === quote) quote = null;
+        i++;
+        continue;
+      }
+      if (c === '"' || c === "'") {
+        quote = c;
+        i++;
+        continue;
+      }
+      if (c === "/" && this.src[i + 1] === "/") {
+        while (i < this.src.length && this.src[i] !== "\n") i++;
+        continue;
+      }
+      if (c === "/" && this.src[i + 1] === "*") {
+        i += 2;
+        while (i < this.src.length && !(this.src[i] === "*" && this.src[i + 1] === "/")) i++;
+        i += 2;
+        continue;
+      }
+      if (c === "(") depth++;
+      else if (c === ")") depth = Math.max(0, depth - 1);
+      else if (depth === 0 && (c === "{" || c === ";" || c === "}")) return c;
+      i++;
+    }
+    return null;
+  }
+
   /** Skips trivia and consumes one character. Never throws — used by the
    *  parser's panic-mode recovery to make progress past malformed input. */
   skipChar(): void {
@@ -129,17 +173,6 @@ export class Lexer {
       this.bump();
       span.end = this.pos;
       return { kind: punct[c], text: c, span };
-    }
-    // `..` range operator (responsive/container heads); a lone `.` is invalid.
-    if (c === ".") {
-      this.bump();
-      if (this.src[this.pos] === ".") {
-        this.bump();
-        span.end = this.pos;
-        return { kind: "dotdot", text: "..", span };
-      }
-      span.end = this.pos;
-      this.fail("ARV001", "unexpected character '.' (did you mean '..'?)", span);
     }
     // `-` may start an ident for vendor prefixes (-webkit-…) and custom properties (--x).
     const dashIdent = c === "-" && /[A-Za-z_-]/.test(this.src[this.pos + 1] ?? "");

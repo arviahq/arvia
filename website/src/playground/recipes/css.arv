@@ -1,0 +1,39 @@
+// Arvia is CSS-first: any raw at-rule passes straight through. Token refs in a
+// prelude (breakpoint.lg, container-size.wide) inline to their literal value.
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+component MediaCard {
+  base {
+    // Opt this element into container queries.
+    container-type: inline-size;
+
+    display: flex;
+    flex-direction: column;
+    gap: space.3;
+    padding: space.4;
+    border-radius: radius.lg;
+    border: 1px solid color.border;
+    background: color.surface;
+    animation: fadeIn duration.normal easing.out;
+
+    // `breakpoint.lg` inlines to its literal (1024px). Grows padding on wider viewports.
+    @media (min-width: breakpoint.lg) {
+      padding: space.5;
+    }
+
+    // Measured against the card's own width, not the viewport.
+    @container (min-width: container-size.wide) {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    // Any other at-rule is emitted verbatim — here a feature query.
+    @supports (-webkit-line-clamp: 2) {
+      overflow: hidden;
+    }
+  }
+}

@@ -27,6 +27,16 @@ component Button {
       display: inline-flex;
       flex-shrink: 0;
     }
+
+    // Scale up the default (small) button at wider viewports.
+    @media (min-width: breakpoint.md) {
+      font-size: font.md;
+      padding: space.2 space.4;
+    }
+    @media (min-width: breakpoint.lg) {
+      font-size: font.lg;
+      padding: space.3 space.5;
+    }
   }
 
   slots {
@@ -82,11 +92,6 @@ component Button {
   defaults {
     size: sm;
     tone: primary;
-  }
-
-  responsive {
-    md { size: md; }
-    lg { size: lg; }
   }
 
   compound {

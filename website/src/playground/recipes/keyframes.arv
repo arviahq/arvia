@@ -1,4 +1,4 @@
-keyframes pulse {
+@keyframes pulse {
   from { opacity: 1; }
   to { opacity: 0.45; }
 }
@@ -10,6 +10,6 @@ component RecipePulseBox {
     background: color.primary;
     color: white;
     font-size: font.sm;
-    animation: keyframes.pulse duration.normal easing.default infinite alternate;
+    animation: pulse duration.normal easing.default infinite alternate;
   }
 }

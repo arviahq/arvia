@@ -11,10 +11,9 @@ const MAX_SYMBOLS = 2000;
 const KIND_CLASS = 5 as SymbolKind;
 const KIND_FUNCTION = 12 as SymbolKind;
 const KIND_CONSTANT = 14 as SymbolKind;
-const KIND_EVENT = 24 as SymbolKind;
 
-/** Components, styles, recipes, keyframes and theme tokens across every
- *  .arv file in each open workspace, fuzzy-filtered by `query`. */
+/** Components, styles, recipes and theme tokens across every .arv file in each
+ *  open workspace, fuzzy-filtered by `query`. */
 export function getWorkspaceSymbols(
   query: string,
   workspaces: Iterable<WorkspaceState>,
@@ -68,9 +67,6 @@ function collect(
         break;
       case "recipe":
         push(item.name, KIND_FUNCTION, item.nameSpan);
-        break;
-      case "keyframes":
-        push(item.name, KIND_EVENT, item.nameSpan);
         break;
       case "theme":
         for (const group of item.groups) {

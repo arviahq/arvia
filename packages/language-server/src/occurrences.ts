@@ -2,14 +2,13 @@ import type { ArviaFile, ComponentDecl, Span } from "@arviahq/compiler";
 import { nodeAtOffset } from "./ast-query.js";
 import type { DocumentAnalysis } from "./documents.js";
 import { findLocalToken } from "./hover.js";
-import { walkDeclarations, walkTokenEntries, walkUses, walkValues } from "./walk.js";
+import { walkDeclarations, walkTokenEntries, walkUses } from "./walk.js";
 
 /** A renameable/referenceable symbol. Components and styles are TS exports
  *  and are deliberately not represented here (tsserver owns their edits). */
 export type SymbolIdentity =
   | { kind: "token"; group: string; name: string; component: ComponentDecl | null }
   | { kind: "recipe"; name: string }
-  | { kind: "keyframes"; name: string }
   | { kind: "variant"; component: ComponentDecl; name: string }
   | { kind: "variant-value"; component: ComponentDecl; variant: string; name: string }
   | { kind: "slot"; component: ComponentDecl; name: string };
@@ -17,14 +16,14 @@ export type SymbolIdentity =
 export interface Occurrence {
   span: Span;
   role: "declaration" | "reference";
-  /** Prefix the span's text carries before the bare name (`color.`,
-   *  `keyframes.`) — rename re-emits it in front of the new name. */
+  /** Prefix the span's text carries before the bare name (`color.`) — rename
+   *  re-emits it in front of the new name. */
   refPrefix?: string;
 }
 
 /** Identity kinds that may propagate beyond the declaring file via the
  *  shared theme. */
-export const crossFileKinds = new Set(["token", "recipe", "keyframes"]);
+export const crossFileKinds = new Set(["token", "recipe"]);
 
 export function identityAt(
   analysis: DocumentAnalysis,
@@ -34,13 +33,6 @@ export function identityAt(
   if (!target) return null;
   switch (target.kind) {
     case "token-ref": {
-      if (target.word.group === "keyframes") {
-        return {
-          identity: { kind: "keyframes", name: target.word.name },
-          span: target.word.span,
-          placeholder: target.word.name,
-        };
-      }
       const local = target.component
         ? findLocalToken(target.component, target.word.group, target.word.name)
         : null;
@@ -77,12 +69,6 @@ export function identityAt(
         identity: { kind: "recipe", name: target.recipe.name },
         span: target.recipe.nameSpan,
         placeholder: target.recipe.name,
-      };
-    case "keyframes-name":
-      return {
-        identity: { kind: "keyframes", name: target.keyframes.name },
-        span: target.keyframes.nameSpan,
-        placeholder: target.keyframes.name,
       };
     case "variant-name":
       return {
@@ -192,21 +178,6 @@ export function occurrencesInFile(ast: ArviaFile, identity: SymbolIdentity): Occ
       }
       break;
     }
-    case "keyframes": {
-      for (const item of ast.items) {
-        if (item.kind === "keyframes" && item.name === identity.name) {
-          occurrences.push({ span: item.nameSpan, role: "declaration" });
-        }
-      }
-      for (const { value } of walkValues(ast)) {
-        for (const word of value.words) {
-          if (word.kind === "ref" && word.group === "keyframes" && word.name === identity.name) {
-            occurrences.push({ span: word.span, role: "reference", refPrefix: "keyframes." });
-          }
-        }
-      }
-      break;
-    }
     case "variant":
     case "variant-value":
     case "slot": {
@@ -280,10 +251,6 @@ function componentOccurrences(
         break;
       case "defaults":
         settingEntries(item.entries);
-        break;
-      case "responsive":
-      case "container":
-        for (const entry of item.entries) settingEntries(entry.variants);
         break;
       case "compound":
         settingEntries(item.matchers);

@@ -88,13 +88,13 @@ describe("selection ranges", () => {
 });
 
 describe("workspace symbols", () => {
-  it("lists components, recipes, keyframes, styles and tokens across files", () => {
+  it("lists components, recipes, styles and tokens across files", () => {
     const dir = mkdtempSync(path.join(os.tmpdir(), "arvia-ws-sym-"));
     tempDirs.push(dir);
     mkdirSync(path.join(dir, "src", "components"), { recursive: true });
     writeFileSync(
       path.join(dir, "src", "theme.arv"),
-      "theme { color { primary = #111; } } recipe Surface { background: white; } keyframes spin { from { opacity: 0; } }\n",
+      "theme { color { primary = #111; } } recipe Surface { background: white; } @keyframes spin { from { opacity: 0; } }\n",
     );
     writeFileSync(
       path.join(dir, "src", "components", "button.arv"),
@@ -107,7 +107,6 @@ describe("workspace symbols", () => {
     expect(names).toContain("Button");
     expect(names).toContain("Truncate");
     expect(names).toContain("Surface");
-    expect(names).toContain("spin");
     expect(names).toContain("color.primary");
 
     // Fuzzy subsequence filter.

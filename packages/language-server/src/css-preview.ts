@@ -6,8 +6,8 @@ const MAX_LINES = 24;
 
 /**
  * The compiled CSS for the declaration under the cursor: whole component,
- * one slot, one variant (value), a standalone style or a keyframes block —
- * produced by narrowing the file IR to the target and re-emitting.
+ * one slot, one variant (value) or a standalone style — produced by narrowing
+ * the file IR to the target and re-emitting.
  */
 export function cssPreviewFor(analysis: DocumentAnalysis, target: AstTarget): string | null {
   // buildIR's contract requires a clean check.
@@ -23,10 +23,10 @@ export function cssPreviewFor(analysis: DocumentAnalysis, target: AstTarget): st
   const empty: FileIR = {
     ...ir,
     globals: [],
+    globalAtRules: [],
     components: [],
     styles: [],
     themeVars: [],
-    keyframes: [],
   };
 
   let scoped: FileIR | null = null;
@@ -55,11 +55,6 @@ export function cssPreviewFor(analysis: DocumentAnalysis, target: AstTarget): st
       if (style) scoped = { ...empty, styles: [style] };
       break;
     }
-    case "keyframes-name": {
-      const kf = ir.keyframes.find((k) => k.name === target.keyframes.name);
-      if (kf) scoped = { ...empty, keyframes: [kf] };
-      break;
-    }
     default:
       return null;
   }
@@ -70,7 +65,7 @@ export function cssPreviewFor(analysis: DocumentAnalysis, target: AstTarget): st
   return truncate(css);
 }
 
-const emptyStyle = (): StyleIR => ({ decls: [], states: [] });
+const emptyStyle = (): StyleIR => ({ decls: [], states: [], atRules: [] });
 
 function componentOf(ir: FileIR, name: string): ComponentIR | null {
   return ir.components.find((c) => c.name === name) ?? null;
@@ -92,7 +87,6 @@ function narrowToSlot(component: ComponentIR, slot: string): ComponentIR {
       ...compound,
       slots: compound.slots[slot] ? { [slot]: compound.slots[slot] } : {},
     })),
-    containers: [],
   };
 }
 
@@ -113,17 +107,6 @@ function narrowToVariant(
         ]
       : [],
     compounds: [],
-    responsive: component.responsive
-      .map((entry) => ({
-        ...entry,
-        variants: Object.fromEntries(
-          Object.entries(entry.variants).filter(
-            ([v, value]) => v === variantName && (valueName === null || value === valueName),
-          ),
-        ),
-      }))
-      .filter((entry) => Object.keys(entry.variants).length > 0),
-    containers: [],
   };
 }
 

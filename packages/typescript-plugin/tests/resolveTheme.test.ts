@@ -13,15 +13,24 @@ describe("resolveTheme", () => {
     const themePath = themePathFor(demoButton);
     expect(themePath).toContain("examples/demo/src/theme.arv");
     const env = themeEnvFor(demoButton);
-    expect(env?.breakpoints).toMatchObject({ sm: "640px", md: "768px", lg: "1024px" });
-    expect(env?.containers).toMatchObject({ narrow: "320px", wide: "560px" });
+    // breakpoint / container-size are ordinary token groups now (mode-agnostic check:
+    // values are plain strings in single-mode themes, per-mode objects when moded).
+    expect(Object.keys(env?.tokens["breakpoint"] ?? {})).toEqual(
+      expect.arrayContaining(["sm", "md", "lg"]),
+    );
+    expect(Object.keys(env?.tokens["container-size"] ?? {})).toEqual(
+      expect.arrayContaining(["narrow", "wide"]),
+    );
   });
 
-  it("emits responsive prop types when theme env is provided", () => {
+  it("compiles the component dts without responsive prop surface", () => {
     const source = readFileSync(demoButton, "utf8");
     const { dts } = compileDts(source, { filename: demoButton, env: themeEnvFor(demoButton) });
-    expect(dts).toContain("initial?:");
-    expect(dts).toContain("md?:");
+    // Variant props still surface…
+    expect(dts).toContain("size");
+    expect(dts).toContain("tone");
+    // …but the removed `responsive {}` block no longer emits a responsive prop.
+    expect(dts).not.toContain("initial");
     expect(dts).not.toContain('"$wide"?:'); // Button has no container block
   });
 });

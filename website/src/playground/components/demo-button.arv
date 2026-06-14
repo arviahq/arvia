@@ -82,11 +82,6 @@ component DemoButton {
     tone: primary;
   }
 
-  responsive {
-    md { size: md; }
-    lg { size: lg; }
-  }
-
   compound {
     size: sm;
     tone: danger;

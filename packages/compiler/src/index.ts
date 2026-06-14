@@ -20,7 +20,7 @@ export type {
   FileIR,
   ComponentIR,
   StyleDeclIR,
-  KeyframesIR,
+  AtRuleIR,
   VariantIR,
   VariantValueIR,
 } from "./ir/ir.js";
@@ -110,8 +110,6 @@ export interface CompileResult {
       slots: string[];
       variants: { name: string; values: string[] }[];
       defaults: Record<string, string>;
-      responsive: { breakpoint: string; variants: Record<string, string> }[];
-      containers: { container: string; variants: Record<string, string> }[];
     }[];
     tokens: {
       group: string;
@@ -120,7 +118,6 @@ export interface CompileResult {
       byMode: Record<string, string>;
       cssVar: string;
     }[];
-    keyframes: string[];
     /** Standalone exported style classes. */
     styles: { name: string; hash: string; className: string }[];
   };
@@ -172,7 +169,7 @@ export function compile(source: string, options: CompileOptions): CompileResult 
       cssMap: null,
       diagnostics: parseDiagnostics,
       env: options.env ?? emptyEnv(),
-      meta: { components: [], tokens: [], keyframes: [], styles: [] },
+      meta: { components: [], tokens: [], styles: [] },
     };
   }
 
@@ -192,7 +189,7 @@ export function compile(source: string, options: CompileOptions): CompileResult 
       cssMap: null,
       diagnostics,
       env,
-      meta: { components: [], tokens: [], keyframes: [], styles: [] },
+      meta: { components: [], tokens: [], styles: [] },
     };
   }
 
@@ -220,8 +217,6 @@ export function compile(source: string, options: CompileOptions): CompileResult 
           values: v.values.map((val) => val.name),
         })),
         defaults: c.defaults,
-        responsive: c.responsive,
-        containers: c.containers,
       })),
       tokens: ir.themeVars.map((v) => ({
         group: v.group,
@@ -230,7 +225,6 @@ export function compile(source: string, options: CompileOptions): CompileResult 
         byMode: v.byMode,
         cssVar: `--arvia-${v.group}-${v.name}`,
       })),
-      keyframes: ir.keyframes.map((k) => k.name),
       styles: ir.styles.map((s) => ({ name: s.name, hash: s.hash, className: s.className })),
     },
   };

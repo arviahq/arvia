@@ -15,9 +15,8 @@ export const semanticTokensLegend: SemanticTokensLegend = {
     "property", // slot names
     "enum", // variant names
     "enumMember", // variant values
-    "variable", // token entries/refs, style names, breakpoint/container keys
+    "variable", // token entries/refs, style names
     "function", // recipes
-    "type", // keyframes
     "namespace", // token group names
   ],
   tokenModifiers: ["declaration", "readonly"],
@@ -29,8 +28,7 @@ const ENUM = 2;
 const ENUM_MEMBER = 3;
 const VARIABLE = 4;
 const FUNCTION = 5;
-const TYPE = 6;
-const NAMESPACE = 7;
+const NAMESPACE = 6;
 
 const DECLARATION = 1 << 0;
 const READONLY = 1 << 1;
@@ -125,14 +123,6 @@ function collect(ast: ArviaFile): Tok[] {
             case "defaults":
               settings(item.entries);
               break;
-            case "responsive":
-            case "container":
-              for (const entry of item.entries) {
-                if (entry.lowerSpan) push(entry.lowerSpan, VARIABLE, READONLY);
-                if (entry.upperSpan) push(entry.upperSpan, VARIABLE, READONLY);
-                settings(entry.variants);
-              }
-              break;
             case "compound":
               settings(item.matchers);
               for (const slot of item.slots) {
@@ -154,9 +144,6 @@ function collect(ast: ArviaFile): Tok[] {
         push(top.nameSpan, FUNCTION, DECLARATION);
         slotBlocks(top.items);
         break;
-      case "keyframes":
-        push(top.nameSpan, TYPE, DECLARATION);
-        break;
       case "theme":
         for (const group of top.groups) push(group.nameSpan, NAMESPACE);
         break;
@@ -172,8 +159,7 @@ function collect(ast: ArviaFile): Tok[] {
   for (const { value } of walkValues(ast)) {
     for (const word of value.words) {
       if (word.kind !== "ref") continue;
-      if (word.group === "keyframes") push(word.span, TYPE);
-      else push(word.span, VARIABLE, READONLY);
+      push(word.span, VARIABLE, READONLY);
     }
   }
 
