@@ -1,0 +1,39 @@
+{
+  "name": "@arviahq/runtime",
+  "version": "2.0.0",
+  "description": "Tiny, zero-dependency runtime helpers for Arvia: manifest-driven CSS collection for SSR and custom bundler integrations.",
+  "homepage": "https://github.com/arviahq/arvia#readme",
+  "bugs": {
+    "url": "https://github.com/arviahq/arvia/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arviahq/arvia.git",
+    "directory": "packages/runtime"
+  },
+  "files": [
+    "dist",
+    "client.d.ts"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./client": {
+      "types": "./client.d.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "prepublishOnly": "pnpm run build",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsc --noEmit"
+  }
+}

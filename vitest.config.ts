@@ -4,6 +4,7 @@ export default defineConfig({
   test: {
     projects: [
       "packages/compiler",
+      "packages/runtime",
       "packages/vite-plugin",
       "packages/typescript-plugin",
       "packages/language-server",

@@ -2,9 +2,39 @@ import type { Span } from "../../diagnostics.js";
 import type { AtRuleIR, DeclIR, FileIR, RawRuleIR, StyleIR } from "../../ir/ir.js";
 import { cssVarName, isColorValue } from "../../ir/ir.js";
 import { baseClass, compoundClass, variantClass } from "../../ir/names.js";
+import { classify } from "./partition.js";
 import { buildCssSourceMap, type CssMapping, type CssSourceMap } from "./sourcemap.js";
 
 export type { CssSourceMap } from "./sourcemap.js";
+
+/**
+ * The combined CSS string split into its output buckets: shared `global` CSS
+ * (statement at-rules, theme tokens, verbatim global at-rules, global element
+ * rules), per-component CSS, and standalone `styles` (utilities). Concatenating
+ * the non-empty buckets in this order reproduces the combined string exactly —
+ * see {@link combineCssParts}. Consumed by component-mode disk emission and the
+ * CSS manifest; in single mode it collapses back via `combineCssParts`.
+ */
+export interface CssParts {
+  global: string;
+  components: { name: string; css: string }[];
+  styles: string;
+}
+
+/** Re-joins {@link CssParts} into the canonical combined CSS string. The
+ *  inverse of the split performed in {@link emitCssWithMap}: empty buckets
+ *  contribute nothing (no stray separators), and a fully empty file yields the
+ *  empty string. `combineCssParts(parts) === emitCss(ir)` for every file. */
+export function combineCssParts(parts: CssParts): string {
+  const sections = [parts.global, ...parts.components.map((c) => c.css), parts.styles].filter(
+    (s) => s.length > 0,
+  );
+  return sections.length > 0 ? sections.join("\n\n") + "\n" : "";
+}
+
+/** Which output bucket a generated chunk belongs to. Components are keyed by
+ *  index (not name) so duplicate component names in one file stay distinct. */
+type PartKey = { kind: "global" } | { kind: "component"; index: number } | { kind: "styles" };
 
 const declLines = (decls: DeclIR[]): string =>
   decls.map((d) => `  ${d.property}: ${d.value};`).join("\n");
@@ -80,13 +110,17 @@ export function emitCss(ir: FileIR): string {
 export function emitCssWithMap(
   ir: FileIR,
   source?: { file: string; content: string | null },
-): { css: string; map: CssSourceMap | null } {
-  const chunks: { text: string; span: Span | null }[] = [];
+): { css: string; map: CssSourceMap | null; parts: CssParts } {
+  const graph = classify(ir);
+  const chunks: { text: string; span: Span | null; part: PartKey }[] = [];
   // The declaration anchor for whatever section is currently emitting.
   let anchor: Span | null = null;
+  // The output bucket the currently-emitting section belongs to. Sections run
+  // sequentially, so a single mutable cursor suffices.
+  let part: PartKey = { kind: "global" };
   const out = {
     push: (text: string) => {
-      chunks.push({ text, span: anchor });
+      chunks.push({ text, span: anchor, part });
     },
   };
 
@@ -135,23 +169,24 @@ export function emitCssWithMap(
     if (produced.length > 0) {
       let body = produced.map((c) => c.text).join("\n\n");
       for (let i = layers.length - 1; i >= 0; i--) body = `${layers[i]} {\n${body}\n}`;
-      chunks.push({ text: body, span: anchorSpan });
+      chunks.push({ text: body, span: anchorSpan, part });
     }
     anchor = null;
   };
 
+  const { statementAtRules, themeVars, themeModes, globalAtRules, globals } = graph.global;
+
   // Statement at-rules (`@import`, `@charset`, `@layer a, b;`) must precede all
   // other rules — hoist them to the very top of the output.
-  for (const at of ir.globalAtRules) {
-    if (!at.statement) continue;
+  for (const at of statementAtRules) {
     anchor = at.anchor ?? null;
     out.push(emitFreeAtRule(at));
   }
   anchor = null;
 
-  if (ir.themeVars.length > 0 && ir.themeModes) {
-    const defaultMode = ir.themeModes[0]!;
-    const altModes = ir.themeModes.slice(1);
+  if (themeVars.length > 0 && themeModes) {
+    const defaultMode = themeModes[0]!;
+    const altModes = themeModes.slice(1);
 
     // Native path: when the modes are exactly the two CSS `color-scheme`
     // keywords, drive theming with `color-scheme` + `light-dark()`. Color
@@ -160,7 +195,7 @@ export function emitCssWithMap(
     // flips `color-scheme`. Any other mode shape falls back to the legacy
     // four-block emission below.
     const isLightDarkTheme =
-      ir.themeModes.length === 2 && ir.themeModes[0] === "light" && ir.themeModes[1] === "dark";
+      themeModes.length === 2 && themeModes[0] === "light" && themeModes[1] === "dark";
 
     if (isLightDarkTheme) {
       const rootDecls: DeclIR[] = [{ property: "color-scheme", value: "light dark" }];
@@ -171,7 +206,7 @@ export function emitCssWithMap(
       const lightOverrides: DeclIR[] = [];
       const darkOverrides: DeclIR[] = [];
 
-      for (const v of ir.themeVars) {
+      for (const v of themeVars) {
         const prop = cssVarName(v.group, v.name);
         const light = v.byMode.light!;
         const dark = v.byMode.dark;
@@ -204,14 +239,14 @@ export function emitCssWithMap(
       ]);
     } else {
       const fullDecls = (mode: string): DeclIR[] =>
-        ir.themeVars.map((v) => ({
+        themeVars.map((v) => ({
           property: cssVarName(v.group, v.name),
           value: v.byMode[mode]!,
         }));
 
       const overrideDecls = (mode: string): DeclIR[] => {
         const decls: DeclIR[] = [];
-        for (const v of ir.themeVars) {
+        for (const v of themeVars) {
           const value = v.byMode[mode];
           if (value !== undefined && value !== v.byMode[defaultMode]) {
             decls.push({ property: cssVarName(v.group, v.name), value });
@@ -236,18 +271,18 @@ export function emitCssWithMap(
     }
   }
 
-  for (const at of ir.globalAtRules) {
-    if (at.statement) continue; // already hoisted above
+  for (const at of globalAtRules) {
     anchor = at.anchor ?? null;
     out.push(emitFreeAtRule(at));
   }
   anchor = null;
 
-  for (const global of ir.globals) {
+  for (const global of globals) {
     rule(global.selector, global.decls);
   }
 
-  for (const c of ir.components) {
+  graph.components.forEach(({ component: c }, index) => {
+    part = { kind: "component", index };
     emitConstruct(c.nameSpan, c.layers, () => {
       for (const slot of c.slotNames) {
         styleRules(baseClass(c, slot), c.base[slot]!, c);
@@ -267,17 +302,38 @@ export function emitCssWithMap(
         }
       }
     });
-  }
+  });
 
   // Standalone styles last (utilities-last): composed styles win the cascade.
-  for (const s of ir.styles) {
+  part = { kind: "styles" };
+  for (const s of graph.styles) {
     emitConstruct(s.nameSpan, s.layers, () => styleRules(s.className, s.style));
   }
 
-  if (chunks.length === 0) return { css: "", map: null };
+  // Group chunks back into output buckets. Chunks are emitted strictly in
+  // bucket order (global → each component → styles), so a component's chunks
+  // are contiguous; `combineCssParts` re-joins them into the combined string.
+  const globalText: string[] = [];
+  const componentTexts = graph.components.map(() => [] as string[]);
+  const styleTexts: string[] = [];
+  for (const chunk of chunks) {
+    if (chunk.part.kind === "global") globalText.push(chunk.text);
+    else if (chunk.part.kind === "styles") styleTexts.push(chunk.text);
+    else componentTexts[chunk.part.index]!.push(chunk.text);
+  }
+  const parts: CssParts = {
+    global: globalText.join("\n\n"),
+    components: graph.components.map(({ component }, i) => ({
+      name: component.name,
+      css: componentTexts[i]!.join("\n\n"),
+    })),
+    styles: styleTexts.join("\n\n"),
+  };
+
+  if (chunks.length === 0) return { css: "", map: null, parts };
 
   const css = chunks.map((c) => c.text).join("\n\n") + "\n";
-  if (!source) return { css, map: null };
+  if (!source) return { css, map: null, parts };
 
   const mappings: CssMapping[] = [];
   let line = 0;
@@ -285,5 +341,5 @@ export function emitCssWithMap(
     if (chunk.span) mappings.push({ generatedLine: line, span: chunk.span });
     line += chunk.text.split("\n").length + 1; // +1 for the blank separator
   }
-  return { css, map: buildCssSourceMap(mappings, source) };
+  return { css, map: buildCssSourceMap(mappings, source), parts };
 }

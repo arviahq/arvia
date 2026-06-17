@@ -163,6 +163,110 @@ describe("@arviahq/vite-plugin", () => {
     expect(collision).toContain("src/b.arv");
   });
 
+  it("emits identical bundled CSS for css.output 'component' (default) and 'single'", async () => {
+    cleanDts();
+    const cssOf = (output: Rollup.RollupOutput["output"]) =>
+      String(
+        output.find(
+          (o): o is Rollup.OutputAsset => o.type === "asset" && o.fileName.endsWith(".css"),
+        )!.source,
+      );
+
+    const def = await buildApp();
+    const component = await buildApp({ css: { output: "component" } });
+    const single = await buildApp({ css: { output: "single" } });
+
+    expect(cssOf(component.output)).toBe(cssOf(def.output));
+    expect(cssOf(single.output)).toBe(cssOf(def.output));
+  });
+
+  it("rejects an unsupported css.output mode", async () => {
+    cleanDts();
+    // "chunk" is in the type union but not yet implemented — the plugin guard
+    // rejects it with a clear message rather than silently falling back.
+    await expect(buildApp({ css: { output: "chunk" } })).rejects.toThrow(/css\.output/);
+  });
+
+  const cssDir = path.join(appRoot, ".arvia/css");
+
+  it("writes structured CSS output (global + per-component + manifest) in component mode", async () => {
+    cleanDts();
+    await buildApp();
+
+    // Shared global CSS holds the reset; component files never repeat it. The
+    // structured files are pretty-printed (we bypass Vite's whitespace minifier),
+    // but class names are still production hashes.
+    const globalCss = readFileSync(path.join(cssDir, "global.css"), "utf8");
+    expect(globalCss).toContain("box-sizing: border-box");
+
+    const buttonCss = readFileSync(path.join(cssDir, "components/Button.css"), "utf8");
+    expect(buttonCss).toContain("8px 16px"); // inlined space tokens
+    expect(buttonCss).not.toContain("box-sizing");
+    expect(buttonCss).not.toContain("Button_root_"); // minified in build
+
+    const manifest = JSON.parse(readFileSync(path.join(cssDir, "manifest.json"), "utf8"));
+    expect(manifest.global).toBe("global.css");
+    expect(manifest.components.Button).toBe("components/Button.css");
+
+    expect(readFileSync(path.join(cssDir, ".gitignore"), "utf8")).toBe("*\n!.gitignore\n");
+  });
+
+  it("skips structured CSS output in single mode", async () => {
+    cleanDts();
+    await buildApp({ css: { output: "single" } });
+    expect(existsSync(path.join(cssDir, "global.css"))).toBe(false);
+    expect(existsSync(path.join(cssDir, "manifest.json"))).toBe(false);
+  });
+
+  it("sweeps a stale component CSS file from a prior run", async () => {
+    cleanDts();
+    const ghost = path.join(cssDir, "components/Ghost.css");
+    mkdirSync(path.join(cssDir, "components"), { recursive: true });
+    writeFileSync(ghost, ".Ghost{}\n");
+    await buildApp();
+    expect(existsSync(ghost)).toBe(false);
+    expect(existsSync(path.join(cssDir, "components/Button.css"))).toBe(true);
+  });
+
+  it("omits the CSS side-effect import in library mode (manual strategy)", async () => {
+    cleanDts();
+    const server = await createServer({
+      root: appRoot,
+      logLevel: "silent",
+      configFile: false,
+      server: { middlewareMode: true },
+      plugins: [arvia({ dts: false, css: { libraryMode: true } })],
+    });
+    try {
+      const result = await server.transformRequest("/src/button.arv");
+      expect(result).not.toBeNull();
+      // No auto-import of the phantom CSS module — the consumer brings CSS in.
+      expect(result!.code).not.toContain(".arv.css");
+      // The component runtime is still emitted.
+      expect(result!.code).toContain("function Button");
+    } finally {
+      await server.close();
+    }
+  });
+
+  it("exposes virtual:arvia/css-manifest as an importable module", async () => {
+    cleanDts();
+    const server = await createServer({
+      root: appRoot,
+      logLevel: "silent",
+      configFile: false,
+      server: { middlewareMode: true },
+      plugins: [arvia({ dts: false })],
+    });
+    try {
+      const mod = await server.ssrLoadModule("virtual:arvia/css-manifest");
+      expect(mod.default.global).toBe("global.css");
+      expect(mod.default.components.Button).toBe("components/Button.css");
+    } finally {
+      await server.close();
+    }
+  });
+
   it("fails the build with a located diagnostic on bad input", async () => {
     const badRoot = fileURLToPath(new URL("./fixtures/bad", import.meta.url));
     await expect(
