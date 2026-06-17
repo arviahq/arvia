@@ -1,7 +1,7 @@
 import { parse } from "./parser/parser.js";
 import { check } from "./checker/checker.js";
 import { buildIR } from "./ir/build.js";
-import { emitCssWithMap, type CssSourceMap } from "./generators/css/emit.js";
+import { emitCssWithMap, type CssParts, type CssSourceMap } from "./generators/css/emit.js";
 import { emitJs } from "./generators/js/emit.js";
 import { emitDts, emitDtsWithAnchors, type DtsAnchor } from "./generators/dts/emit.js";
 import { emptyEnv, type ThemeEnv } from "./ir/ir.js";
@@ -26,7 +26,22 @@ export type {
 } from "./ir/ir.js";
 export { emptyEnv } from "./ir/ir.js";
 export { buildIR } from "./ir/build.js";
-export { emitCss, emitCssWithMap, type CssSourceMap } from "./generators/css/emit.js";
+export {
+  combineCssParts,
+  emitCss,
+  emitCssWithMap,
+  type CssParts,
+  type CssSourceMap,
+} from "./generators/css/emit.js";
+export {
+  ARVIA_LAYER_ORDER,
+  buildCssBundle,
+  splitTopLevelBlocks,
+  type CssBundle,
+  type CssBundleOptions,
+  type FileCss,
+} from "./generators/css/bundle.js";
+export { buildCssManifest, type CssManifest } from "./generators/css/manifest.js";
 export type { DtsAnchor } from "./generators/dts/emit.js";
 
 // Editor tooling surface: the recovered AST, position utilities and a
@@ -72,6 +87,21 @@ export function analyze(
   return { ast, diagnostics, env };
 }
 
+/**
+ * How CSS is partitioned across outputs.
+ * - `"single"` — one combined CSS string per file (every bucket merged); the
+ *   simplest target, ideal for static sites and older bundlers.
+ * - `"component"` (default) — global/shared CSS and per-component CSS are
+ *   emitted as separate artifacts (enables library publishing, manual import
+ *   control, per-component caching and manifest-driven SSR).
+ * - `"chunk"` — reserved for a future grouping mode; not yet implemented.
+ *
+ * Note: every mode still produces the combined {@link CompileResult.css}; the
+ * mode governs what the Vite plugin / CLI emit to disk and how modules are
+ * wired. The structured split is always available via {@link CompileResult.cssParts}.
+ */
+export type CssOutputMode = "single" | "component" | "chunk";
+
 export interface CompileOptions {
   /** Absolute (or project-relative) path of the source, used for diagnostics
    *  and stable class-name hashing. */
@@ -91,6 +121,10 @@ export interface CompileOptions {
    *  the readable `Component_variant_value_slot_hash` form (development). The
    *  Vite plugin sets this from `command === "build"`. Defaults to false. */
   minify?: boolean;
+  /** How CSS is partitioned across outputs. Defaults to `"component"`. Every
+   *  mode still emits the combined {@link CompileResult.css}; the structured
+   *  buckets are always available via {@link CompileResult.cssParts}. */
+  cssOutput?: CssOutputMode;
 }
 
 export interface CompileResult {
@@ -98,6 +132,11 @@ export interface CompileResult {
   css: string | null;
   js: string | null;
   dts: string | null;
+  /** The combined `css` split into global / per-component / utility buckets.
+   *  Null when `diagnostics` contains errors. `combineCssParts(cssParts)`
+   *  reproduces `css`. Consumed by component-mode disk emission and the CSS
+   *  manifest. */
+  cssParts: CssParts | null;
   /** Rule-level source map for `css` (rules → declaring name in source). */
   cssMap: CssSourceMap | null;
   diagnostics: Diagnostic[];
@@ -157,6 +196,14 @@ export function compileDts(
 }
 
 export function compile(source: string, options: CompileOptions): CompileResult {
+  // Validate the output mode up front so an unimplemented/typo'd value fails
+  // loudly rather than silently behaving like the default. Phase 1 wires the
+  // combined output for both "single" and "component"; "chunk" is reserved.
+  const cssOutput: CssOutputMode = options.cssOutput ?? "component";
+  if (cssOutput === "chunk") {
+    throw new Error(`css output mode "chunk" is not implemented yet`);
+  }
+
   const { ast, diagnostics: parseDiagnostics } = parse(source, options.filename);
 
   // Parse errors: report all of them at once, but don't run the checker on a
@@ -166,6 +213,7 @@ export function compile(source: string, options: CompileOptions): CompileResult 
       css: null,
       js: null,
       dts: null,
+      cssParts: null,
       cssMap: null,
       diagnostics: parseDiagnostics,
       env: options.env ?? emptyEnv(),
@@ -186,6 +234,7 @@ export function compile(source: string, options: CompileOptions): CompileResult 
       css: null,
       js: null,
       dts: null,
+      cssParts: null,
       cssMap: null,
       diagnostics,
       env,
@@ -198,12 +247,13 @@ export function compile(source: string, options: CompileOptions): CompileResult 
     root: options.root,
     minify: options.minify,
   });
-  const { css, map } = emitCssWithMap(ir, { file: options.filename, content: source });
+  const { css, map, parts } = emitCssWithMap(ir, { file: options.filename, content: source });
 
   return {
     css,
     js: emitJs(ir),
     dts: emitDts(ir),
+    cssParts: parts,
     cssMap: map,
     diagnostics,
     env,

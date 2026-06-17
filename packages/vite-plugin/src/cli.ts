@@ -2,11 +2,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import { glob } from "tinyglobby";
-import { compile, renderDiagnostic, type ThemeEnv } from "@arviahq/compiler";
+import { compile, renderDiagnostic, type FileCss, type ThemeEnv } from "@arviahq/compiler";
+import { writeCssOutput } from "./css-writer.js";
 import { mirrorPathFor } from "./dts-paths.js";
 import { ensureCentralGitignore, sweepDtsDir, writeDtsNow } from "./dts-writer.js";
 
-const USAGE = `Usage: arvia gen [dir] [--theme <path>] [--dts-mode sibling|central] [--dts-dir <dir>] [--src-root <dir>] [--clean] [--storybook|--docs] [--out <dir>] [--include <dirs>] [--format md|json]
+const USAGE = `Usage: arvia gen [dir] [--theme <path>] [--dts-mode sibling|central] [--dts-dir <dir>] [--src-root <dir>] [--clean] [--css] [--css-dir <dir>] [--layers] [--storybook|--docs] [--out <dir>] [--include <dirs>] [--format md|json]
 
 Compiles every .arv file under [dir] (default: .) and writes .d.ts declaration
 files, so TypeScript can typecheck without running Vite. The theme defaults to
@@ -17,6 +18,10 @@ relative to cwd) under paths relative to --src-root (default src); add
 "rootDirs": ["src", ".arvia/types"] to your tsconfig. Use --dts-mode sibling to
 write foo.arv.d.ts next to each source file instead. --clean wipes the central
 dir first for a hermetic regen.
+
+With --css, also writes the structured CSS output (global.css + components/*.css
++ manifest.json) into --css-dir (default .arvia/css); --layers wraps it in
+cascade layers. This is the publishable design-system output.
 
 With --storybook, generates Storybook CSF stories into --out (default: stories/generated/).
 With --docs, generates design token documentation (default: docs/tokens/).`;
@@ -40,6 +45,9 @@ async function main(): Promise<number> {
   let dtsDir = ".arvia/types";
   let srcRoot = "src";
   let clean = false;
+  let css = false;
+  let cssDir = ".arvia/css";
+  let layers = false;
   for (let i = 0; i < args.length; i++) {
     if (args[i] === "--theme") {
       themeArg = args[++i];
@@ -68,6 +76,18 @@ async function main(): Promise<number> {
       }
     } else if (args[i] === "--clean") {
       clean = true;
+    } else if (args[i] === "--css") {
+      css = true;
+    } else if (args[i] === "--css-dir") {
+      cssDir = args[++i] ?? "";
+      css = true;
+      if (!cssDir) {
+        console.error("error: --css-dir requires a path");
+        return 1;
+      }
+    } else if (args[i] === "--layers") {
+      layers = true;
+      css = true;
     } else if (args[i] === "--storybook") {
       storybook = true;
       outDir = "stories/generated";
@@ -161,6 +181,7 @@ async function main(): Promise<number> {
   let failed = false;
   let env: ThemeEnv | undefined;
   const written = new Set<string>();
+  const cssParts: FileCss[] = [];
 
   const generate = (file: string, fileEnv: ThemeEnv | undefined): ThemeEnv | undefined => {
     const result = compile(fs.readFileSync(file, "utf8"), { filename: file, env: fileEnv });
@@ -174,6 +195,7 @@ async function main(): Promise<number> {
       written.add(path.resolve(target));
       console.log(`generated ${path.relative(process.cwd(), target)}`);
     }
+    if (css && result.cssParts) cssParts.push({ parts: result.cssParts });
     return result.env;
   };
 
@@ -188,6 +210,17 @@ async function main(): Promise<number> {
   // Mark-and-sweep: the central dir is CLI-owned, so prune any stale mirror
   // left by a prior run for a file that no longer exists.
   if (dtsMode === "central") sweepDtsDir(centralDir, written);
+
+  if (css && !failed) {
+    const cssOutDir = path.resolve(process.cwd(), cssDir);
+    const { manifest } = writeCssOutput(cssOutDir, cssParts, { layers });
+    const rel = (p: string) => path.relative(process.cwd(), path.join(cssOutDir, p));
+    console.log(`generated ${rel("global.css")}`);
+    for (const componentPath of Object.values(manifest.components)) {
+      console.log(`generated ${rel(componentPath)}`);
+    }
+    console.log(`generated ${rel("manifest.json")}`);
+  }
 
   return failed ? 1 : 0;
 }

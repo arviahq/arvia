@@ -31,6 +31,7 @@ import { ComponentsPage, componentsMeta } from "./pages/components";
 import { CompoundPage, compoundMeta } from "./pages/compound";
 import { ContainerQueriesPage, container_queriesMeta } from "./pages/container-queries";
 import { CssPage, cssMeta } from "./pages/css";
+import { CssOutputPage, css_outputMeta } from "./pages/css-output";
 import { DiagnosticsPage, diagnosticsMeta } from "./pages/diagnostics";
 import { FaqPage, faqMeta } from "./pages/faq";
 import { FromCssModulesPage, from_css_modulesMeta } from "./pages/from-css-modules";
@@ -89,6 +90,7 @@ export const docPages: DocPageEntry[] = [
   { meta: compoundMeta, Page: CompoundPage },
   { meta: container_queriesMeta, Page: ContainerQueriesPage },
   { meta: cssMeta, Page: CssPage },
+  { meta: css_outputMeta, Page: CssOutputPage },
   { meta: diagnosticsMeta, Page: DiagnosticsPage },
   { meta: faqMeta, Page: FaqPage },
   { meta: from_css_modulesMeta, Page: FromCssModulesPage },

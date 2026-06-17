@@ -12,7 +12,8 @@
       "@arviahq/storybook",
       "@arviahq/vite-plugin-react",
       "@arviahq/vite-plugin-preact",
-      "@arviahq/vite-plugin-vue"
+      "@arviahq/vite-plugin-vue",
+      "@arviahq/runtime"
     ]
   ],
   "linked": [],

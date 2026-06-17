@@ -6,10 +6,14 @@ import {
   compile,
   renderDiagnostic,
   type CompileResult,
+  type CssOutputMode,
+  type CssParts,
   type CssSourceMap,
   type Diagnostic,
+  type FileCss,
   type ThemeEnv,
 } from "@arviahq/compiler";
+import { planCssOutput, writeCssOutput } from "./css-writer.js";
 import { mirrorPathFor } from "./dts-paths.js";
 import {
   ensureCentralGitignore,
@@ -38,6 +42,63 @@ export interface DtsConfig {
   sourceRoot?: string;
 }
 
+/** CSS output configuration. See {@link CssConfig.output}. */
+export interface CssConfig {
+  /**
+   * How CSS is partitioned across outputs.
+   *
+   * - `'component'` (default) — global/shared CSS and per-component CSS are
+   *   tracked as separate buckets (enables library publishing, manual import
+   *   control, per-component caching and manifest-driven SSR in later phases).
+   * - `'single'` — one combined CSS string per file; simplest for static sites
+   *   and older bundlers.
+   * - `'chunk'` — reserved for a future grouping mode; not yet implemented.
+   *
+   * Note: the dev/app bundling path is identical for `'single'` and
+   * `'component'` — Vite still bundles the per-file CSS into one asset. The
+   * mode governs the structured disk emission (`global.css` +
+   * `components/*.css` + `manifest.json`) produced at build time and by the
+   * `arvia gen --css` CLI, which `'single'` skips.
+   */
+  output?: CssOutputMode;
+  /**
+   * Directory for the structured CSS output (component mode), relative to the
+   * Vite root. Default: `.arvia/css`. A self-ignoring `.gitignore` is dropped
+   * in so the generated tree is never committed.
+   */
+  dir?: string;
+  /**
+   * Wrap the structured output in cascade layers (`@layer arvia.tokens,
+   * arvia.reset, arvia.base, arvia.components, arvia.utilities`) so import order
+   * can never change the result. Off by default — enabling it alters cascade
+   * resolution. Does not affect the bundled app CSS.
+   */
+  layers?: boolean;
+  /**
+   * How a compiled `.arv` module pulls in its CSS.
+   *
+   * - `'side-effect'` (default for apps) — the generated JS auto-imports its
+   *   phantom CSS module, so styles load just by importing the component.
+   * - `'manual'` / `'manifest'` — no auto-import; the consumer brings the CSS
+   *   in itself (via the structured files, the manifest, or SSR collection).
+   *   Required when publishing a library whose JS must not hard-depend on a
+   *   bundler-specific CSS import.
+   *
+   * Defaults to `'manual'` when {@link CssConfig.libraryMode} is on, else
+   * `'side-effect'`.
+   */
+  importStrategy?: "side-effect" | "manual" | "manifest";
+  /**
+   * Library/publishing mode. Flips the default import strategy to `'manual'`
+   * so the emitted JS carries no automatic CSS side-effect import — consumers
+   * import the published `global.css` / `components/*.css` (or use the manifest)
+   * themselves. Pair with `arvia gen --css` to emit the publishable tree.
+   */
+  libraryMode?: boolean;
+}
+
+type ImportStrategy = "side-effect" | "manual" | "manifest";
+
 export interface ArviaOptions {
   /**
    * Path (relative to the Vite root) of the shared theme file whose tokens
@@ -45,6 +106,8 @@ export interface ArviaOptions {
    * Defaults to `src/theme.arv` when that file exists.
    */
   theme?: string;
+  /** CSS output configuration. Defaults to `{ output: 'component' }`. */
+  css?: CssConfig;
   /**
    * Emit `.d.ts` files so plain `tsc` (no `arvia-tsc`, no tsserver plugin) can
    * typecheck `.arv` imports.
@@ -89,11 +152,34 @@ function resolveDts(dts: ArviaOptions["dts"], root: string): ResolvedDts | null 
 const ARV_RE = /.arv$/;
 const ARV_CSS_RE = /\.arv\.css$/;
 
+/** Importable manifest of the structured CSS output, for SSR / preloading /
+ *  tooling. Resolves to a module whose default export is a {@link CssManifest}. */
+const VIRTUAL_MANIFEST_ID = "virtual:arvia/css-manifest";
+const RESOLVED_MANIFEST_ID = `\0${VIRTUAL_MANIFEST_ID}`;
+
+/** Validates and defaults the CSS output mode. `'chunk'` is reserved. */
+function resolveCssOutput(css: ArviaOptions["css"]): CssOutputMode {
+  const output = css?.output ?? "component";
+  if (output !== "single" && output !== "component") {
+    throw new Error(
+      `[arvia] css.output: "${output}" is not supported — use "single" or "component".`,
+    );
+  }
+  return output;
+}
+
 const firstError = (diagnostics: Diagnostic[]) => diagnostics.find((d) => d.severity === "error");
 
 export function arvia(options: ArviaOptions = {}): Plugin {
   let root = process.cwd();
   let isBuild = false;
+  let cssOutput: CssOutputMode = "component";
+  let cssDir = ".arvia/css";
+  let cssLayers = false;
+  let importStrategy: ImportStrategy = "side-effect";
+  /** Memoized `virtual:arvia/css-manifest` module body; invalidated on any
+   *  `.arv` change so the manifest tracks added/removed components. */
+  let manifestModule: string | null = null;
   let dts: ResolvedDts | null = null;
   let logger: Logger | undefined;
   let hintedRootDirs = false;
@@ -102,8 +188,12 @@ export function arvia(options: ArviaOptions = {}): Plugin {
   let explicitThemePath: string | null = null;
   let conventionalThemePath = "";
   let themeEnv: ThemeEnv | undefined;
-  /** Compiled CSS per .arv file, served through the phantom `<file>.arv.css` module. */
-  const cssCache = new Map<string, { css: string; map: CssSourceMap | null }>();
+  /** Compiled CSS per .arv file, served through the phantom `<file>.arv.css`
+   *  module. `parts` feeds the structured component-mode output at build time. */
+  const cssCache = new Map<
+    string,
+    { css: string; map: CssSourceMap | null; parts: CssParts | null }
+  >();
   /** Last generated JS per .arv file, used to detect style-only edits in HMR. */
   const jsCache = new Map<string, string>();
   /** Component name → defining files, to warn about cross-file name clashes. */
@@ -153,6 +243,7 @@ export function arvia(options: ArviaOptions = {}): Plugin {
       root,
       sharedEnvFile: true,
       minify: isBuild,
+      cssOutput,
     });
     const error = firstError(result.diagnostics);
     if (error) throw new Error(renderDiagnostic(error));
@@ -169,11 +260,37 @@ export function arvia(options: ArviaOptions = {}): Plugin {
       env,
       sharedEnvFile: isTheme,
       minify: isBuild,
+      cssOutput,
     });
     if (isTheme && !firstError(result.diagnostics)) {
       themeEnv = result.env;
     }
     return result;
+  };
+
+  /** Compiles every `.arv` file in the project (theme first) into the parts the
+   *  whole-project CSS aggregation needs, reusing cached parts where possible. */
+  const collectProjectFileCss = async (): Promise<FileCss[]> => {
+    const files = (
+      await glob("**/*.arv", { cwd: root, absolute: true, ignore: ["**/node_modules/**"] })
+    )
+      .map(normalizePath)
+      .toSorted((a, b) => (a === themePath ? -1 : b === themePath ? 1 : a < b ? -1 : 1));
+    const out: FileCss[] = [];
+    for (const file of files) {
+      let parts = cssCache.get(file)?.parts ?? null;
+      if (!parts) {
+        try {
+          const result = compileFile(file, fs.readFileSync(file, "utf8"));
+          if (firstError(result.diagnostics)) continue;
+          parts = result.cssParts;
+        } catch {
+          continue;
+        }
+      }
+      if (parts) out.push({ parts });
+    }
+    return out;
   };
 
   /** Declaration path for a `.arv` id, or `null` when dts emission is off. */
@@ -230,6 +347,11 @@ export function arvia(options: ArviaOptions = {}): Plugin {
       root = config.root;
       isBuild = config.command === "build";
       logger = config.logger;
+      cssOutput = resolveCssOutput(options.css);
+      cssDir = normalizePath(path.resolve(root, options.css?.dir ?? ".arvia/css"));
+      cssLayers = options.css?.layers ?? false;
+      importStrategy =
+        options.css?.importStrategy ?? (options.css?.libraryMode ? "manual" : "side-effect");
       dts = resolveDts(options.dts, root);
       explicitThemePath = options.theme ? normalizePath(path.resolve(root, options.theme)) : null;
       conventionalThemePath = normalizePath(path.resolve(root, "src/theme.arv"));
@@ -246,23 +368,34 @@ export function arvia(options: ArviaOptions = {}): Plugin {
       fileComponents.clear();
       warnedCollisions.clear();
       wroteGitignore = false;
+      manifestModule = null;
     },
 
     async buildEnd() {
-      // After a build, prune central-dir mirrors whose `.arv` source no longer
-      // exists (renames/deletes that happened while nothing was watching).
-      if (!isBuild || dts?.mode !== "central") return;
-      const files = await glob("**/*.arv", {
-        cwd: root,
-        absolute: true,
-        ignore: ["**/node_modules/**"],
-      });
-      const keep = new Set<string>();
-      for (const file of files) {
-        const target = dtsPathFor(normalizePath(file));
-        if (target) keep.add(path.resolve(target));
+      if (!isBuild) return;
+      const needCss = cssOutput === "component";
+      const needDtsSweep = dts?.mode === "central";
+      if (!needCss && !needDtsSweep) return;
+
+      // The whole-project view: every `.arv` file, not just the ones imported
+      // by the bundle, so a published component library emits a complete CSS
+      // tree and the dts sweep sees the full source set.
+      const files = (
+        await glob("**/*.arv", { cwd: root, absolute: true, ignore: ["**/node_modules/**"] })
+      ).map(normalizePath);
+
+      if (needDtsSweep) {
+        const keep = new Set<string>();
+        for (const file of files) {
+          const target = dtsPathFor(file);
+          if (target) keep.add(path.resolve(target));
+        }
+        sweepDtsDir(dts!.centralDir, keep);
       }
-      sweepDtsDir(dts.centralDir, keep);
+
+      if (needCss) {
+        writeCssOutput(cssDir, await collectProjectFileCss(), { layers: cssLayers });
+      }
     },
 
     configureServer(server: ViteDevServer) {
@@ -270,8 +403,17 @@ export function arvia(options: ArviaOptions = {}): Plugin {
         themeEnv = undefined;
         cssCache.clear();
         jsCache.clear();
+        manifestModule = null;
         server.moduleGraph.invalidateAll();
         server.ws.send({ type: "full-reload" });
+      };
+
+      // Drops the memoized manifest and invalidates the virtual module so a
+      // re-import recomputes it (components added/removed during the session).
+      const invalidateManifest = () => {
+        manifestModule = null;
+        const mod = server.moduleGraph.getModuleById(RESOLVED_MANIFEST_ID);
+        if (mod) server.moduleGraph.invalidateModule(mod);
       };
 
       // `handleHotUpdate` only sees edits to files already in the module
@@ -294,7 +436,7 @@ export function arvia(options: ArviaOptions = {}): Plugin {
           try {
             const result = compileFile(file, fs.readFileSync(file, "utf8"));
             if (!firstError(result.diagnostics)) {
-              cssCache.set(file, { css: result.css!, map: result.cssMap });
+              cssCache.set(file, { css: result.css!, map: result.cssMap, parts: result.cssParts });
               jsCache.set(file, result.js!);
               const target = dtsPathFor(file);
               if (target) emitDts(target, result.dts!, false);
@@ -303,6 +445,7 @@ export function arvia(options: ArviaOptions = {}): Plugin {
             // Unreadable or theme broken — transform surfaces it on import.
           }
         }
+        invalidateManifest();
       });
 
       server.watcher.on("unlink", (rawFile) => {
@@ -311,6 +454,7 @@ export function arvia(options: ArviaOptions = {}): Plugin {
         cssCache.delete(file);
         jsCache.delete(file);
         untrackComponents(file);
+        invalidateManifest();
 
         // Drop the generated declaration so stale types don't shadow anything
         // (and don't outlive their source).
@@ -329,6 +473,7 @@ export function arvia(options: ArviaOptions = {}): Plugin {
     },
 
     resolveId(source, importer) {
+      if (source === VIRTUAL_MANIFEST_ID) return RESOLVED_MANIFEST_ID;
       if (!ARV_CSS_RE.test(source)) return;
       // Mark the phantom CSS id as resolved so Vite's CSS pipeline owns it
       // (dev injection, build extraction/minification) without touching disk.
@@ -345,7 +490,14 @@ export function arvia(options: ArviaOptions = {}): Plugin {
       return source;
     },
 
-    load(id) {
+    async load(id) {
+      if (id === RESOLVED_MANIFEST_ID) {
+        if (manifestModule === null) {
+          const { manifest } = planCssOutput(await collectProjectFileCss(), { layers: cssLayers });
+          manifestModule = `export default ${JSON.stringify(manifest)};\n`;
+        }
+        return manifestModule;
+      }
       if (!ARV_CSS_RE.test(id)) return;
       const arviaPath = id.slice(0, -".css".length);
       const cached = cssCache.get(arviaPath);
@@ -355,7 +507,7 @@ export function arvia(options: ArviaOptions = {}): Plugin {
       const result = compileFile(arviaPath, code);
       const error = firstError(result.diagnostics);
       if (error) this.error(renderDiagnostic(error));
-      cssCache.set(arviaPath, { css: result.css!, map: result.cssMap });
+      cssCache.set(arviaPath, { css: result.css!, map: result.cssMap, parts: result.cssParts });
       return { code: result.css!, map: result.cssMap };
     },
 
@@ -374,7 +526,7 @@ export function arvia(options: ArviaOptions = {}): Plugin {
         if (warning.severity === "warning") this.warn(renderDiagnostic(warning));
       }
 
-      cssCache.set(id, { css: result.css!, map: result.cssMap });
+      cssCache.set(id, { css: result.css!, map: result.cssMap, parts: result.cssParts });
       jsCache.set(id, result.js!);
       trackComponents(
         id,
@@ -385,8 +537,13 @@ export function arvia(options: ArviaOptions = {}): Plugin {
       const dtsPath = dtsPathFor(id);
       if (dtsPath) emitDts(dtsPath, result.dts!, isBuild);
 
-      // The appended import routes the generated CSS through Vite's pipeline.
-      const js = `import ${JSON.stringify(`${id}.css`)};\n${result.js!}`;
+      // 'side-effect' routes the generated CSS through Vite's pipeline by
+      // appending an import. 'manual'/'manifest' (library mode) emit no
+      // auto-import — the consumer brings the CSS in itself.
+      const js =
+        importStrategy === "side-effect"
+          ? `import ${JSON.stringify(`${id}.css`)};\n${result.js!}`
+          : result.js!;
       // The generated module is a handful of readable lines; mapping it back
       // to the .arv source would obscure more than it reveals.
       return { code: js, map: null };
@@ -394,6 +551,9 @@ export function arvia(options: ArviaOptions = {}): Plugin {
 
     handleHotUpdate(ctx) {
       if (!ARV_RE.test(ctx.file)) return;
+      // The edit may change a component's class names or its parts — recompute
+      // the manifest on next import.
+      manifestModule = null;
 
       // Token/recipe edits can change every file's output: reset and reload.
       if (ctx.file === themePath) {
@@ -416,7 +576,7 @@ export function arvia(options: ArviaOptions = {}): Plugin {
       }
 
       if (result && !firstError(result.diagnostics)) {
-        cssCache.set(ctx.file, { css: result.css!, map: result.cssMap });
+        cssCache.set(ctx.file, { css: result.css!, map: result.cssMap, parts: result.cssParts });
         const dtsPath = dtsPathFor(ctx.file);
         if (dtsPath) emitDts(dtsPath, result.dts!, false);
 
