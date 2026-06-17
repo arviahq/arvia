@@ -1,6 +1,6 @@
 {
   "name": "@arviahq/runtime",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Tiny, zero-dependency runtime helpers for Arvia: manifest-driven CSS collection for SSR and custom bundler integrations.",
   "homepage": "https://github.com/arviahq/arvia#readme",
   "bugs": {

@@ -1,5 +1,13 @@
 # @arviahq/vite-plugin-vue
 
+## 2.1.0
+
+### Patch Changes
+
+- Updated dependencies [c59a3f2]
+  - @arviahq/vite-plugin@2.1.0
+  - @arviahq/typescript-plugin@2.1.0
+
 ## 2.0.1
 
 ### Patch Changes

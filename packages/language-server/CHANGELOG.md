@@ -1,5 +1,12 @@
 # @arviahq/language-server
 
+## 2.1.0
+
+### Patch Changes
+
+- Updated dependencies [c59a3f2]
+  - @arviahq/compiler@2.1.0
+
 ## 2.0.1
 
 ### Patch Changes
